@@ -12,17 +12,14 @@ class Position:
 @dataclass
 class GameConfig:
     """ JSON config data. """
-    highscore_file: str = "highscores.json"
-    levels_data: List[Dict] = [
-                                {'width': 20, 'height': 20, "n_pacgum": 381}
-                                for _ in range(10)
-                              ]
-    lives: int = 3
-    pacgum_points: int = 10
-    super_pacgum_points: int = 50
-    ghost_points: int = 200
-    seed: int = 42
-    level_max_time: int = 90
+    highscore_file: str
+    levels_data: List[Dict]
+    lives: int
+    pacgum_points: int
+    super_pacgum_points: int
+    ghost_points: int
+    seed: int
+    level_max_time: int
 
 
 @dataclass

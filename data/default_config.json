@@ -1,0 +1,31 @@
+# hello world
+// hello world
+
+{
+    "highscore_file": "highscore.json",
+
+    "levels_data"   : [
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5},
+                        {"width": 20, "height": 20, "n_pacgum": 5}
+                      ],
+
+    "lives"         : 3,
+
+    "pacgum_points" : 10,
+
+    "super_pacgum_points": 50,
+
+    "ghost_points": 200,
+
+    "seed": 42,
+
+    "level_max_time": 90
+}
