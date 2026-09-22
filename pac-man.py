@@ -12,7 +12,7 @@ def main():
 
     p = Parser(sys.argv[1])
 
-    print(p.config_txt)
+    print(p.net_txt)
 
 
 if __name__ == "__main__":
