@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict, List
+from pydantic import BaseModel, Field
+from typing import List
 
 
 @dataclass
@@ -9,18 +10,29 @@ class Position:
     y: int
 
 
-@dataclass
-class GameConfig:
-    """ JSON config data. """
+# === the config file parser ===
+
+class Levels(BaseModel):
+    width: int = Field(ge=9)
+    height: int = Field(ge=7)
+    pacgum: int = Field(ge=1)
+
+
+# ----------------------------
+
+class GameConfig(BaseModel):
+
     highscore_file: str
-    levels_data: List[Dict]
-    lives: int
+    levels_data: List[Levels]
+    lives: int = Field(gt=0)
     pacgum_points: int
     super_pacgum_points: int
     ghost_points: int
     seed: int
     level_max_time: int
 
+
+# ========================================
 
 @dataclass
 class GameState:
@@ -32,6 +44,8 @@ class GameState:
     status: str = "MENU"  # MENU, PLAYING, PAUSED, GAME_OVER, VICTORY
 
 
+# =============================
+
 @dataclass
 class Player:
     """ player metadata. """
@@ -39,6 +53,8 @@ class Player:
     direction: str = "RIGHT"
     is_alive: bool = True
 
+
+# =============================
 
 @dataclass
 class Ghost:

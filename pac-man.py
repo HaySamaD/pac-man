@@ -20,7 +20,9 @@ def main():
 
     p = Parser(sys.argv[1])
 
-    print(p.conf_obj)
+    g_conf = p.parse_config_object()
+
+    print(g_conf)
 
 
 if __name__ == "__main__":

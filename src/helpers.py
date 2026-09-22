@@ -1,0 +1,57 @@
+from src.dataclasses import GameConfig
+
+
+class Color:
+    RED = "\033[31m"
+    GREEN = "\033[32m"
+    WHITE = "\033[37m"
+
+
+# ==================== Default config if missing any data ====================
+
+class Default_conf:
+
+    DICT = {
+                "highscore_file": "test.json",
+
+                "levels_data": [
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42},
+                                    {"width": 20, "height": 20, "pacgum": 42}
+                                ],
+
+                "lives": 3,
+
+                "pacgum_points": 10,
+
+                "super_pacgum_points": 50,
+
+                "ghost_points": 200,
+
+                "seed": 42,
+
+                "level_max_time": 90
+            }
+
+
+# ============================ Helper methodes ================================
+
+class Helper:
+
+    def read_config_file(self, json_path: str) -> str | GameConfig:
+        try:
+            with open(json_path, 'r') as f:
+                content: str = f.read()
+            return content
+        except (FileNotFoundError, OSError):
+            raise Exception(
+                            f"{Color().RED}❌ Error: {json_path} not exist or "
+                            f"access denied{Color().WHITE}"
+                           )

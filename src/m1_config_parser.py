@@ -1,72 +1,28 @@
-from src.dataclasses import GameConfig
 from typing import List, Dict
 import json
+from src.helpers import Helper, Default_conf, Color
+from pydantic import BaseModel, Field
+from src.dataclasses import GameConfig
 
-
-RED = "\033[31m"
-GREEN = "\033[32m"
-WHITE = "\033[37m"
-
-
-DEFAULT_DICT = {
-                    "highscore_file": "test.json",
-
-                    "levels_data": [
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42}
-                                   ],
-
-                    "lives": 3,
-
-                    "pacgum_points": 10,
-
-                    "super_pacgum_points": 50,
-
-                    "ghost_points": 200,
-
-                    "seed": 42,
-
-                    "level_max_time": 90
-                }
-
-
-class Helper:
-
-    def read_json_file(self, json_path: str) -> str | GameConfig:
-        try:
-            with open(json_path, 'r') as f:
-                content: str = f.read()
-            return content
-        except (FileNotFoundError, OSError):
-            raise Exception(
-                f"{RED}❌ Error: {json_path} not exist or access denied{WHITE}"
-                           )
+# ==============================================================================
 
 
 class Parser:
 
     def __init__(self, config_path) -> None:
 
-        # ----------------------------------------------------------
-        self.config_txt: str = Helper().read_json_file(config_path)
+        # ------------------ Raw text config -------------------------
+        self.config_txt: str = Helper().read_config_file(config_path)
 
-        # ----------------------------------------------------------
-        self.net_txt: str = self.skip_comments_and_filter_text()
+        # ---------------- Net text config -----------------------
+        self.net_txt: str = self.skip_comments()
 
-        # ---------------------------------------------------------
-        self.conf_obj = self.build_config_object()
+        # ---------- config object ----------------
+        self.conf_obj: List[Dict] = self.build_config_object()
 
     # -------------------------------------------------------
 
-    def skip_comments_and_filter_text(self) -> str:
+    def skip_comments(self) -> str:
 
         lines: List[str] = self.config_txt.splitlines()
 
@@ -96,12 +52,19 @@ class Parser:
         except json.decoder.JSONDecodeError:
 
             print(
-                f"{RED}\n❌ JSON syntax: the syntax not conforme\n{GREEN}"
-                F"switching to default config data ...\n{WHITE}"
+                f"{Color().RED}\n❌ JSON syntax: the syntax not conforme\n"
+                f"{Color().GREEN}\nswitching to default config data ...\n"
+                f"{Color().WHITE}"
                  )
 
-            conf_obj = DEFAULT_DICT
+            conf_obj = Default_conf().DICT
 
         return conf_obj
 
     # --------------------------------------------------------
+
+    def parse_config_object(self):
+
+        g_conf: GameConfig = GameConfig(**self.conf_obj)
+
+        return g_conf
