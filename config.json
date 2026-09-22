@@ -20,7 +20,7 @@
 
     "pacgum_points" : 10,
 
-    "super_pacgum_points": 50,
+    "super_pacgum_points": 50, # hello world
 
     "ghost_points": 200,
 
