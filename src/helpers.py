@@ -15,16 +15,8 @@ class Default_conf:
                 "highscore_file": "test.json",
 
                 "levels_data": [
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
-                                    {"width": 20, "height": 20, "pacgum": 42},
                                     {"width": 20, "height": 20, "pacgum": 42}
+                                    for _ in range(10)
                                 ],
 
                 "lives": 3,

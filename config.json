@@ -4,7 +4,7 @@
     "highscore_file": "test.json", # yassine is king
 
     "levels_data"   : [
-                        {"width": 20, "height": 20, "pacgum": 42},
+                        {"height": 50, "pacgum": 42},
                         {"width": 20, "height": 20, "pacgum": 42},
                         {"width": 20, "height": 20, "pacgum": 42},
                         {"width": 20, "height": 20, "pacgum": 42},
