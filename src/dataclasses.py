@@ -26,8 +26,8 @@ class Levels(BaseModel):
         # ------------------ check the type of the input --------------------
         if not isinstance(dic, dict):
             print(
-                    f"{Color().YELLOW}one of levels metadata not a dict. \n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    f"\n{Color().YELLOW}one of levels metadata not a dict. \n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             return {"width": 20, "height": 20, "pacgum": 42}
 
@@ -40,14 +40,14 @@ class Levels(BaseModel):
 
         if val_width is None:
             print(
-                    f"{Color().YELLOW}width not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    f"\n{Color().YELLOW}'width' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic["width"] = 20
 
         elif not isinstance(val_width, int) or val_width < 9:
             print(
-                    f"{Color().YELLOW}width not a integer or < 9.\n"
+                    f"\n{Color().YELLOW}'width' not a integer or < 9.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}"
                  )
             dic["width"] = 20
@@ -55,26 +55,32 @@ class Levels(BaseModel):
         # ----------------- handel height value -------------------------
 
         if val_height is None:
-            print("height not exist. default value is added")
+            print(
+                    f"\n{Color().YELLOW}'height' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
             dic["height"] = 20
 
         elif (not isinstance(val_height, int) or val_height < 7):
             print(
-                    f"{Color().YELLOW}height not a integer or < 7."
-                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    f"\n{Color().YELLOW}'height' not a integer or < 7."
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic["height"] = 20
 
         # ----------------- handel pacgums value -------------------------
 
         if val_pacgum is None:
-            print("pacgum not exist. default value is added")
+            print(
+                    f"\n{Color().YELLOW}'pacgum' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
             dic["pacgum"] = 20
 
         elif not isinstance(val_pacgum, int) or val_pacgum < 1:
             print(
-                    f"{Color().YELLOW}pacgum not a integer or < 1.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    f"\n{Color().YELLOW}'pacgum' not a integer or < 1.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic["pacgum"] = 20
 
