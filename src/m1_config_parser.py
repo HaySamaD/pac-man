@@ -1,7 +1,6 @@
 from typing import List, Dict
 import json
 from src.helpers import Helper, Default_conf, Color
-from pydantic import BaseModel, Field
 from src.dataclasses import GameConfig
 
 # ==============================================================================
@@ -52,7 +51,7 @@ class Parser:
         except json.decoder.JSONDecodeError:
 
             print(
-                f"{Color().RED}\n❌ JSON syntax: the syntax not conforme\n"
+                f"{Color().RED}❌ JSON syntax: the syntax not conforme\n"
                 f"{Color().GREEN}\nswitching to default config data ...\n"
                 f"{Color().WHITE}"
                  )

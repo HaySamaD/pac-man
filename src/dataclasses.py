@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pydantic import BaseModel, Field, model_validator
-from typing import List, Dict
+from typing import List, Any
+from src.helpers import Color
 
 
 @dataclass
@@ -20,45 +21,61 @@ class Levels(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def validate_raw_dic(cls, dic: Dict[str, int]) -> Dict[str, int]:
+    def validate_raw_dic(cls, dic: Any) -> Any:
 
-        # ----------------------------------------------------------------
+        # ------------------ check the type of the input --------------------
+        if not isinstance(dic, dict):
+            print(
+                    f"{Color().YELLOW}one of levels metadata not a dict. \n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                 )
+            return {"width": 20, "height": 20, "pacgum": 42}
 
-        if dic.get("width", None) is None:
-            print("width not exist. default value is added")
+        # ----------- get the elements ------------
+        val_width: Any = dic.get("width", None)
+        val_height: Any = dic.get("height", None)
+        val_pacgum: Any = dic.get("pacgum", None)
+
+        # ----------------- handel width value -------------------------
+
+        if val_width is None:
+            print(
+                    f"{Color().YELLOW}width not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                 )
             dic["width"] = 20
 
-        elif (
-                not isinstance(dic.get("width", None), int) or
-                dic.get("width", None) < 9
-             ):
-            print("width not a integer or < 9. default value is added")
+        elif not isinstance(val_width, int) or val_width < 9:
+            print(
+                    f"{Color().YELLOW}width not a integer or < 9.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                 )
             dic["width"] = 20
 
-        # ----------------------------------------------------------------
+        # ----------------- handel height value -------------------------
 
-        if dic.get("height", None) is None:
+        if val_height is None:
             print("height not exist. default value is added")
             dic["height"] = 20
 
-        elif (
-                not isinstance(dic.get("height", None), int) or
-                dic.get("height", None) < 7
-             ):
-            print("height not a integer or < 7. default value is added")
+        elif (not isinstance(val_height, int) or val_height < 7):
+            print(
+                    f"{Color().YELLOW}height not a integer or < 7."
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                 )
             dic["height"] = 20
 
-        # ----------------------------------------------------------------
+        # ----------------- handel pacgums value -------------------------
 
-        if dic.get("pacgum", None) is None:
+        if val_pacgum is None:
             print("pacgum not exist. default value is added")
             dic["pacgum"] = 20
 
-        elif (
-                not isinstance(dic.get("pacgum", None), int) or
-                dic.get("pacgum", None) < 1
-             ):
-            print("pacgum not a integer or < 1. default value is added")
+        elif not isinstance(val_pacgum, int) or val_pacgum < 1:
+            print(
+                    f"{Color().YELLOW}pacgum not a integer or < 1.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                 )
             dic["pacgum"] = 20
 
         # ----------------------------------------------------------------

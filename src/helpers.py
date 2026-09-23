@@ -1,8 +1,7 @@
-from src.dataclasses import GameConfig
-
 
 class Color:
     RED = "\033[31m"
+    YELLOW = '\033[93m'
     GREEN = "\033[32m"
     WHITE = "\033[37m"
 
@@ -12,7 +11,7 @@ class Color:
 class Default_conf:
 
     DICT = {
-                "highscore_file": "test.json",
+                "highscore_file": "highscore.json",
 
                 "levels_data": [
                                     {"width": 20, "height": 20, "pacgum": 42}
@@ -37,7 +36,7 @@ class Default_conf:
 
 class Helper:
 
-    def read_config_file(self, json_path: str) -> str | GameConfig:
+    def read_config_file(self, json_path: str) -> str:
         try:
             with open(json_path, 'r') as f:
                 content: str = f.read()
