@@ -14,7 +14,7 @@ class Default_conf:
                 "highscore_file": "highscore.json",
 
                 "levels_data": [
-                                    {"width": 20, "height": 20, "pacgum": 42}
+                                    {"width": 42, "height": 42, "pacgum": 42}
                                     for _ in range(10)
                                 ],
 
@@ -22,13 +22,13 @@ class Default_conf:
 
                 "pacgum_points": 10,
 
-                "super_pacgum_points": 50,
+                "super_pacgum_points": 20,
 
-                "ghost_points": 200,
+                "ghost_points": 40,
 
                 "seed": 42,
 
-                "level_max_time": 90
+                "level_max_time": 300
             }
 
 

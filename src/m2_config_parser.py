@@ -1,7 +1,7 @@
 from typing import List, Dict
 import json
-from src.helpers import Helper, Default_conf, Color
-from src.dataclasses import GameConfig
+from src.m0_helpers import Helper, Default_conf, Color
+from src.m1_dataclasses import GameConfig
 
 # ==============================================================================
 
@@ -64,6 +64,13 @@ class Parser:
 
     def parse_config_object(self):
 
-        g_conf: GameConfig = GameConfig(**self.conf_obj)
+        if not isinstance(self.conf_obj, dict):
+            print(
+                    f"\n{Color().YELLOW}the config is not a dictionary. \n"
+                    f"{Color().GREEN}default config is added{Color().WHITE}\n"
+                 )
+            self.conf_obj = Default_conf().DICT
 
-        return g_conf
+        game_conf: GameConfig = GameConfig(**self.conf_obj)
+
+        return game_conf

@@ -1,4 +1,4 @@
-from src.m1_config_parser import Parser
+from src.m2_config_parser import Parser
 import sys
 
 RED = "\033[31m"
@@ -26,7 +26,7 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(e)
+    # try:
+    main()
+    # except Exception as e:
+        # print(e)
