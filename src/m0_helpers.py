@@ -11,20 +11,20 @@ class Color:
 class Default_conf:
 
     DICT = {
-                "highscore_file": "highscore.json",
+                "highscore_filename": "top_10_scores.json",
 
                 "levels_data": [
                                     {"width": 42, "height": 42, "pacgum": 42}
                                     for _ in range(10)
-                                ],
+                               ],
 
                 "lives": 3,
 
-                "pacgum_points": 10,
+                "points_per_pacgum": 10,
 
-                "super_pacgum_points": 20,
+                "points_per_super_pacgum": 20,
 
-                "ghost_points": 40,
+                "points_per_ghost": 40,
 
                 "seed": 42,
 

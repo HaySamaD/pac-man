@@ -101,12 +101,12 @@ class Levels(BaseModel):
 
 class GameConfig(BaseModel):
 
-    highscore_file: str
+    highscore_filename: str
     levels_data: List[Levels]
     lives: int = Field(gt=0)
-    pacgum_points: int
-    super_pacgum_points: int
-    ghost_points: int
+    points_per_pacgum: int
+    points_per_super_pacgum: int
+    points_per_ghost: int
     seed: int
     level_max_time: int
 
@@ -114,41 +114,65 @@ class GameConfig(BaseModel):
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
 
-        highscore_file: Any = dic['highscore_file']
-        levels_data: Any = dic['levels_data']
-        lives: Any = dic['lives']
-        pacgum_points: Any = dic['pacgum_points']
-        super_pacgum_points: Any = dic['super_pacgum_points']
-        ghost_points: Any = dic['ghost_points']
-        seed: Any = dic['seed']
-        level_max_time: Any = dic['level_max_time']
+        highscore_filename: Any = dic.get("highscore_filename", None)
+        levels_data: Any = dic.get("levels_data", None)
+        lives: Any = dic.get("lives", None)
+        points_per_pacgum: Any = dic.get("points_per_pacgum", None)
+        points_per_super_pacgum: Any = dic.get("points_per_super_pacgum", None)
+        points_per_ghost: Any = dic.get("points_per_ghost", None)
+        seed: Any = dic.get("seed", None)
+        level_max_time: Any = dic.get("level_max_time", None)
 
         # ---------------------------------------------------------------------
 
+        if highscore_filename is None:
+            print(
+                    f"\n{Color().YELLOW}'highscore_filename' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['highscore_filename'] = "top_10_scores.json"
+
         if (
-            not isinstance(highscore_file, str)
-            or not highscore_file.endswith('.json')
+            not isinstance(highscore_filename, str)
+            or not highscore_filename.endswith('.json')
            ):
             print(
-                f"\n{Color().YELLOW}'highscore_file' not valid "
+                f"\n{Color().YELLOW}'highscore_filename' not valid "
                 "(not str or not end with '.json').\n"
                 f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_file'] = 'top_10_scores.json'
+            dic['highscore_filename'] = 'top_10_scores.json'
 
         # ---------------------------------------------------------------------
 
-        if len(levels_data) < 10:
+        if not isinstance(levels_data, list):
+            print(
+                    f"\n{Color().YELLOW}'levels_data' not a list.\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                 )
+            dic['levels_data'] = [
+                                    {"width": 42, "height": 42, "pacgum": 42}
+                                    for _ in range(10)
+                                 ]
+
+        elif len(levels_data) < 10:
             print(
                     f"\n{Color().YELLOW}'levels_data' less than 10.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            for i in range(10 - levels_data):
+            for _ in range(10 - len(levels_data)):
                 dic['levels_data'].append(
                                         Levels(width=42, height=42, pacgum=42)
                                          )
 
         # ---------------------------------------------------------------------
+
+        if lives is None:
+            print(
+                    f"\n{Color().YELLOW}'lives' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['lives'] = 3
 
         if not isinstance(lives, int) or lives < 1:
             print(
@@ -159,27 +183,51 @@ class GameConfig(BaseModel):
 
         # ---------------------------------------------------------------------
 
-        if not isinstance(pacgum_points, int) or pacgum_points < 1:
+        if points_per_pacgum is None:
             print(
-                    f"\n{Color().YELLOW}'pacgum_points' not a number or less "
-                    "than 1.\n"
+                    f"\n{Color().YELLOW}'points_per_pacgum' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['points_per_pacgum'] = 10
+
+        if not isinstance(points_per_pacgum, int) or points_per_pacgum < 1:
+            print(
+                    f"\n{Color().YELLOW}'points_per_pacgum' not a number or"
+                    " less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            dic['pacgum_points'] = 10
+            dic['points_per_pacgum'] = 10
 
         # ---------------------------------------------------------------------
 
-        if not isinstance(super_pacgum_points, int) or super_pacgum_points < 1:
+        if points_per_super_pacgum is None:
             print(
-                    f"\n{Color().YELLOW}'super_pacgum_points' not a number or"
-                    "less than 1.\n"
+                    f"\n{Color().YELLOW}'points_per_super_pacgum' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['points_per_super_pacgum'] = 20
+
+        if (
+                not isinstance(points_per_super_pacgum, int)
+                or points_per_super_pacgum < 1
+           ):
+            print(
+                    f"\n{Color().YELLOW}'points_per_super_pacgum' not a number"
+                    " or less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            dic['super_pacgum_points'] = 20
+            dic['points_per_super_pacgum'] = 20
 
         # ---------------------------------------------------------------------
 
-        if not isinstance(ghost_points, int) or ghost_points < 1:
+        if points_per_ghost is None:
+            print(
+                    f"\n{Color().YELLOW}'points_per_ghost' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['points_per_ghost'] = 40
+
+        if not isinstance(points_per_ghost, int) or points_per_ghost < 1:
             print(
                     f"\n{Color().YELLOW}'ghost_points' not a number or"
                     "less than 1.\n"
@@ -188,6 +236,13 @@ class GameConfig(BaseModel):
             dic['ghost_points'] = 40
 
         # ---------------------------------------------------------------------
+
+        if seed is None:
+            print(
+                    f"\n{Color().YELLOW}'seed' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['seed'] = 42
 
         if not isinstance(seed, int) or seed < 1:
             print(
@@ -199,7 +254,14 @@ class GameConfig(BaseModel):
 
         # ---------------------------------------------------------------------
 
-        if not isinstance(level_max_time, int) or seed < 1:
+        if level_max_time is None:
+            print(
+                    f"\n{Color().YELLOW}'level_max_time' not exist."
+                    f"default value is added{Color().WHITE}\n"
+                 )
+            dic['level_max_time'] = 300
+
+        if not isinstance(level_max_time, int) or level_max_time < 1:
             print(
                     f"\n{Color().YELLOW}'level_max_time' not a number or"
                     "less than 1.\n"

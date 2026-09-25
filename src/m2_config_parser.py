@@ -51,8 +51,8 @@ class Parser:
         except json.decoder.JSONDecodeError:
 
             print(
-                f"{Color().RED}❌ JSON syntax: the syntax not conforme\n"
-                f"{Color().GREEN}\nswitching to default config data ...\n"
+                f"{Color().RED}\n❌ JSON syntax: the syntax not conforme\n"
+                f"{Color().GREEN}switching to default config data ...\n"
                 f"{Color().WHITE}"
                  )
 

@@ -1,31 +1,4 @@
-# hello world
-
 {
-    "highscore_file": "top_10_scores.json", # yassine is king
-
-    "levels_data"   : [
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42},
-                        {"width": 42, "height": 42, "pacgum": 42}
-                      ],
-
-    "lives"         : 3,
-
-    "pacgum_points" : 10,
-
-    "super_pacgum_points": 20, # hello world
-
-    "ghost_points": 40,
-
-    "seed": 42,
-
-    "level_max_time": 300
-
-}
+    "highscore_filename": "top_10_scores.json",
+    "lives": 3,
+    "seed": 42
