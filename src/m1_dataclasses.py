@@ -103,7 +103,7 @@ class GameConfig(BaseModel):
 
     highscore_filename: str
     levels_data: List[Levels]
-    lives: int = Field(gt=0)
+    lives: int
     points_per_pacgum: int
     points_per_super_pacgum: int
     points_per_ghost: int
@@ -227,13 +227,13 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_ghost'] = 40
 
-        if not isinstance(points_per_ghost, int) or points_per_ghost < 1:
+        elif not isinstance(points_per_ghost, int) or points_per_ghost < 1:
             print(
                     f"\n{Color().YELLOW}'ghost_points' not a number or"
                     "less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            dic['ghost_points'] = 40
+            dic['points_per_ghost'] = 40
 
         # ---------------------------------------------------------------------
 

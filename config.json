@@ -1,4 +1,77 @@
 {
-    "highscore_filename": "top_10_scores.json",
-    "lives": 3,
-    "seed": 42
+    # Global comments should be ignored
+    "highscore_filename": 123,
+
+    "lives": -5,
+    "pacgum": -10,
+    "points_per_pacgum": 0,
+    "points_per_super_pacgum": -50,
+    "points_per_ghost": "world",
+    "seed": null,
+    "level_max_time": 0,
+
+    # Unknown keys should be ignored
+    "hello": "unknown key",
+    "random_value": 12345,
+
+    # Only 8 levels -> your program should add 2 defaults
+    "level": [
+        12,
+        # Level 1: completely valid
+        {
+            "width": 20,
+            "height": 15,
+            "pacgum": 42
+        },
+
+        # Level 2: width too small
+        {
+            "width": 5,
+            "height": 15,
+            "pacgum": 20
+        },
+
+        # Level 3: height too small
+        {
+            "width": 20,
+            "height": 3,
+            "pacgum": 20
+        },
+
+        # Level 4: pacgum <= 0
+        {
+            "width": 20,
+            "height": 15,
+            "pacgum": -10
+        },
+
+        # Level 5: pacgum too large for width * height - 19
+        {
+            "width": 10,
+            "height": 7,
+            "pacgum": 100
+        },
+
+        # Level 6: wrong types
+        {
+            "width": 15,
+            "height": [],
+            "pacgum": {}
+        },
+
+        # Level 7: unknown keys + valid required fields
+        {
+            "width": 20,
+            "height": 15,
+            "pacgum": 42,
+            "unknown_key": "should be ignored",
+            "another_unknown_key": 123
+        },
+
+        # Level 8: missing width
+        {
+            "height": 15,
+            "pacgum": 42
+        }
+    ]
+}
