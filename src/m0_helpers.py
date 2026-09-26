@@ -13,7 +13,7 @@ class Default_conf:
     DICT = {
                 "highscore_filename": "top_10_scores.json",
 
-                "levels_data": [
+                "levels": [
                                     {"width": 42, "height": 42, "pacgum": 42}
                                     for _ in range(10)
                                ],

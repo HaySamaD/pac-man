@@ -14,7 +14,7 @@ class Position:
 
 # ========================= the config file parser ============================
 
-class Levels(BaseModel):
+class Level(BaseModel):
 
     width: int = Field(ge=9)
     height: int = Field(ge=7)
@@ -64,7 +64,7 @@ class Levels(BaseModel):
 
         elif (not isinstance(val_height, int) or val_height < 7):
             print(
-                    f"\n{Color().YELLOW}'height' not a integer or < 7."
+                    f"\n{Color().YELLOW}'height' not a integer or < 7.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
@@ -85,7 +85,7 @@ class Levels(BaseModel):
                  )
             dic['pacgum'] = 42
 
-        if val_pacgum > (val_width * val_height) - 19:
+        elif val_pacgum > (dic['width'] * dic['height']) - 19:
             print(
                 f"\n{Color().YELLOW}'nbr of pacgums more than map capacity\n"
                 f"{Color().GREEN}default value is added{Color().WHITE}\n"
@@ -102,7 +102,7 @@ class Levels(BaseModel):
 class GameConfig(BaseModel):
 
     highscore_filename: str
-    levels_data: List[Levels]
+    levels: List[Level]
     lives: int
     points_per_pacgum: int
     points_per_super_pacgum: int
@@ -115,7 +115,7 @@ class GameConfig(BaseModel):
     def validate_raw_dic(cls, dic: Any) -> Any:
 
         highscore_filename: Any = dic.get("highscore_filename", None)
-        levels_data: Any = dic.get("levels_data", None)
+        levels: Any = dic.get("levels", None)
         lives: Any = dic.get("lives", None)
         points_per_pacgum: Any = dic.get("points_per_pacgum", None)
         points_per_super_pacgum: Any = dic.get("points_per_super_pacgum", None)
@@ -145,25 +145,25 @@ class GameConfig(BaseModel):
 
         # ---------------------------------------------------------------------
 
-        if not isinstance(levels_data, list):
+        if not isinstance(levels, list):
             print(
-                    f"\n{Color().YELLOW}'levels_data' not a list.\n"
+                    f"\n{Color().YELLOW}'levels' not a list.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            dic['levels_data'] = [
-                                    {"width": 42, "height": 42, "pacgum": 42}
-                                    for _ in range(10)
-                                 ]
+            dic['levels'] = [
+                                {"width": 42, "height": 42, "pacgum": 42}
+                                for _ in range(10)
+                            ]
 
-        elif len(levels_data) < 10:
+        elif len(levels) < 10:
             print(
-                    f"\n{Color().YELLOW}'levels_data' less than 10.\n"
+                    f"\n{Color().YELLOW}'levels' less than 10.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            for _ in range(10 - len(levels_data)):
-                dic['levels_data'].append(
-                                        Levels(width=42, height=42, pacgum=42)
-                                         )
+            for _ in range(10 - len(levels)):
+                dic['levels'].append(
+                                        Level(width=42, height=42, pacgum=42)
+                                    )
 
         # ---------------------------------------------------------------------
 
@@ -229,8 +229,8 @@ class GameConfig(BaseModel):
 
         elif not isinstance(points_per_ghost, int) or points_per_ghost < 1:
             print(
-                    f"\n{Color().YELLOW}'ghost_points' not a number or"
-                    "less than 1.\n"
+                    f"\n{Color().YELLOW}'points_per_ghost' not a number or"
+                    " less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['points_per_ghost'] = 40
@@ -239,14 +239,14 @@ class GameConfig(BaseModel):
 
         if seed is None:
             print(
-                    f"\n{Color().YELLOW}'seed' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'seed' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['seed'] = 42
 
-        if not isinstance(seed, int) or seed < 1:
+        elif not isinstance(seed, int) or seed < 1:
             print(
-                    f"\n{Color().YELLOW}'seed' not a number or"
+                    f"\n{Color().YELLOW}'seed' not a number or "
                     "less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
