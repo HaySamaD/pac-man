@@ -1,5 +1,7 @@
 from src.parsing_config_file.m2_config_parser import Parser
 
+from src.parsing_config_file.m1_pydantic_obj import GameConfig
+
 from typing import List, Dict
 
 import sys
@@ -11,7 +13,7 @@ WHITE = "\033[37m"
 
 # --------------------------------------------------------------------------------
 
-def main():
+def main() -> None:
 
     # ---------------------------------------------------------------------------
 
@@ -29,7 +31,7 @@ def main():
 
     p = Parser(sys.argv[1])
 
-    conf_obj: List[Dict] = p.conf_obj
+    conf_obj: GameConfig = p.conf_obj
 
 
 # --------------------------------------------------------------------------------
