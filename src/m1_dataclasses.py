@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from pydantic import BaseModel, Field, model_validator
 from typing import List, Any
 from src.m0_helpers import Color
-from src.m0_helpers import Default_conf
 
 
 @dataclass
@@ -160,9 +159,9 @@ class GameConfig(BaseModel):
                     f"\n{Color().YELLOW}'levels' less than 10.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            for _ in range(10 - len(levels)):
+            for _ in range(0, 10 - len(levels)):
                 dic['levels'].append(
-                                        Level(width=42, height=42, pacgum=42)
+                                    {"width": 42, "height": 42, "pacgum": 42}
                                     )
 
         # ---------------------------------------------------------------------

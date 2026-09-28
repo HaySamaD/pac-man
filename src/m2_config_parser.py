@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Any
 import json
 from src.m0_helpers import Helper, Default_conf, Color
 from src.m1_dataclasses import GameConfig
@@ -8,16 +8,19 @@ from src.m1_dataclasses import GameConfig
 
 class Parser:
 
-    def __init__(self, config_path) -> None:
+    def __init__(self, config_path: str) -> None:
 
         # ------------------ Raw text config -------------------------
         self.config_txt: str = Helper().read_config_file(config_path)
 
-        # ---------------- Net text config -----------------------
+        # ---------- Net text config -------------
         self.net_txt: str = self.skip_comments()
 
-        # ---------- config object ----------------
-        self.conf_obj: List[Dict] = self.build_config_object()
+        # ---------------- config object ----------------------
+        self.conf_dic: Dict[str, Any] = self.get_config_dict()
+
+        # ------------- the finale parsed config object -------------
+        self.conf_obj: GameConfig = self.parse_config_object()
 
     # -------------------------------------------------------
 
@@ -33,20 +36,17 @@ class Parser:
             if not line or line.startswith("#"):
                 continue
 
-            if "#" in line:
-                line = line.split("#")[0].strip()
-
             res.append(line)
 
         return "".join(res)
 
     # --------------------------------------------------------
 
-    def build_config_object(self):
+    def get_config_dict(self) -> Dict[str, Any]:
 
         try:
 
-            conf_obj = json.loads(self.net_txt)
+            conf_dic = json.loads(self.net_txt)
 
         except json.decoder.JSONDecodeError:
 
@@ -56,21 +56,21 @@ class Parser:
                 f"{Color().WHITE}"
                  )
 
-            conf_obj = Default_conf().DICT
+            conf_dic = Default_conf().DICT
 
-        return conf_obj
+        return conf_dic
 
     # --------------------------------------------------------
 
-    def parse_config_object(self):
+    def parse_config_object(self) -> GameConfig:
 
-        if not isinstance(self.conf_obj, dict):
+        if not isinstance(self.conf_dic, dict):
             print(
                     f"\n{Color().YELLOW}the config is not a dictionary. \n"
                     f"{Color().GREEN}default config is added{Color().WHITE}\n"
                  )
-            self.conf_obj = Default_conf().DICT
+            self.conf_dic = Default_conf().DICT
 
-        game_conf: GameConfig = GameConfig(**self.conf_obj)
+        config_obj: GameConfig = GameConfig(**self.conf_dic)
 
-        return game_conf
+        return config_obj
