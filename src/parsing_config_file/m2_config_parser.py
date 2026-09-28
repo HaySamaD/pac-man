@@ -11,7 +11,7 @@ class Parser:
     def __init__(self, config_path: str) -> None:
 
         # ------------------ Raw text config -------------------------
-        self.config_txt: str = Helper().read_config_file(config_path)
+        self.config_txt: str = Helper().read_content_file(config_path)
 
         # ---------- Net text config -------------
         self.net_txt: str = self.skip_comments()

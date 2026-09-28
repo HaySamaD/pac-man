@@ -1,3 +1,7 @@
+from typing import List, Dict
+
+import json
+
 
 class Color:
     RED = "\033[31m"
@@ -11,7 +15,7 @@ class Color:
 class Default_conf:
 
     DICT = {
-                "highscore_filename": "top_10_scores.json",
+                "highscore_filename": "data/highscores.json",
 
                 "levels": [
                                     {"width": 42, "height": 42, "pacgum": 42}
@@ -36,13 +40,44 @@ class Default_conf:
 
 class Helper:
 
-    def read_config_file(self, json_path: str) -> str:
+    # --- read json file and return he content (str format) ---
+
+    def read_content_file(self, file_path: str) -> str:
         try:
-            with open(json_path, 'r') as f:
+            with open(file_path, 'r') as f:
                 content: str = f.read()
             return content
-        except (FileNotFoundError, OSError):
+        except OSError:
             raise Exception(
-                            f"{Color().RED}❌ Error: {json_path} not exist or "
+                            f"{Color().RED}❌ Error: {file_path} not exist or "
                             f"access denied{Color().WHITE}"
                            )
+
+    # --------------------------------------------------------------------------
+
+    def read_json_file(self, file_path: str) -> List[Dict]:
+
+        try:
+            with open(file_path, 'r') as f:
+                content: List[Dict] = json.load(f)
+                return content
+        except OSError:
+            print(
+                    f"{Color().YELLOW}❌ Error: {file_path} not exist or "
+                    "access denied"
+                    f"{Color().WHITE} add default value [] and switch to "
+                    "'highscores.json'"
+                 )
+            return []
+        except json.JSONDecodeError:
+            print(
+                    f"{Color().YELLOW}❌ Error: {file_path}: wrong syntax"
+                    f"{Color().WHITE} add default value [] and switch to "
+                    "'highscores.json'"
+                 )
+            return []
+
+        if not isinstance(content, list):
+            return []
+
+        return content

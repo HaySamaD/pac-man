@@ -121,7 +121,7 @@ class GameConfig(BaseModel):
                     f"\n{Color().YELLOW}'highscore_filename' not exist."
                     f"default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_filename'] = "top_10_scores.json"
+            dic['highscore_filename'] = "data/highscores.json"
 
         if (
             not isinstance(highscore_filename, str)
@@ -132,7 +132,7 @@ class GameConfig(BaseModel):
                 "(not str or not end with '.json').\n"
                 f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_filename'] = 'top_10_scores.json'
+            dic['highscore_filename'] = 'data/highscores.json'
 
         # ---------------------------------------------------------------------
 
