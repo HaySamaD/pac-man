@@ -1,17 +1,9 @@
-from dataclasses import dataclass
 from pydantic import BaseModel, Field, model_validator
+
 from typing import List, Any
-from src.m0_helpers import Color
 
+from .m0_helpers import Color
 
-@dataclass
-class Position:
-    """ object prosition (x, y) on maze. """
-    x: int
-    y: int
-
-
-# ========================= the config file parser ============================
 
 class Level(BaseModel):
 
@@ -96,7 +88,7 @@ class Level(BaseModel):
         return dic
 
 
-# ----------------------------
+# ===============================================================================
 
 class GameConfig(BaseModel):
 
@@ -122,7 +114,7 @@ class GameConfig(BaseModel):
         seed: Any = dic.get("seed", None)
         level_max_time: Any = dic.get("level_max_time", None)
 
-        # ---------------------------------------------------------------------
+        # ------------------------------------------------------------------
 
         if highscore_filename is None:
             print(
@@ -269,36 +261,3 @@ class GameConfig(BaseModel):
             dic['level_max_time'] = 300
 
         return dic
-
-
-# ========================================
-
-@dataclass
-class GameState:
-    """ state of the game per status. """
-    score: int = 0
-    lives: int = 3
-    level: int = 1
-    time_left: int = 90
-    status: str = "MENU"  # MENU, PLAYING, PAUSED, GAME_OVER, VICTORY
-
-
-# =============================
-
-@dataclass
-class Player:
-    """ player metadata. """
-    position: Position
-    direction: str = "RIGHT"
-    is_alive: bool = True
-
-
-# =============================
-
-@dataclass
-class Ghost:
-    """ ghost metadata """
-    position: Position
-    ghost_type: str  # blinky, pinky, inky, clyde
-    is_edible: bool = False
-    direction: str = "UP"

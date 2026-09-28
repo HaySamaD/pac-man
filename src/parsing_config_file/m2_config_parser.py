@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 import json
-from src.m0_helpers import Helper, Default_conf, Color
-from src.m1_dataclasses import GameConfig
+from .m0_helpers import Helper, Default_conf, Color
+from .m1_pydantic_obj import GameConfig
 
 # ==============================================================================
 
@@ -19,7 +19,7 @@ class Parser:
         # ---------------- config object ----------------------
         self.conf_dic: Dict[str, Any] = self.get_config_dict()
 
-        # ------------- the finale parsed config object -------------
+        # ------------- the finale parsed config object -------
         self.conf_obj: GameConfig = self.parse_config_object()
 
     # -------------------------------------------------------
@@ -46,7 +46,7 @@ class Parser:
 
         try:
 
-            conf_dic = json.loads(self.net_txt)
+            conf_dic: Dict[str, Any] = json.loads(self.net_txt)
 
         except json.decoder.JSONDecodeError:
 

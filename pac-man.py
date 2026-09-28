@@ -1,4 +1,4 @@
-from src.m2_config_parser import Parser
+from src.parsing_config_file.m2_config_parser import Parser
 
 from typing import List, Dict
 
