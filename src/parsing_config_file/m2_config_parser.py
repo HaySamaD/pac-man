@@ -1,7 +1,7 @@
 from typing import List, Dict, Any
 import json
-from .m0_helpers import Helper, Default_conf, Color
-from .m1_pydantic_obj import GameConfig
+from ..m0_helpers import Helper, Default_conf, Color
+from .m1_pydantic_objs import GameConfig
 
 # ==============================================================================
 
@@ -11,7 +11,7 @@ class Parser:
     def __init__(self, config_path: str) -> None:
 
         # ------------------ Raw text config -------------------------
-        self.config_txt: str = Helper().read_content_file(config_path)
+        self.config_txt: str = Helper().read_txt_file(config_path)
 
         # ---------- Net text config -------------
         self.net_txt: str = self.skip_comments()
@@ -20,7 +20,7 @@ class Parser:
         self.conf_dic: Dict[str, Any] = self.get_config_dict()
 
         # ------------- the finale parsed config object -------
-        self.conf_obj: GameConfig = self.parse_config_object()
+        self.conf_obj: GameConfig = self.create_gameconf_obj()
 
     # -------------------------------------------------------
 
@@ -62,7 +62,7 @@ class Parser:
 
     # --------------------------------------------------------
 
-    def parse_config_object(self) -> GameConfig:
+    def create_gameconf_obj(self) -> GameConfig:
 
         if not isinstance(self.conf_dic, dict):
             print(

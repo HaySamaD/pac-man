@@ -2,20 +2,24 @@ from pydantic import BaseModel, Field, model_validator
 
 from typing import List, Any
 
-from .m0_helpers import Color
+from ..m0_helpers import Color
 
+
+# ==============================================================================
 
 class Level(BaseModel):
 
-    width: int = Field(ge=9)
-    height: int = Field(ge=7)
-    pacgum: int = Field(ge=1)
+    width: int
+    height: int
+    pacgum: int
+
+    # ------------- parce the dict before impaking (mode=before) -------------
 
     @model_validator(mode="before")
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
 
-        # ------------------ check the type of the input --------------------
+        # ----------- check the type of the input (if dict or not) -----------
         if not isinstance(dic, dict):
             print(
                     f"\n{Color().YELLOW}one of levels metadata not a dict. \n"
@@ -23,12 +27,12 @@ class Level(BaseModel):
                  )
             return {"width": 42, "height": 42, "pacgum": 42}
 
-        # ----------- get the elements ------------
+        # -------- get the dic elements ---------
         val_width: Any = dic.get("width", None)
         val_height: Any = dic.get("height", None)
         val_pacgum: Any = dic.get("pacgum", None)
 
-        # ----------------- handel width value -------------------------
+        # --------------------- handel width value ---------------------------
 
         if val_width is None:
             print(
@@ -93,7 +97,7 @@ class Level(BaseModel):
 class GameConfig(BaseModel):
 
     highscore_filename: str
-    levels: List[Level]
+    levels_data: List[Level]
     lives: int
     points_per_pacgum: int
     points_per_super_pacgum: int
@@ -101,12 +105,15 @@ class GameConfig(BaseModel):
     seed: int
     level_max_time: int
 
+    # ------------ parce the dict before impaking (mode=before) ---------------
+
     @model_validator(mode="before")
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
 
+        # ------------------------ get the dic elements -----------------------
         highscore_filename: Any = dic.get("highscore_filename", None)
-        levels: Any = dic.get("levels", None)
+        levels_data: Any = dic.get("levels_data", None)
         lives: Any = dic.get("lives", None)
         points_per_pacgum: Any = dic.get("points_per_pacgum", None)
         points_per_super_pacgum: Any = dic.get("points_per_super_pacgum", None)
@@ -114,7 +121,7 @@ class GameConfig(BaseModel):
         seed: Any = dic.get("seed", None)
         level_max_time: Any = dic.get("level_max_time", None)
 
-        # ------------------------------------------------------------------
+        # ------------------ handel highscore_filename ------------------
 
         if highscore_filename is None:
             print(
@@ -134,29 +141,29 @@ class GameConfig(BaseModel):
                  )
             dic['highscore_filename'] = 'data/highscores.json'
 
-        # ---------------------------------------------------------------------
+        # ------------------------ handel levels_data -------------------------
 
-        if not isinstance(levels, list):
+        if not isinstance(levels_data, list):
             print(
-                    f"\n{Color().YELLOW}'levels' not a list.\n"
+                    f"\n{Color().YELLOW}'levels_data' not a list.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            dic['levels'] = [
+            dic['levels_data'] = [
                                 {"width": 42, "height": 42, "pacgum": 42}
                                 for _ in range(10)
                             ]
 
-        elif len(levels) < 10:
+        elif len(levels_data) < 10:
             print(
-                    f"\n{Color().YELLOW}'levels' less than 10.\n"
+                    f"\n{Color().YELLOW}'levels_data' less than 10.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
-            for _ in range(0, 10 - len(levels)):
-                dic['levels'].append(
+            for _ in range(0, 10 - len(levels_data)):
+                dic['levels_data'].append(
                                     {"width": 42, "height": 42, "pacgum": 42}
                                     )
 
-        # ---------------------------------------------------------------------
+        # ---------------------- handel lives List[Dict] ----------------------
 
         if lives is None:
             print(
@@ -172,7 +179,7 @@ class GameConfig(BaseModel):
                  )
             dic['lives'] = 3
 
-        # ---------------------------------------------------------------------
+        # --------------------- handel points_per_pacgum ----------------------
 
         if points_per_pacgum is None:
             print(
@@ -189,7 +196,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_pacgum'] = 10
 
-        # ---------------------------------------------------------------------
+        # ----------------- handel points_per_super_pacgum --------------------
 
         if points_per_super_pacgum is None:
             print(
@@ -209,7 +216,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_super_pacgum'] = 20
 
-        # ---------------------------------------------------------------------
+        # -------------------- handel points_per_ghost -----------------------
 
         if points_per_ghost is None:
             print(
@@ -226,7 +233,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_ghost'] = 40
 
-        # ---------------------------------------------------------------------
+        # -------------------------- handel seed ------------------------------
 
         if seed is None:
             print(
@@ -243,7 +250,7 @@ class GameConfig(BaseModel):
                  )
             dic['seed'] = 42
 
-        # ---------------------------------------------------------------------
+        # --------------------- handel level_max_time -------------------------
 
         if level_max_time is None:
             print(

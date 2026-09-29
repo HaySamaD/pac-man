@@ -1,10 +1,10 @@
 from src.parsing_config_file.m2_config_parser import Parser
 
-from src.parsing_config_file.m1_pydantic_obj import GameConfig
+from src.parsing_config_file.m1_pydantic_objs import GameConfig
 
-from typing import List, Dict
+from typing import Dict
 
-from src.highscores_system import HighScoreSys
+from src.m2_highscores_system import HighScoreSys
 
 import sys
 
@@ -35,14 +35,9 @@ def main() -> None:
 
     conf_obj: GameConfig = p.conf_obj
 
-    # ---------------------------------------------------------------------------
-
-    highscore_obj: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
-
-    highscore_dict: Dict[str, int] = highscore_obj.highscores_meta
-
-    print(highscore_dict)
-
+    # ---------------------------------
+    hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
+    print(hs.highscores_obj)
 
 # --------------------------------------------------------------------------------
 
