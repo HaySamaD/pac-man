@@ -37,7 +37,8 @@ def main() -> None:
 
     # ---------------------------------
     hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
-    print(hs.highscores_obj)
+    hs.add_new_score({"name": "yassine", "score": 80000})
+    hs.save_top_10_scores()
 
 # --------------------------------------------------------------------------------
 
