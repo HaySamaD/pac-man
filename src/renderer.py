@@ -3,8 +3,16 @@ import pygame
 from src.maze_board import TileType, MazeBoard
 
 
+# =============================================================================
+
 class Renderer:
-    def __init__(self, board: MazeBoard, tile_size: int = 40, assets_dir: str = "assets"):
+    def __init__(
+                        self,
+                        board: MazeBoard,
+                        tile_size: int = 40,
+                        assets_dir: str = "assets"
+            ) -> None:
+
         self.board = board
         self.tile_size = tile_size
         self.maze_pixel_w = board.width * tile_size
