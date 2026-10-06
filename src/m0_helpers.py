@@ -64,6 +64,8 @@ class Helper:
 
             with open(file_path, 'r') as f:
                 content: List[Dict] = json.load(f)
+                if not isinstance(content, list):
+                    return []
                 return content
 
         except OSError:
@@ -82,8 +84,3 @@ class Helper:
                     f"'data/highscores.json'{Color().WHITE}"
                  )
             return []
-
-        if not isinstance(content, list):
-            return []
-
-        return content
