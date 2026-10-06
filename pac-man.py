@@ -5,13 +5,11 @@ from src.maze_board import MazeBoard
 from src.renderer import Renderer
 
 
-# --------------------------------------------------------------------------------
-
 def main() -> None:
     gen = MazeGenerator(size=(21, 21), seed=42)
     board = MazeBoard.from_raw_maze(gen.maze)
 
-    renderer = Renderer(board, tile_size=45)
+    renderer = Renderer(board, tile_size=40)
 
     running = True
     while running:
@@ -28,7 +26,6 @@ def main() -> None:
     pygame.quit()
     sys.exit(0)
 
-# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()

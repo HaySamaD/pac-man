@@ -4,3 +4,4 @@ src/.mypy_cache
 .mypy_cache
 .vscode
 test.py
+generate_assets.py

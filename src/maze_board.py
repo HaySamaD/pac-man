@@ -1,6 +1,7 @@
 from enum import IntEnum
 from dataclasses import dataclass
 
+
 class TileType(IntEnum):
     EMPTY = 0
     WALL = 1
@@ -17,14 +18,13 @@ class MazeBoard:
 
     @classmethod
     def from_raw_maze(cls, raw_maze: list[list[int]]) -> "MazeBoard":
-        width = len(raw_maze)
         height = len(raw_maze)
+        width = len(raw_maze[0])
         grid = [[int(TileType.EMPTY) for _ in range(width)] for _ in range(height)]
         gums_count = 0
 
         for y in range(height):
             for x in range(width):
-                # kay3ni bli raha cell dyal 42
                 if raw_maze[y][x] == 15:
                     grid[y][x] = TileType.WALL
                 else:

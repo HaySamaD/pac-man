@@ -1,31 +1,38 @@
+import os
 import pygame
 from src.maze_board import TileType, MazeBoard
 
 
 class Renderer:
-    def __init__(self, board: MazeBoard, tile_size: int = 40):
+    def __init__(self, board: MazeBoard, tile_size: int = 40, assets_dir: str = "assets"):
         self.board = board
         self.tile_size = tile_size
         self.maze_pixel_w = board.width * tile_size
         self.maze_pixel_h = board.height * tile_size
 
-        # Classec Pac-Man colores
-        self.COLOR_BG = "black"
-        self.COLOR_WALL = "blue"
-        self.COLOR_PACGUM = (255, 183, 174)
-        self.COLOR_SUPER = "white"
+        self.COLOR_BG = (0, 0, 0)
 
         pygame.init()
         info = pygame.display.Info()
         self.screen_w = info.current_w
         self.screen_h = info.current_h
-        self.screen = pygame.display.set_mode((self.screen_w, self.screen_h), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(
+            (self.screen_w, self.screen_h), pygame.FULLSCREEN
+        )
         pygame.display.set_caption("Pac-Man")
 
         self.offset_x = (self.screen_w - self.maze_pixel_w) // 2
         self.offset_y = (self.screen_h - self.maze_pixel_h) // 2
 
         self.clock = pygame.time.Clock()
+
+        wall_img = pygame.image.load(os.path.join(assets_dir, "tile_wall.png")).convert_alpha()
+        gum_img = pygame.image.load(os.path.join(assets_dir, "pacgum.png")).convert_alpha()
+        super_img = pygame.image.load(os.path.join(assets_dir, "super_pacgum.png")).convert_alpha()
+
+        self.img_wall = pygame.transform.scale(wall_img, (self.tile_size, self.tile_size))
+        self.img_pacgum = pygame.transform.scale(gum_img, (self.tile_size, self.tile_size))
+        self.img_super_pacgum = pygame.transform.scale(super_img, (self.tile_size, self.tile_size))
 
     def render_map(self):
         self.screen.fill(self.COLOR_BG)
@@ -36,17 +43,13 @@ class Renderer:
                 tile = self.board.grid[y][x]
                 px = self.offset_x + x * ts
                 py = self.offset_y + y * ts
-                center = (px + ts // 2, py + ts // 2)
 
                 if tile == TileType.WALL:
-                    # nrsmo l7itt kamostatil
-                    pygame.draw.rect(self.screen, self.COLOR_WALL, (px, py, ts, ts))
+                    self.screen.blit(self.img_wall, (px, py))
                 elif tile == TileType.PACGUM:
-                    # hh yup nrsmo no9tta sghira
-                    pygame.draw.circle(self.screen, self.COLOR_PACGUM, center, 3)
+                    self.screen.blit(self.img_pacgum, (px, py))
                 elif tile == TileType.SUPER_PACGUM:
-                    # nrsmo no9tta kbira
-                    pygame.draw.circle(self.screen, self.COLOR_SUPER, center, 6)
+                    self.screen.blit(self.img_super_pacgum, (px, py))
 
     def update_desplay(self):
         pygame.display.flip()
