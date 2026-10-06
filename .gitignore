@@ -1,4 +1,6 @@
 src/__pycache__
 src/.mypy_cache
-.venv
+.myenv
 .mypy_cache
+.vscode
+test.py
