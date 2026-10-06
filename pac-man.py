@@ -1,49 +1,34 @@
-from src.parsing_config_file.m2_config_parser import Parser
-
-from src.parsing_config_file.m1_pydantic_objs import GameConfig
-
-from typing import Dict
-
-from src.m2_highscores_system import HighScoreSys
-
 import sys
-
-RED = "\033[31m"
-GREEN = "\033[32m"
-WHITE = "\033[37m"
+import pygame
+from mazegenerator import MazeGenerator
+from src.maze_board import MazeBoard
+from src.renderer import Renderer
 
 
 # --------------------------------------------------------------------------------
 
 def main() -> None:
+    gen = MazeGenerator(size=(21, 21), seed=42)
+    board = MazeBoard.from_raw_maze(gen.maze)
 
-    # ------------ if we have more than one arg || not a json file ------------
+    renderer = Renderer(board, tile_size=45)
 
-    if len(sys.argv) != 2:
-        raise Exception(
-            f"\n{RED}❌ Usage: python3 pac-man.py <config_file>.json\n{WHITE}\n"
-                       )
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
-    if not sys.argv[1].endswith('.json'):
-        raise Exception(
-            f"{RED}❌ JSON format: '{sys.argv[1]}' must be a json file{WHITE}\n"
-                       )
+        renderer.render_map()
+        renderer.update_desplay()
 
-    # ----- config object parsed -----
-
-    p = Parser(sys.argv[1])
-
-    conf_obj: GameConfig = p.conf_obj
-
-    # ---------------------------------
-    hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
-    hs.add_new_score({"name": "yassine", "score": 80000})
-    hs.save_top_10_scores()
+    pygame.quit()
+    sys.exit(0)
 
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    # try:
     main()
-    # except Exception as e:
-    #     print(e)

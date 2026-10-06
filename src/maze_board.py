@@ -1,8 +1,8 @@
-from enum import StrEnum, Enum
+from enum import IntEnum
 from dataclasses import dataclass
 
-class TileType(StrEnum):
-    EMPTY = "empty"
+class TileType(IntEnum):
+    EMPTY = 0
     WALL = 1
     PACGUM = 2
     SUPER_PACGUM = 3
@@ -19,7 +19,7 @@ class MazeBoard:
     def from_raw_maze(cls, raw_maze: list[list[int]]) -> "MazeBoard":
         width = len(raw_maze)
         height = len(raw_maze)
-        grid = [[TileType.EMPTY for _ in range(width)] for _ in range(height)]
+        grid = [[int(TileType.EMPTY) for _ in range(width)] for _ in range(height)]
         gums_count = 0
 
         for y in range(height):
@@ -31,4 +31,9 @@ class MazeBoard:
                     grid[y][x] = TileType.PACGUM
                     gums_count += 1
 
-        corners = [(0, 0), (width - 2, ),]
+        corners = [(1, 1), (width - 2, 1), (1, height - 2), (width - 2, height - 2)]
+        for cx, cy in corners:
+            if 0 <= cy < height and 0 <= cx < width and grid[cy][cx] == TileType.PACGUM:
+                grid[cy][cx] = TileType.SUPER_PACGUM
+
+        return cls(width=width, height=height, grid=grid, remaining_pacgums=gums_count)
