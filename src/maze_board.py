@@ -14,6 +14,7 @@ class MazeBoard:
     width: int
     height: int
     grid: list[list[int]]
+    raw_maze: list[list[int]]
     remaining_pacgums: int = 0
 
     @classmethod
@@ -31,9 +32,20 @@ class MazeBoard:
                     grid[y][x] = TileType.PACGUM
                     gums_count += 1
 
-        corners = [(1, 1), (width - 2, 1), (1, height - 2), (width - 2, height - 2)]
+        corners = [
+            (0, 0),
+            (width - 1, 0),
+            (0, height - 1),
+            (width - 1, height - 1)
+        ]
         for cx, cy in corners:
             if 0 <= cy < height and 0 <= cx < width and grid[cy][cx] == TileType.PACGUM:
                 grid[cy][cx] = TileType.SUPER_PACGUM
 
-        return cls(width=width, height=height, grid=grid, remaining_pacgums=gums_count)
+        return cls(
+            width=width,
+            height=height,
+            grid=grid,
+            raw_maze=raw_maze,
+            remaining_pacgums=gums_count,
+        )

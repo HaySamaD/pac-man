@@ -1,0 +1,8 @@
+Pygame = pygame.display.set_mode()          == MLX = mlx_new_window()
+Pygame = screen.set_at((x, y), color)       == MLX = mlx_pixel_put()
+Pygame = pygame.Surface()                   == MLX = mlx_new_image()
+Pygame = screen.blit(image, (x, y))         == MLX = mlx_put_image_to_window()
+Pygame = pygame.image.load()                == MLX = mlx_xpm_file_to_image()
+Pygame = pygame.event.get() (KEYDOWN, QUIT) == MLX = mlx_hook(), mlx_key_hook()
+Pygame = clock.tick(fps)                    == MLX = mlx_loop_hook()
+
