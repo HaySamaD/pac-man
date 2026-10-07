@@ -20,7 +20,7 @@ class GameManager:
         self.game_state.score += count
 
     # -----------------------------------
-    def deincrement_lives(self) -> None:
+    def decrement_lives(self) -> None:
         self.game_state.lives -= 1
 
     # ---------------------------------
@@ -31,8 +31,12 @@ class GameManager:
     def reset_time(self) -> None:
         self.game_state.time_left = self.level_max_time
 
+    # ------------------------------------------------
+    def change_status_game(self, status: str) -> None:
+        self.game_state.status = status
+
     # -----------------------------------------------
-    def deincrement_time(self) -> None:
+    def decrement_time(self) -> None:
 
         self.game_state.time_left -= 1
 
@@ -42,9 +46,5 @@ class GameManager:
                 self.change_status_game("GAME_OVER")
 
             else:
-                self.deincrement_lives()
+                self.decrement_lives()
                 self.reset_time()
-
-    # ------------------------------------------------
-    def change_status_game(self, status: str) -> None:
-        self.game_state.status = status
