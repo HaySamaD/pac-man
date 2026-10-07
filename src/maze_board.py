@@ -36,7 +36,7 @@ class MazeBoard:
             (0, 0),
             (width - 1, 0),
             (0, height - 1),
-            (width - 1, height - 1)
+            (width - 1, height - 1),
         ]
         for cx, cy in corners:
             if 0 <= cy < height and 0 <= cx < width and grid[cy][cx] == TileType.PACGUM:
