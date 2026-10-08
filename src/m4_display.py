@@ -8,6 +8,7 @@ class MainMenu:
     def __init__(
                     self,
                     top_10_scores: HighScoreSys,
+                    rules_lst: List[str],
                     screen_dim: Tuple[int, int] = (1920, 1080),
                 ) -> None:
 
@@ -120,38 +121,11 @@ class MainMenu:
     # --------------------------------------------------------------------------
     def print_instructions(self) -> None:
 
-        content: str = (
-            "CONTROLS & GAME INSTRUCTIONS\n\n"
-            "1. Player Movement:\n"
-            " -Use ARROW KEYS or WASD to move Pac-Man through the corridors.\n"
-            " - Pac-Man can only move through open corridors, not through "
-            "walls.\n\n"
-            "2. Objectives:\n"
-            " - Eat all Pacgums (small dots) scattered across the corridors to"
-            " win the current level.\n"
-            "- Avoid ghosts. Touching a ghost causes Pac-Man to lose a life "
-            "and restart in the middle.\n"
-            " - The game ends when all lives are lost or all 10 levels are "
-            "completed.\n\n"
-            "3. Power Pellets (Super-Pacgums):\n"
-            "- Located in the 4 corners of the maze.\n"
-            "- Eating a super-pacgum grants points and makes ghosts edible for"
-            " a short time.\n"
-            "- Eating edible ghosts awards extra points.\n\n"
-            "4. Scoring:\n"
-            " - Pacgum: +10 points\n"
-            " - Super-Pacgum: +50 points\n"
-            " -- Ghost: +200 points\n\n"
-            "5. Pause & Navigation:"
-            " - Press ESC to pause the game at any time."
-            " - Use the Main Menu to view Top 10 Highscores, read instructions"
-            ", or exit."
-                       )
+        x: int = self.width * 0.22
+        y: int = self.height * 0.22
 
-        x: int = self.width * 0.5
-        y: int = self.height * 0.5
+        
 
-        self.print_text(content, (x, y), "white", "black")
 
     # -----------------------------------------------------
     def run(self):
