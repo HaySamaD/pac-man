@@ -41,9 +41,9 @@ class Level(BaseModel):
                  )
             dic['width'] = 42
 
-        elif not isinstance(val_width, int) or val_width < 9:
+        elif not isinstance(val_width, int) or val_width < 14:
             print(
-                    f"\n{Color().YELLOW}'width' not a integer or < 9.\n"
+                    f"\n{Color().YELLOW}'width' not a integer or < 14.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}"
                  )
             dic['width'] = 42
@@ -57,9 +57,9 @@ class Level(BaseModel):
                  )
             dic['height'] = 42
 
-        elif (not isinstance(val_height, int) or val_height < 7):
+        elif (not isinstance(val_height, int) or val_height < 10):
             print(
-                    f"\n{Color().YELLOW}'height' not a integer or < 7.\n"
+                    f"\n{Color().YELLOW}'height' not a integer or < 10.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
