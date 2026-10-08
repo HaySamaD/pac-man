@@ -6,7 +6,7 @@ from src.renderer import Renderer
 
 
 def main() -> None:
-    gen = MazeGenerator(size=(21, 21), seed=42)
+    gen = MazeGenerator(size=(48, 24)) # (14, 10) <= size <= (48, 24)
     board = MazeBoard.from_raw_maze(gen.maze, max_pacgums=42)
 
     renderer = Renderer(board, tile_size=40)
