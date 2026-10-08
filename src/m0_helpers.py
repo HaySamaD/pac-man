@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Tuple
 
 import json
 
@@ -10,30 +10,12 @@ class Color:
     WHITE = "\033[37m"
 
 
-# ==================== Default config if missing any data ====================
-
-class Default_conf:
-
-    DICT = {
-                "highscore_filename": "data/highscores.json",
-
-                "levels_data": [
-                                    {"width": 42, "height": 42, "pacgum": 42}
-                                    for _ in range(10)
-                               ],
-
-                "lives": 3,
-
-                "points_per_pacgum": 10,
-
-                "points_per_super_pacgum": 20,
-
-                "points_per_ghost": 40,
-
-                "seed": 42,
-
-                "level_max_time": 300
-            }
+class Rgb:
+    WHITE: Tuple[int] = (255, 255, 255)
+    GREEN: Tuple[int] = (0, 255, 0)
+    YELLOW: Tuple[int] = (255, 255, 0)
+    PINK: Tuple[int] = (255, 192, 203)
+    BLACK: Tuple[int] = (0, 0, 0)
 
 
 # ============================ Helper methodes ================================
@@ -84,3 +66,5 @@ class Helper:
                     f"'data/highscores.json'{Color().WHITE}"
                  )
             return []
+
+# =============================================================================

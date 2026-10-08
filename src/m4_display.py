@@ -1,144 +1,186 @@
 import pygame
-from typing import Tuple, List, Dict
-from .m2_highscores_system import HighScoreSys
+from pygame import Surface, font
 
+from typing import Tuple, List
+
+from .m0_helpers import Rgb
+
+
+# ======================== STATIC ELEMNTS OF SCREEN ========================
+
+MENU: List[str] = ["Start Game", "View Highscores", "Instructions", "Exit"]
+
+INSTRUCTIONS: List[str] = [
+
+        "CONTROLS & GAME INSTRUCTIONS",
+
+        "1. Player Movement:",
+
+        " - Use ARROW KEYS or WASD to move Pac-Man through the corridors.",
+
+        " - Pac-Man can only move through open corridors, not through walls.",
+
+        "2. Objectives:",
+
+        " - Eat all Pacgums (small dots) scattered across the corridors to win"
+        " the current level.",
+
+        " - Avoid ghosts. Touching a ghost causes Pac-Man to lose a life and"
+        " restart in the middle.",
+
+        " - The game ends when all lives are lost or all 10 levels are"
+        " completed.",
+
+        "3. Power Pellets (Super-Pacgums):",
+
+        " - Located in the 4 corners of the maze.",
+
+        " - Eating a super-pacgum grants points and makes ghosts edible for a"
+        " short time.",
+
+        " - Eating edible ghosts awards extra points.",
+
+        "4. Scoring:",
+
+        " - Pacgum: +10 points",
+
+        " - Super-Pacgum: +50 points",
+
+        " - Ghost: +200 points",
+
+        "5. Pause & Navigation:"
+
+        " - Press ESC to pause the game at any time."
+
+        " - Use the Main Menu to view Top 10 Highscores, read instructions, or"
+        " exit."
+
+                            ]
+
+
+class Printer:
+    def __init__(
+                    self,
+                    screen: Surface,
+                    title_font: font.Font,
+                    content_font: font.Font,
+                    resolution: Tuple[int, int] = (1920, 1080)
+                ) -> None:
+
+        # ------------- init params ----------------
+        self.screen: Surface = screen
+        self.title_font: font.Font = title_font
+        self.content_font: font.Font = content_font
+        self.width, self.height = resolution
+
+    # ------------------- draw the title of the page -------------------
+    def print_title(
+                        self,
+                        content: str,
+                        color: Tuple[int],
+                        background: Tuple[int]
+                   ) -> None:
+
+        text = self.title_font.render(content, True, color, background)
+
+        # for central the title
+        x: int = (self.width - text.get_width()) / 2
+        y: int = self.height * 0.05
+
+        self.screen.blit(text, (x, y))
+
+        return None
+
+    # ------------------------------------------------------------------
+    def print_text(
+                    self,
+                    content: str,
+                    coord: Tuple[int, int],
+                    color: Tuple[int],
+                    background: Tuple[int],
+                    center_text: bool
+                  ) -> None:
+
+        x, y = coord
+
+        text: Surface = self.content_font.render(
+                                            content, True, color, background
+                                                )
+
+        if center_text:
+            x = (self.width - text.get_width()) / 2
+
+        self.screen.blit(text, (x, y))
+
+
+# ========================= THE MAIN MENU CLASS =========================
 
 class MainMenu:
 
     def __init__(
-                    self,
-                    top_10_scores: HighScoreSys,
-                    rules_lst: List[str],
-                    screen_dim: Tuple[int, int] = (1920, 1080),
+                    self, resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
 
         # -------------------- init params ----------------------
-        self.width, self.height = screen_dim
-        self.top_10_scores: List[Dict[str, int]] = top_10_scores
+        self.width, self.height = resolution
 
-        # ------- init pygame dependencises -------
+        # ------------------ init pygame elements ------------------
         pygame.init()
-        self.screen = pygame.display.set_mode(screen_dim)
+        self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
 
-        # -------- init the font of the text ----------
-        self.title_font = pygame.font.Font(None, 135)
-        self.content_font = pygame.font.Font(None, 50)
+        # ---------------- init fonts of text --------------------
+        self.title_font: font.Font = pygame.font.Font(None, 135)
+        self.content_font: font.Font = pygame.font.Font(None, 50)
 
-        # --------------- composantes of main menu (hors title) ---------------
-        self.options: Tuple[str] = (
-                        "Start Game", "View Highscores", "Instructions", "Exit"
-                                   )
+        # --------------------- the printer class --------------------
+        self.printer: Printer = Printer(
+                                            self.screen,
+                                            self.title_font,
+                                            self.content_font,
+                                            (self.width, self.height)
+                                       )
+
+        # -- the selected option now is 'Start Game'
+        # (for lopping for each elements of MENU) --
         self.pos: int = 0
 
-        # running flag
-        self.running: bool = True
+    # ------------------------------------------------------
 
-    # ---------------- draw the title in the main menu ------------------
-    def print_title(self, content: str, color: str, background: str) -> None:
+    def print_main_menu(self) -> None:
 
-        text = self.title_font.render(content, True, color, background)
-        # for central the title
-        x: int = (self.width - text.get_width()) / 2
-        y: int = self.height * 0.05
-        self.screen.blit(text, (x, y))
+        # fill the screen first before printing
+        self.screen.fill(Rgb.BLACK)
 
-    # ---------------------------------------------------------------------
-    def print_text(
-                    self,
-                    content: str | Tuple[str] | List[str],
-                    coord: Tuple[int, int] | None,
-                    color: str | None,
-                    background: str | None,
-                 ) -> None:
+        self.printer.print_title("Pac-man", Rgb.YELLOW, Rgb.BLACK)
 
-        # --------------------- display a simple text ------------------------
-        if isinstance(content, str):
+        x: int = -99
+        y: int = self.height * 0.25
+        for pos, option_content in enumerate(MENU):
 
-            text = self.content_font.render(content, True, color, background)
-            x, y = coord
+            color: Tuple[int] = Rgb.GREEN if pos == self.pos else Rgb.WHITE
 
-            self.screen.blit(text, (x, y))
+            self.printer.print_text(
+                                option_content, (x, y), color, Rgb.BLACK, True
+                                   )
 
-            return None
+            y += self.height * 0.1
 
-        # ------------------- display the menu elements ---------------------
-        if isinstance(content, tuple):
+        return None
 
-            y = self.height * 0.22
-            for i, option_str in enumerate(self.options):
-
-                color = "green" if i == self.pos else "white"
-
-                text = self.content_font.render(
-                                            option_str, True, color, background
-                                               )
-
-                x = (self.width - text.get_width()) / 2
-
-                self.screen.blit(text, (x, y))
-
-                y += self.height * 0.05
-
-            return None
-
-        # ---------------- display the top 10 scores ------------------------
-        if isinstance(content, List):
-
-            y = self.height * 0.22
-            for i in content:
-
-                name: str = i.name
-                score: int = i.score
-
-                text = self.content_font.render(
-                                f"{name} ---> {score}", True, "white", "black"
-                                               )
-
-                x: int = (self.width - text.get_width()) / 2
-
-                self.screen.blit(text, (x, y))
-
-                y += self.width * 0.035
-
-    # -----------------------------------------------------------------------
-
-    def print_menu_page(self):
-
-        # print the title
-        self.print_title("PAC-MAN", "yellow", "black")
-
-        # print options
-        # ("Start Game", "View Highscores", "Instructions", "Exit")
-        self.print_text(self.options, None, None, None)
-
-    # --------------------------------------------------------
-    def print_highscores_page(self) -> None:
-
-        self.print_title("Highscores", "yellow", "black")
-        self.print_text(self.top_10_scores, None, None, None)
-
-    # --------------------------------------------------------------------------
-    def print_instructions(self) -> None:
-
-        x: int = self.width * 0.22
-        y: int = self.height * 0.22
-
-        
-
-
-    # -----------------------------------------------------
+    # -------------------------------------------------------------
     def run(self):
 
-        while self.running:
+        running: bool = True
+
+        while running:
 
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
-                    self.running = False
+                    running = False
 
-            self.screen.fill("black")
-            self.print_instructions()
+                self.print_main_menu()
 
             self.clock.tick(60)
             # refrech of FPS

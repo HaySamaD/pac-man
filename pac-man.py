@@ -2,13 +2,13 @@ from src.parsing_config_file.m2_config_parser import Parser
 
 from src.parsing_config_file.m1_pydantic_objs import GameConfig
 
-from typing import Dict
-
 from src.m2_highscores_system import HighScoreSys
 
 from src.m4_display import MainMenu
 
 import sys
+
+from typing import Tuple
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -37,10 +37,9 @@ def main() -> None:
 
     # --------------------------------------
     hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
-    
 
     # ------------- display ---------------
-    menu: MainMenu = MainMenu(hs.top_10_scores_obj)
+    menu: MainMenu = MainMenu((1920, 1080))
     menu.run()
 
 # --------------------------------------------------------------------------------

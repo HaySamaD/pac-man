@@ -38,6 +38,7 @@ class NameScore(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['name'] = 'Player'
+            name = 'Player'
 
         elif len(name) > 10:
             print(
@@ -45,6 +46,7 @@ class NameScore(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['name'] = 'Player'
+            name = 'Player'
 
         elif not all(c.isalnum() or c.isspace() for c in name):
             print(
@@ -53,6 +55,7 @@ class NameScore(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['name'] = 'Player'
+            name = 'Player'
 
         # --------------------- verefy score is a integer -------------------
         if not isinstance(score, int):

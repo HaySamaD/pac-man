@@ -40,11 +40,14 @@ class Level(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['width'] = 42
+            val_width = 42
 
-        elif not isinstance(val_width, int) or val_width < 14:
+        # the maze must be >= 14 (to display the 42)
+        # and <= 48 (to less space for HUD)
+        elif not isinstance(val_width, int) or not (14 <= val_width <= 48):
             print(
-                    f"\n{Color().YELLOW}'width' not a integer or < 14.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
+                f"\v{Color().GREEN}default value is added{Color().WHITE}"
                  )
             dic['width'] = 42
 
@@ -56,11 +59,12 @@ class Level(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
+            val_height = 42
 
-        elif (not isinstance(val_height, int) or val_height < 10):
+        elif not isinstance(val_height, int) or not (10 <= val_width <= 24):
             print(
-                    f"\n{Color().YELLOW}'height' not a integer or < 10.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
 
@@ -72,6 +76,7 @@ class Level(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['pacgum'] = 42
+            val_pacgum = 42
 
         elif not isinstance(val_pacgum, int) or val_pacgum < 1:
             print(
@@ -79,6 +84,7 @@ class Level(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['pacgum'] = 42
+            val_pacgum = 42
 
         elif val_pacgum > (dic['width'] * dic['height']) - 23:
             print(
@@ -87,6 +93,7 @@ class Level(BaseModel):
                 f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['pacgum'] = 42
+            val_pacgum = 42
 
         # ----------------------------------------------------------------
 
@@ -130,6 +137,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['highscore_filename'] = "data/highscores.json"
+            highscore_filename = "data/highscores.json"
 
         if (
             not isinstance(highscore_filename, str)
@@ -140,7 +148,8 @@ class GameConfig(BaseModel):
                 "(not str or not end with '.json').\n"
                 f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_filename'] = 'data/highscores.json'
+            dic['highscore_filename'] = "data/highscores.json"
+            highscore_filename = "data/highscores.json"
 
         # ------------------------ handel levels_data -------------------------
 
@@ -152,7 +161,8 @@ class GameConfig(BaseModel):
             dic['levels_data'] = [
                                 {"width": 42, "height": 42, "pacgum": 42}
                                 for _ in range(10)
-                            ]
+                                 ]
+            levels_data = dic['levels_data']
 
         elif len(levels_data) < 10:
             print(
@@ -162,7 +172,8 @@ class GameConfig(BaseModel):
             for _ in range(0, 10 - len(levels_data)):
                 dic['levels_data'].append(
                                     {"width": 42, "height": 42, "pacgum": 42}
-                                    )
+                                         )
+                levels_data = dic['levels_data']
 
         # ---------------------- handel lives List[Dict] ----------------------
 
@@ -172,6 +183,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['lives'] = 3
+            lives = 3
 
         if not isinstance(lives, int) or lives < 1:
             print(
@@ -179,6 +191,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['lives'] = 3
+            lives = 3
 
         # --------------------- handel points_per_pacgum ----------------------
 
@@ -188,6 +201,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['points_per_pacgum'] = 10
+            points_per_pacgum = 10
 
         if not isinstance(points_per_pacgum, int) or points_per_pacgum < 1:
             print(
@@ -196,6 +210,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['points_per_pacgum'] = 10
+            points_per_pacgum = 10
 
         # ----------------- handel points_per_super_pacgum --------------------
 
@@ -205,6 +220,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['points_per_super_pacgum'] = 20
+            points_per_super_pacgum = 20
 
         if (
                 not isinstance(points_per_super_pacgum, int)
@@ -216,6 +232,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['points_per_super_pacgum'] = 20
+            points_per_super_pacgum = 20
 
         # -------------------- handel points_per_ghost -----------------------
 
@@ -225,6 +242,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['points_per_ghost'] = 40
+            points_per_ghost = 40
 
         elif not isinstance(points_per_ghost, int) or points_per_ghost < 1:
             print(
@@ -233,6 +251,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['points_per_ghost'] = 40
+            points_per_ghost = 40
 
         # -------------------------- handel seed ------------------------------
 
@@ -242,6 +261,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['seed'] = 42
+            seed = 42
 
         elif not isinstance(seed, int) or seed < 1:
             print(
@@ -250,6 +270,7 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['seed'] = 42
+            seed = 42
 
         # --------------------- handel level_max_time -------------------------
 
@@ -259,6 +280,7 @@ class GameConfig(BaseModel):
                     f"default value is added{Color().WHITE}\n"
                  )
             dic['level_max_time'] = 300
+            level_max_time = 300
 
         if not isinstance(level_max_time, int) or level_max_time < 1:
             print(
@@ -267,5 +289,6 @@ class GameConfig(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['level_max_time'] = 300
+            level_max_time = 300
 
         return dic
