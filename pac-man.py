@@ -40,8 +40,8 @@ def main() -> None:
     
 
     # ------------- display ---------------
-    menu: MainMenu = MainMenu(hs.top_10_scores_obj)
-    menu.run()
+    # menu: MainMenu = MainMenu(hs.top_10_scores_obj)
+    # menu.run()
 
 # --------------------------------------------------------------------------------
 
