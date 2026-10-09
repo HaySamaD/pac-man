@@ -21,7 +21,7 @@ def main() -> None:
                     running = False
 
         renderer.render_map()
-        renderer.update_desplay()
+        renderer.update_display()
 
     pygame.quit()
     sys.exit(0)

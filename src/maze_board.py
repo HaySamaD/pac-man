@@ -39,15 +39,15 @@ class MazeBoard:
     ) -> "MazeBoard":
         """Build and populate a MazeBoard instance.
 
-        ELI5:
-        1. Measure how many rows and columns the maze has.
-        2. Create an empty 2D grid filled with zeros.
-        3. Separate full walls (number 15) from open walking paths.
-        4. Reserve the 4 outer corners for big power pellets.
-        5. Check if the config asked for fewer dots than available.
-        6. Pick random spots and drop small pac-gums.
-        7. Place big super pac-gums in open corners.
-        8. Return the finished board object ready to play.
+        Class Algo:
+                1. Measure how many rows and columns the maze has.
+                2. Create an empty 2D grid filled with zeros.
+                3. Separate full walls (number 15) from open walking paths.
+                4. Reserve the 4 outer corners for big power pellets.
+                5. Check if the config asked for fewer dots than available.
+                6. Pick random spots and drop small pac-gums.
+                7. Place big super pac-gums in open corners.
+                8. Return the finished board object ready to play.
         """
         # =====================================================================
         # Step 1: Read dimensions and build an empty grid (all zeros)
@@ -97,14 +97,6 @@ class MazeBoard:
         if max_pacgums is not None:
             if 0 < max_pacgums <= total_available:
                 target_count = max_pacgums
-            else:
-                # Log a clear warning message and keep playing safely
-                print(
-                    f"[CONFIG WARNING] Invalid max_pacgums value "
-                    f"({max_pacgums}).\n"
-                    f"    Must be between 1 and {total_available}.\n"
-                    f"    Falling back to default ({total_available})."
-                )
 
         # =====================================================================
         # Step 5: Place normal pac-gums randomly on the paths

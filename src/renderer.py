@@ -6,7 +6,7 @@ from src.maze_board import TileType, MazeBoard
 
 
 class Renderer:
-    """Game renderer using MLX-compatible Pygame functions."""
+    """Game renderer using cached surface and bitwise wall parsing."""
 
     def __init__(
         self,
@@ -14,13 +14,14 @@ class Renderer:
         tile_size: int = 40,
         assets_dir: str = "assets",
     ) -> None:
-        """Set up screen, compute offsets, and load image textures.
+        """Set up screen, bake static walls, and load textures.
 
-        ELI5:
-        1. Save the map data and tile size.
-        2. Open a fullscreen window.
-        3. Center the maze in the middle of the screen.
-        4. Load picture files into memory.
+        Class Algo:
+            1. Save the map data and tile size.
+            2. Open a fullscreen window.
+            3. Center the maze in the middle of the screen.
+            4. Load picture files into memory.
+            5. Pre-render (bake) all static walls once onto a cached surface.
         """
         # =====================================================================
         # Step 1: Save map information and compute pixel sizes
@@ -35,6 +36,7 @@ class Renderer:
         # Theme colors: dark night background and gentle blue walls
         self.COLOR_BG: tuple[int, int, int] = (12, 12, 16)
         self.COLOR_WALL: tuple[int, int, int] = (40, 65, 135)
+        self.COLOR_BLOCK_FILL: tuple[int, int, int] = (30, 48, 102)
 
         # =====================================================================
         # Step 2: Start pygame and open fullscreen window (like mlx_new_window)
@@ -69,9 +71,6 @@ class Renderer:
         # =====================================================================
         # Step 4: Load images from disk (like mlx_xpm_file_to_image)
         # =====================================================================
-        self.img_wall: pygame.Surface = pygame.image.load(
-            os.path.join(assets_dir, "tile_wall.png")
-        ).convert_alpha()
         self.img_pacgum: pygame.Surface = pygame.image.load(
             os.path.join(assets_dir, "pacgum.png")
         ).convert_alpha()
@@ -79,84 +78,178 @@ class Renderer:
             os.path.join(assets_dir, "super_pacgum.png")
         ).convert_alpha()
 
+        # =====================================================================
+        # Step 5: Bake static maze walls into an off-screen surface
+        # =====================================================================
+        self.maze_surface: pygame.Surface = pygame.Surface(
+            (self.screen_w, self.screen_h)
+        ).convert()
+        self.maze_surface.fill(self.COLOR_BG)
+        self._bake_static_walls()
+
     # =========================================================================
-    # Helper 1: Put a horizontal line pixel by pixel (like mlx_pixel_put)
+    # Helper 1: Put a horizontal line on a surface (like mlx_pixel_put)
     # =========================================================================
-    def _put_h(self, x1: int, x2: int, y: int, th: int = 2) -> None:
+    def _put_h(
+        self,
+        surface: pygame.Surface,
+        x1: int,
+        x2: int,
+        y: int,
+        th: int = 2,
+    ) -> None:
         """Draw a flat line from x1 to x2 with thickness th."""
         for t in range(th):
             for px in range(x1, x2):
-                self.screen.set_at((px, y + t), self.COLOR_WALL)
+                if 0 <= px < self.screen_w and 0 <= (y + t) < self.screen_h:
+                    surface.set_at((px, y + t), self.COLOR_WALL)
 
     # =========================================================================
-    # Helper 2: Put a vertical line pixel by pixel (like mlx_pixel_put)
+    # Helper 2: Put a vertical line on a surface (like mlx_pixel_put)
     # =========================================================================
-    def _put_v(self, x: int, y1: int, y2: int, th: int = 2) -> None:
+    def _put_v(
+        self,
+        surface: pygame.Surface,
+        x: int,
+        y1: int,
+        y2: int,
+        th: int = 2,
+    ) -> None:
         """Draw an upright line from y1 to y2 with thickness th."""
         for t in range(th):
             for py in range(y1, y2):
-                self.screen.set_at((x + t, py), self.COLOR_WALL)
+                if 0 <= (x + t) < self.screen_w and 0 <= py < self.screen_h:
+                    surface.set_at((x + t, py), self.COLOR_WALL)
+
+    #   Visual Cell Diagram (Tile Coordinates & Offsets):
+    #
+    #   (px, py) ────────────────────────────────── (px + ts, py)
+    #      │         Top Wall: Bit 1 (North)           │
+    #      │                                           │
+    #      │ Left: Bit 8                 Right: Bit 2  │
+    #      │ (West)                      (East)        │
+    #      │                                           │
+    #      │        Bottom Wall: Bit 4 (South)         │
+    #   (px, py + ts) ───────────────────────────── (px + ts, py + ts)
+
+    # =========================================================================
+    #Helper 3: Fill solid rectangular tile area pixel by pixel
+    # =========================================================================
+    def _fill_rect(
+        self,
+        surface: pygame.Surface,
+        x: int,
+        y: int,
+        w: int,
+        h: int,
+    ) -> None:
+        """Fill a rectangle area pixel by pixel without using pygame.draw."""
+        for row in range(h):
+            for col in range(w):
+                px = x + col
+                py = y + row
+                if 0 <= px < self.screen_w and 0 <= py < self.screen_h:
+                    surface.set_at((px, py), self.COLOR_BLOCK_FILL,)
+
+    # =========================================================================
+    # Pre-render: Draw all maze lines once during startup
+    # =========================================================================
+    def _bake_static_walls(self) -> None:
+        """Render all maze walls once at startup using bitwise checks.
+
+        Bake Algo:
+            1. Iterate over every grid coordinate (x, y).
+            2. Skip empty tiles (value 0).
+            3. Convert tile index to screen pixels.
+            4. Check bit flags (1, 2, 4, 8) and draw matching wall lines.
+        """
+        ts: int = self.tile_size
+        th: int = 2
+
+        for y in range(self.board.height):
+            for x in range(self.board.width):
+                val: int = self.board.raw_maze[y][x]
+                if val == 0:
+                    continue
+
+                # Convert grid (x, y) to screen pixels (px, py)
+                px: int = self.offset_x + x * ts
+                py: int = self.offset_y + y * ts
+
+                # Special Case: Fill center '42' logo blocks (solid tile 15)
+                if val == 15:
+                    self._fill_rect(
+                        self.maze_surface,
+                        px,
+                        py,
+                        ts,
+                        ts,
+                    )
+
+                # Bit 1 = Top wall (North)
+                if val & 1:
+                    self._put_h(self.maze_surface, px, px + ts, py, th)
+
+                # Bit 2 = Right wall (East)
+                if val & 2:
+                    self._put_v(
+                        self.maze_surface,
+                        px + ts - th,
+                        py,
+                        py + ts,
+                        th,
+                    )
+
+                # Bit 4 = Bottom wall (South)
+                if val & 4:
+                    self._put_h(
+                        self.maze_surface,
+                        px,
+                        px + ts,
+                        py + ts - th,
+                        th,
+                    )
+
+                # Bit 8 = Left wall (West)
+                if val & 8:
+                    self._put_v(self.maze_surface, px, py, py + ts, th)
 
     # =========================================================================
     # Main Render: Draw the whole board on screen
     # =========================================================================
     def render_map(self) -> None:
-        """Clear screen and draw tiles, pac-gums, and walls.
+        """Stamp baked walls and render remaining dots on top.
 
-        ELI5:
-        1. Paint the entire background black.
-        2. Loop over every cell in the grid.
-        3. If it is block 42, stamp the wall picture.
-        4. If it has a dot, stamp the dot picture.
-        5. Check numbers (1, 2, 4, 8) and draw thin wall borders.
+        Method Algo:
+            1. Fast blit of the pre-rendered maze background.
+            2. Loop over grid cells.
+            3. Skip cells marked as EMPTY.
+            4. Stamp dots or super dots on active positions.
         """
-        # 1. Clear old screen frame
-        self.screen.fill(self.COLOR_BG)
-        ts: int = self.tile_size
-        th: int = 2
+        # Step 1: Draw pre-rendered maze surface in a single blit call
+        self.screen.blit(self.maze_surface, (0, 0))
 
-        # 2. Check each cell one by one
+        ts: int = self.tile_size
+
+        # Step 2: Draw dynamic collectible dots on top
         for y in range(self.board.height):
             for x in range(self.board.width):
                 tile: int = self.board.grid[y][x]
-                val: int = self.board.raw_maze[y][x]
+                if tile == int(TileType.EMPTY):
+                    continue
 
-                # Convert grid (x, y) to real screen pixels (px, py)
                 px: int = self.offset_x + x * ts
                 py: int = self.offset_y + y * ts
 
-                # Case A: Solid block 42 (number 15 means fully closed wall)
-                if val == 15:
-                    self.screen.blit(self.img_wall, (px, py))
-                    continue
-
-                # Case B: Draw dots (small dot or big super dot)
                 if tile == int(TileType.PACGUM):
                     self.screen.blit(self.img_pacgum, (px, py))
                 elif tile == int(TileType.SUPER_PACGUM):
                     self.screen.blit(self.img_super_pacgum, (px, py))
 
-                # Case C: Draw thin wall edges using binary bits
-                # Bit 1 = Top wall (North)
-                if val & 1:
-                    self._put_h(px, px + ts, py, th)
-
-                # Bit 2 = Right wall (East)
-                if val & 2:
-                    self._put_v(px + ts - th, py, py + ts, th)
-
-                # Bit 4 = Bottom wall (South)
-                if val & 4:
-                    self._put_h(px, px + ts, py + ts - th, th)
-
-                # Bit 8 = Left wall (West)
-                if val & 8:
-                    self._put_v(px, py, py + ts, th)
-
     # =========================================================================
     # Display Update: Show frame and limit FPS (like mlx_loop_hook)
     # =========================================================================
-    def update_desplay(self) -> None:
+    def update_display(self) -> None:
         """Show new frame on screen and wait to keep 60 FPS."""
         pygame.display.flip()
         self.clock.tick(60)
