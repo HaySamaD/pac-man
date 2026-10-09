@@ -1,9 +1,12 @@
 import pygame
+
 from pygame import Surface, font
 
 from typing import Tuple, List
 
 from .m0_helpers import Rgb
+
+from .m2_highscores_system import HighScoreSys
 
 
 # ======================== STATIC ELEMNTS OF SCREEN ========================
@@ -12,7 +15,7 @@ MENU: List[str] = ["Start Game", "View Highscores", "Instructions", "Exit"]
 
 INSTRUCTIONS: List[str] = [
 
-        "CONTROLS & GAME INSTRUCTIONS",
+        "CONTROLS & GAME INSTRUCTIONS:",
 
         "1. Player Movement:",
 
@@ -48,9 +51,9 @@ INSTRUCTIONS: List[str] = [
 
         " - Ghost: +200 points",
 
-        "5. Pause & Navigation:"
+        "5. Pause & Navigation:",
 
-        " - Press ESC to pause the game at any time."
+        " - Press ESC to pause the game at any time.",
 
         " - Use the Main Menu to view Top 10 Highscores, read instructions, or"
         " exit."
@@ -115,7 +118,7 @@ class Printer:
 
 # ========================= THE MAIN MENU CLASS =========================
 
-class MainMenu:
+class MainMenuPage:
 
     def __init__(
                     self, resolution: Tuple[int, int] = (1920, 1080)
@@ -134,15 +137,14 @@ class MainMenu:
         self.content_font: font.Font = pygame.font.Font(None, 50)
 
         # --------------------- the printer class --------------------
-        self.printer: Printer = Printer(
-                                            self.screen,
-                                            self.title_font,
-                                            self.content_font,
-                                            (self.width, self.height)
-                                       )
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
 
-        # -- the selected option now is 'Start Game'
-        # (for lopping for each elements of MENU) --
+        # -- the selected option now is 'Start Game' --
         self.pos: int = 0
 
     # ------------------------------------------------------
@@ -152,7 +154,7 @@ class MainMenu:
         # fill the screen first before printing
         self.screen.fill(Rgb.BLACK)
 
-        self.printer.print_title("Pac-man", Rgb.YELLOW, Rgb.BLACK)
+        self.p.print_title("Pac-man", Rgb.YELLOW, Rgb.BLACK)
 
         x: int = -99
         y: int = self.height * 0.25
@@ -160,9 +162,9 @@ class MainMenu:
 
             color: Tuple[int] = Rgb.GREEN if pos == self.pos else Rgb.WHITE
 
-            self.printer.print_text(
+            self.p.print_text(
                                 option_content, (x, y), color, Rgb.BLACK, True
-                                   )
+                             )
 
             y += self.height * 0.1
 
@@ -181,6 +183,173 @@ class MainMenu:
                     running = False
 
                 self.print_main_menu()
+
+            self.clock.tick(60)
+            # refrech of FPS
+            pygame.display.flip()
+
+        pygame.quit()
+
+
+# ===================================================================================
+
+class HighscoresPage:
+    def __init__(
+                    self,
+                    highscores_obj: HighScoreSys,
+                    resolution: Tuple[int, int] = (1920, 1080)
+                ) -> None:
+
+        # ----------- init params -----------
+        self.highscores_obj: HighScoreSys = highscores_obj
+        self.width, self.height = resolution
+
+        # ------------------------ init pygame -------------------------
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+
+        # ---------------------- init fonts ----------------------
+        self.title_font: font.Font = pygame.font.Font(None, 135)
+        self.content_font: font.Font = pygame.font.Font(None, 50)
+
+        # ----------------
+        self.pos: int = 0
+
+        # ------------------------------------------------------------------
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
+
+    # -----------------------------------------------------------------
+    def print_highscores_page(self) -> None:
+
+        self.screen.fill(Rgb.BLACK)
+
+        self.p.print_title("Highscores", Rgb.PINK, Rgb.BLACK)
+
+        x: int = -99
+        y: int = self.height * 0.20
+        for i in self.highscores_obj:
+
+            name: str = i.name
+            score: int = i.score
+
+            self.p.print_text(
+                                f"{name} ----> {score}",
+                                (x, y),
+                                Rgb.WHITE, Rgb.BLACK, center_text=True
+                             )
+
+            y += self.height * 0.05
+
+        # ----------------- print the 'previous' boutton ------------------
+        color: Tuple[int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
+
+        self.p.print_text(
+                            "previous",
+                            (self.width * 0.8, self.height * 0.8),
+                            color,
+                            Rgb.BLACK, False
+                         )
+
+    # ----------------------------------------
+    def run(self):
+
+        running: bool = True
+
+        while running:
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+                    running = False
+
+                self.print_highscores_page()
+
+            self.clock.tick(60)
+            # refrech of FPS
+            pygame.display.flip()
+
+        pygame.quit()
+
+
+# ===================================================================================
+
+class InstructionsPage:
+    def __init__(self, resolution: Tuple[int, int] = (1920, 1080)) -> None:
+
+        # ----------- init params -----------
+        self.width, self.height = resolution
+
+        # ------------------------ init pygame -------------------------
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+
+        # ---------------------- init fonts ----------------------
+        self.title_font: font.Font = pygame.font.Font(None, 100)
+        self.content_font: font.Font = pygame.font.Font(None, 40)
+
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
+
+        # ---------------
+        self.pos: int = 0
+
+    # ----------------------------------------------------------------
+    def print_instruction_page(self) -> None:
+
+        self.screen.fill(Rgb.BLACK)
+
+        self.p.print_title("Instructions", Rgb.RED, Rgb.BLACK)
+
+        x: int = self.width * 0.05
+        y: int = self.height * 0.15
+
+        for i in INSTRUCTIONS:
+
+            if i.startswith(("1", "2", "3", "4", "5", "6", "7", "8", "9")):
+                y += self.height * 0.05
+
+            elif i.startswith(" -"):
+                y += self.height * 0.025
+
+            else:
+                y += self.height * 0.0125
+
+            self.p.print_text(i, (x, y), Rgb.WHITE, Rgb.BLACK, False)
+
+        # ----------------- print the 'previous' boutton ------------------
+        color: Tuple[int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
+
+        self.p.print_text(
+                            "previous",
+                            (self.width * 0.8, self.height * 0.8),
+                            color,
+                            Rgb.BLACK, False
+                         )
+
+    # -----------------------------------------
+    def run(self):
+
+        running: bool = True
+
+        while running:
+
+            for event in pygame.event.get():
+
+                if event.type == pygame.QUIT:
+                    running = False
+
+                self.print_instruction_page()
 
             self.clock.tick(60)
             # refrech of FPS

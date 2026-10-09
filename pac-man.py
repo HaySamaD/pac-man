@@ -2,13 +2,16 @@ from src.parsing_config_file.m2_config_parser import Parser
 
 from src.parsing_config_file.m1_pydantic_objs import GameConfig
 
-from src.m2_highscores_system import HighScoreSys
+from src.m2_highscores_system import HighScoreSys, NameScore
 
-from src.m4_display import MainMenu
+from src.m4_display import MainMenuPage
 
 import sys
 
-from typing import Tuple
+from typing import List
+
+from src.m4_display import MainMenuPage, HighscoresPage, InstructionsPage
+
 
 RED = "\033[31m"
 GREEN = "\033[32m"
@@ -35,12 +38,21 @@ def main() -> None:
     p = Parser(sys.argv[1])
     conf_obj: GameConfig = p.conf_obj
 
-    # --------------------------------------
+    # ---------------------- higher scores ----------------------
     hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
+    # higher_scores_obj: List[NameScore] = hs.top_10_scores_obj
 
-    # ------------- display ---------------
-    menu: MainMenu = MainMenu((1920, 1080))
-    menu.run()
+    # ------------- display menu page ---------------
+    # menu: MainMenuPage = MainMenuPage((1920, 1080))
+    # menu.run()
+
+    # ------------- display highscores page ---------------
+    # hs_page: HighscoresPage = HighscoresPage(higher_scores_obj, (1920, 1080))
+    # hs_page.run()
+
+    # ------------- display instructions page ---------------
+    # instr_page: InstructionsPage = InstructionsPage((1920, 1080))
+    # instr_page.run()
 
 # --------------------------------------------------------------------------------
 
