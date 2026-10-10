@@ -15,7 +15,7 @@ class Rgb:
     GREEN: Tuple[int] = (0, 255, 0)
     YELLOW: Tuple[int] = (255, 255, 0)
     PINK: Tuple[int] = (255, 192, 203)
-    BLACK: Tuple[int] = (0, 0, 0)
+    BLACK: Tuple[int] = (12, 12, 16)
     RED: Tuple[int] = (255, 0, 0)
 
 

@@ -10,7 +10,9 @@ import sys
 
 from typing import List
 
-from src.m4_display import MainMenuPage, HighscoresPage, InstructionsPage
+from src.m4_display import MainMenuPage, HighscoresPage, InstructionsPage, HUD, PauseMenu
+
+from src.m1_our_dataclasses import GameState
 
 
 RED = "\033[31m"
@@ -40,7 +42,7 @@ def main() -> None:
 
     # ---------------------- higher scores ----------------------
     hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
-    # higher_scores_obj: List[NameScore] = hs.top_10_scores_obj
+    higher_scores_obj: List[NameScore] = hs.top_10_scores_obj
 
     # ------------- display menu page ---------------
     # menu: MainMenuPage = MainMenuPage((1920, 1080))
@@ -54,6 +56,14 @@ def main() -> None:
     # instr_page: InstructionsPage = InstructionsPage((1920, 1080))
     # instr_page.run()
 
+    # --------- display HUD -------------
+    # game_state: GameState = GameState(score=42, lives=3, level=1, time_left=90, status="PLAYING")
+    # uud: HUD = HUD(game_state, (1920, 1080))
+    # uud.run()
+
+    # --------- display PAUSE page -------------
+    pause: PauseMenu = PauseMenu((1920, 1080))
+    pause.run()
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":

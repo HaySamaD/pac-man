@@ -8,6 +8,8 @@ from .m0_helpers import Rgb
 
 from .m2_highscores_system import HighScoreSys
 
+from .m1_our_dataclasses import GameState
+
 
 # ======================== STATIC ELEMNTS OF SCREEN ========================
 
@@ -43,15 +45,7 @@ INSTRUCTIONS: List[str] = [
 
         " - Eating edible ghosts awards extra points.",
 
-        "4. Scoring:",
-
-        " - Pacgum: +10 points",
-
-        " - Super-Pacgum: +50 points",
-
-        " - Ghost: +200 points",
-
-        "5. Pause & Navigation:",
+        "4. Pause & Navigation:",
 
         " - Press ESC to pause the game at any time.",
 
@@ -59,6 +53,8 @@ INSTRUCTIONS: List[str] = [
         " exit."
 
                             ]
+
+PAUSE = ["Resume", "Go to menu"]
 
 
 class Printer:
@@ -133,7 +129,7 @@ class MainMenuPage:
         self.clock = pygame.time.Clock()
 
         # ---------------- init fonts of text --------------------
-        self.title_font: font.Font = pygame.font.Font(None, 135)
+        self.title_font: font.Font = pygame.font.Font(None, 100)
         self.content_font: font.Font = pygame.font.Font(None, 50)
 
         # --------------------- the printer class --------------------
@@ -178,11 +174,10 @@ class MainMenuPage:
         while running:
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     running = False
 
-                self.print_main_menu()
+            self.print_main_menu()
 
             self.clock.tick(60)
             # refrech of FPS
@@ -264,11 +259,10 @@ class HighscoresPage:
         while running:
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     running = False
 
-                self.print_highscores_page()
+            self.print_highscores_page()
 
             self.clock.tick(60)
             # refrech of FPS
@@ -316,14 +310,14 @@ class InstructionsPage:
 
         for i in INSTRUCTIONS:
 
-            if i.startswith(("1", "2", "3", "4", "5", "6", "7", "8", "9")):
-                y += self.height * 0.05
+            if i.startswith(("1", "2", "3", "4")):
+                y += self.height * 0.08
 
             elif i.startswith(" -"):
-                y += self.height * 0.025
+                y += self.height * 0.028
 
             else:
-                y += self.height * 0.0125
+                y += self.height * 0.0128
 
             self.p.print_text(i, (x, y), Rgb.WHITE, Rgb.BLACK, False)
 
@@ -345,11 +339,141 @@ class InstructionsPage:
         while running:
 
             for event in pygame.event.get():
-
                 if event.type == pygame.QUIT:
                     running = False
 
-                self.print_instruction_page()
+            self.print_instruction_page()
+
+            self.clock.tick(60)
+            # refrech of FPS
+            pygame.display.flip()
+
+        pygame.quit()
+
+
+class HUD:
+    def __init__(self, game_state: GameState, resolution: Tuple[int, int]) -> None:
+
+        # ------------- init params -------------
+        self.game_state: GameState = game_state
+        self.width, self.height = resolution
+
+        # ------------------------ init pygame -------------------------
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+
+        # ---------------------- init fonts ----------------------
+        self.title_font: font.Font = pygame.font.Font(None, 100)
+        self.content_font: font.Font = pygame.font.Font(None, 40)
+
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
+
+    def print_hud(self):
+
+        score: int = self.game_state.score
+        lives: int = self.game_state.lives
+        level: int = self.game_state.level
+        time_left: int = self.game_state.time_left
+
+        x: int = self.width * 0.20
+        y: int = self.height * 0.025
+
+        self.p.print_text(
+                            (
+                                f"Score: {score}                      "
+                                f"Lives: {lives}                      "
+                                f"Level: {level}                      "
+                                f"Time left: {time_left}"
+                            ),
+                            (x, y),
+                            Rgb.WHITE,
+                            Rgb.BLACK,
+                            False
+                         )
+
+    # -----------------------------------------
+    def run(self):
+
+        running: bool = True
+
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            self.print_hud()
+
+            self.clock.tick(60)
+            # refrech of FPS
+            pygame.display.flip()
+
+        pygame.quit()
+
+
+# ===================================================================================
+
+class PauseMenu:
+    def __init__(self, resolution: Tuple[int, int]) -> None:
+
+        # ----------- init params -----------
+        self.width, self.height = resolution
+
+        # ------------------------ init pygame -------------------------
+        pygame.init()
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
+
+        # ---------------------- init fonts ----------------------
+        self.title_font: font.Font = pygame.font.Font(None, 100)
+        self.content_font: font.Font = pygame.font.Font(None, 40)
+
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
+
+        # ----------------
+        self.pos: int = 0
+
+    # ----------------------------------------------------------------------------
+
+    def print_pause_page(self):
+
+        self.p.print_title("Pause", Rgb.GREEN, Rgb.BLACK)
+
+        x: int = -99
+        y: int = self.height * 0.18
+
+        for idx, option in enumerate(PAUSE):
+
+            color: Tuple = Rgb.YELLOW if idx == self.pos else Rgb.WHITE
+
+            self.p.print_text(option, (x, y), color, Rgb.BLACK, True)
+
+            y += self.height * 0.08
+
+    # ----------------------------------------------------------------------------
+
+    def run(self):
+
+        running: bool = True
+        
+        while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+
+            self.print_pause_page()
 
             self.clock.tick(60)
             # refrech of FPS
