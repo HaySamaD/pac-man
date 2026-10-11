@@ -1,18 +1,18 @@
-from src.parsing_config_file.m2_config_parser import Parser
+from parsing_config_file.m1_config_parser import Parser
 
 from src.parsing_config_file.m1_pydantic_objs import GameConfig
 
-from src.m2_highscores_system import HighScoreSys, NameScore
+from d3_highscores_parser.m2_highscores_system import HighScoreSys, NameScore
 
-from src.m4_display import MainMenuPage
+from d5_display.m7_win_page import MainMenuPage
 
 import sys
 
 from typing import List
 
-from src.m4_display import MainMenuPage, HighscoresPage, InstructionsPage, HUD, PauseMenu
+from d5_display.m7_win_page import MainMenuPage, HighscoresPage, InstructionsPage, HUD, PauseMenuPage, GameOverPage, WinPage
 
-from src.m1_our_dataclasses import GameState
+from d1_classes.m1_dataclasses import GameState
 
 
 RED = "\033[31m"
@@ -62,8 +62,16 @@ def main() -> None:
     # uud.run()
 
     # --------- display PAUSE page -------------
-    pause: PauseMenu = PauseMenu((1920, 1080))
-    pause.run()
+    # pause: PauseMenu = PauseMenu((1920, 1080))
+    # pause.run()
+
+    # --------- display game over page -------------
+    # game_over: GameOver = GameOver((1920, 1080))
+    # game_over.run()
+
+    # --------- display win page -------------
+    win: WinPage = WinPage((1920, 1080))
+    win.run()
 # --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
