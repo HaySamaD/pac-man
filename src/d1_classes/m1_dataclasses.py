@@ -17,7 +17,8 @@ class GameState:
     lives: int = 3
     level: int = 1
     time_left: int = 90
-    status: str = "MENU"  # MENU, PLAYING, PAUSED, GAME_OVER, VICTORY
+    status: str = "MENU"
+    # MENU, PLAYING, PAUSED, GAME_OVER, VICTORY, HIGHSCORES, INSTRUCTIONS
 
 
 # =============================

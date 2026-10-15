@@ -9,10 +9,10 @@ class Color:
 
 
 class Rgb:
-    WHITE: Tuple[int] = (255, 255, 255)
-    GREEN: Tuple[int] = (0, 255, 0)
-    YELLOW: Tuple[int] = (255, 255, 0)
-    PINK: Tuple[int] = (255, 192, 203)
-    BLACK: Tuple[int] = (12, 12, 16)
-    RED: Tuple[int] = (255, 0, 0)
-    ORANGE: Tuple[int] = (255, 165, 0)
+    WHITE: Tuple[int, int, int] = (255, 255, 255)
+    GREEN: Tuple[int, int, int] = (0, 255, 0)
+    YELLOW: Tuple[int, int, int] = (255, 255, 0)
+    PINK: Tuple[int, int, int] = (255, 192, 203)
+    BLACK: Tuple[int, int, int] = (12, 12, 16)
+    RED: Tuple[int, int, int] = (255, 0, 0)
+    ORANGE: Tuple[int, int, int] = (255, 165, 0)

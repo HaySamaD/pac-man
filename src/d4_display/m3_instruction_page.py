@@ -4,8 +4,8 @@ import pygame
 from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
-from d0_helpers.m3_static_data import INSTRUCTIONS
-from d5_display.m0_printer import Printer
+from d0_helpers.m2_static_data import INSTRUCTIONS
+from d4_display.m0_printer import Printer
 
 
 class InstructionsPage:
@@ -40,8 +40,8 @@ class InstructionsPage:
 
         self.p.print_title("Instructions", Rgb.RED, Rgb.BLACK)
 
-        x: int = self.width * 0.05
-        y: int = self.height * 0.15
+        x: int | float = self.width * 0.05
+        y: int | float = self.height * 0.15
 
         for i in INSTRUCTIONS:
 
@@ -57,7 +57,7 @@ class InstructionsPage:
             self.p.print_text(i, (x, y), Rgb.WHITE, Rgb.BLACK, False)
 
         # ----------------- print the 'previous' boutton ------------------
-        color: Tuple[int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
+        color: Tuple[int, int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
 
         self.p.print_text(
                             "previous",

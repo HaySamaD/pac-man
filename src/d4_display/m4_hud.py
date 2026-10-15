@@ -4,13 +4,17 @@ import pygame
 from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
-from d5_display.m0_printer import Printer
+from d1_classes.m1_dataclasses import GameState
+from d4_display.m0_printer import Printer
 
 
-class GameOverPage:
-    def __init__(self, resolution: Tuple[int, int]) -> None:
+class HUD:
+    def __init__(
+                    self, game_state: GameState, resolution: Tuple[int, int]
+                ) -> None:
 
-        # ----------- init params -----------
+        # ------------- init params -------------
+        self.game_state: GameState = game_state
         self.width, self.height = resolution
 
         # ------------------------ init pygame -------------------------
@@ -29,18 +33,25 @@ class GameOverPage:
                                     (self.width, self.height)
                                  )
 
-    # ---------------------------------------------
+    def print_hud(self) -> None:
 
-    def print_game_over_page(self) -> None:
+        score: int = self.game_state.score
+        lives: int = self.game_state.lives
+        level: int = self.game_state.level
+        time_left: int = self.game_state.time_left
 
-        self.p.print_title("Game Over: Try again", Rgb.ORANGE, Rgb.BLACK)
+        x: int | float = self.width * 0.20
+        y: int | float = self.height * 0.025
 
-        x: int = -99
-        y: int = self.height * 0.17
         self.p.print_text(
-                            "Enter your name bellow to save your score",
+                            (
+                                f"Score: {score}                      "
+                                f"Lives: {lives}                      "
+                                f"Level: {level}                      "
+                                f"Time left: {time_left}"
+                            ),
                             (x, y),
                             Rgb.WHITE,
                             Rgb.BLACK,
-                            center_text=True
+                            False
                          )

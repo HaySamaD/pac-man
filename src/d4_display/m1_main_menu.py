@@ -5,8 +5,8 @@ from typing import Tuple
 from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
-from d0_helpers.m3_static_data import MENU
-from d5_display.m0_printer import Printer
+from d0_helpers.m2_static_data import MENU
+from d4_display.m0_printer import Printer
 
 
 class MainMenuPage:
@@ -47,11 +47,11 @@ class MainMenuPage:
 
         self.p.print_title("Pac-man", Rgb.YELLOW, Rgb.BLACK)
 
-        x: int = -99
-        y: int = self.height * 0.25
+        x: int | float = -99
+        y: int | float = self.height * 0.25
         for pos, option_content in enumerate(MENU):
 
-            color: Tuple[int] = Rgb.GREEN if pos == self.pos else Rgb.WHITE
+            color: Tuple = Rgb.GREEN if pos == self.pos else Rgb.WHITE
 
             self.p.print_text(
                                 option_content, (x, y), color, Rgb.BLACK, True

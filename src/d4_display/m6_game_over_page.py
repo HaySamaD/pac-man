@@ -4,11 +4,10 @@ import pygame
 from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
-from d0_helpers.m3_static_data import PAUSE
-from d5_display.m0_printer import Printer
+from d4_display.m0_printer import Printer
 
 
-class PauseMenuPage:
+class GameOverPage:
     def __init__(self, resolution: Tuple[int, int]) -> None:
 
         # ----------- init params -----------
@@ -30,22 +29,18 @@ class PauseMenuPage:
                                     (self.width, self.height)
                                  )
 
-        # ----------------
-        self.pos: int = 0
+    # ---------------------------------------------
 
-    # ----------------------------------------------------------------------------
+    def print_game_over_page(self) -> None:
 
-    def print_pause_page(self):
+        self.p.print_title("Game Over: Try again", Rgb.ORANGE, Rgb.BLACK)
 
-        self.p.print_title("Pause", Rgb.GREEN, Rgb.BLACK)
-
-        x: int = -99
-        y: int = self.height * 0.18
-
-        for idx, option in enumerate(PAUSE):
-
-            color: Tuple = Rgb.YELLOW if idx == self.pos else Rgb.WHITE
-
-            self.p.print_text(option, (x, y), color, Rgb.BLACK, True)
-
-            y += self.height * 0.08
+        x: int | float = -99
+        y: int | float = self.height * 0.17
+        self.p.print_text(
+                            "Enter your name bellow to save your score",
+                            (x, y),
+                            Rgb.WHITE,
+                            Rgb.BLACK,
+                            center_text=True
+                         )

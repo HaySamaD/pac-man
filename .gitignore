@@ -3,3 +3,5 @@ src/.mypy_cache
 .venv
 .mypy_cache
 .myvenv
+.vscode
+docs

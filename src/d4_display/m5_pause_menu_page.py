@@ -4,11 +4,11 @@ import pygame
 from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
-from d5_display.m0_printer import Printer
+from d0_helpers.m2_static_data import PAUSE
+from d4_display.m0_printer import Printer
 
 
-class WinPage:
-
+class PauseMenuPage:
     def __init__(self, resolution: Tuple[int, int]) -> None:
 
         # ----------- init params -----------
@@ -30,16 +30,22 @@ class WinPage:
                                     (self.width, self.height)
                                  )
 
-    def print_win_page(self):
+        # ----------------
+        self.pos: int = 0
 
-        self.p.print_title("Congratulations: You Win", Rgb.GREEN, Rgb.BLACK)
+    # ----------------------------------------------------------------------------
 
-        x: int = -99
-        y: int = self.height * 0.17
-        self.p.print_text(
-                            "Enter your name bellow to save your score",
-                            (x, y),
-                            Rgb.WHITE,
-                            Rgb.BLACK,
-                            center_text=True
-                         )
+    def print_pause_page(self) -> None:
+
+        self.p.print_title("Pause", Rgb.GREEN, Rgb.BLACK)
+
+        x: int | float = -99
+        y: int | float = self.height * 0.18
+
+        for idx, option in enumerate(PAUSE):
+
+            color: Tuple = Rgb.YELLOW if idx == self.pos else Rgb.WHITE
+
+            self.p.print_text(option, (x, y), color, Rgb.BLACK, True)
+
+            y += self.height * 0.08

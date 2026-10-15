@@ -5,7 +5,7 @@ from pygame import font
 
 from d0_helpers.m0_colors_RGB import Rgb
 from d3_parsing_highscores.m2_highscores_system import HighScoreSys
-from d5_display.m0_printer import Printer
+from d4_display.m0_printer import Printer
 
 
 class HighscoresPage:
@@ -46,9 +46,9 @@ class HighscoresPage:
 
         self.p.print_title("Highscores", Rgb.PINK, Rgb.BLACK)
 
-        x: int = -99
-        y: int = self.height * 0.20
-        for i in self.highscores_obj:
+        x: int | float = -99
+        y: int | float = self.height * 0.20
+        for i in self.highscores_obj.top_10_scores_obj:
 
             name: str = i.name
             score: int = i.score
@@ -62,7 +62,7 @@ class HighscoresPage:
             y += self.height * 0.05
 
         # ----------------- print the 'previous' boutton ------------------
-        color: Tuple[int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
+        color: Tuple[int, int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
 
         self.p.print_text(
                             "previous",

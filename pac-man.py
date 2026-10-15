@@ -1,18 +1,15 @@
-from parsing_config_file.m1_config_parser import Parser
-
-from src.parsing_config_file.m1_pydantic_objs import GameConfig
-
-from d3_highscores_parser.m2_highscores_system import HighScoreSys, NameScore
-
-from d5_display.m7_win_page import MainMenuPage
-
 import sys
 
+from src.d1_classes import GameConfig, NameScore, GameState
+
+from src.d2_parsing_config_file import Parser
+
+from src.d3_parsing_highscores import HighScoreSys
+
+from src.d4_display import MainMenuPage, HighscoresPage, InstructionsPage
+from src.d4_display import HUD, PauseMenuPage, GameOverPage, WinPage
+
 from typing import List
-
-from d5_display.m7_win_page import MainMenuPage, HighscoresPage, InstructionsPage, HUD, PauseMenuPage, GameOverPage, WinPage
-
-from d1_classes.m1_dataclasses import GameState
 
 
 RED = "\033[31m"
@@ -36,12 +33,12 @@ def main() -> None:
             f"{RED}❌ JSON format: '{sys.argv[1]}' must be a json file{WHITE}\n"
                        )
 
-    # ----- config object parsed -----
+    # ---- config object parsed ----
     p = Parser(sys.argv[1])
-    conf_obj: GameConfig = p.conf_obj
+    config: GameConfig = p.conf_obj
 
     # ---------------------- higher scores ----------------------
-    hs: HighScoreSys = HighScoreSys(conf_obj.highscore_filename)
+    hs: HighScoreSys = HighScoreSys(config.highscore_filename)
     higher_scores_obj: List[NameScore] = hs.top_10_scores_obj
 
     # ------------- display menu page ---------------
@@ -57,22 +54,29 @@ def main() -> None:
     # instr_page.run()
 
     # --------- display HUD -------------
-    # game_state: GameState = GameState(score=42, lives=3, level=1, time_left=90, status="PLAYING")
+    # game_state: GameState = GameState(
+    #                                     score=42,
+    #                                     lives=3,
+    #                                     level=1,
+    #                                     time_left=90,
+    #                                     status="PLAYING"
+    #                                  )
     # uud: HUD = HUD(game_state, (1920, 1080))
     # uud.run()
 
     # --------- display PAUSE page -------------
-    # pause: PauseMenu = PauseMenu((1920, 1080))
-    # pause.run()
+    # pause: PauseMenuPage = PauseMenuPage((1920, 1080))
+    # pause.print_pause_page()
 
     # --------- display game over page -------------
-    # game_over: GameOver = GameOver((1920, 1080))
+    # game_over: GameOverPage = GameOverPage((1920, 1080))
     # game_over.run()
 
     # --------- display win page -------------
-    win: WinPage = WinPage((1920, 1080))
-    win.run()
+    # win: WinPage = WinPage((1920, 1080))
+    # win.run()
 # --------------------------------------------------------------------------------
+
 
 if __name__ == "__main__":
     # try:

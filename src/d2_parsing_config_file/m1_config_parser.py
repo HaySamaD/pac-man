@@ -2,10 +2,9 @@ from typing import List, Dict, Any
 
 import json
 
-from pygame import Color
-
+from d0_helpers.m0_colors_RGB import Color
 from d0_helpers.m1_helpers_read import Helper
-from d0_helpers.m3_static_data import DEFAULT_CONFIG_FILE
+from d0_helpers.m2_static_data import DEFAULT_CONFIG_FILE
 from d1_classes.m0_pydantic_classes import GameConfig
 
 

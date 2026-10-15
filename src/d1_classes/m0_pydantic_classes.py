@@ -1,8 +1,8 @@
 from pydantic import BaseModel, model_validator
 
-from typing import List, Any
+from typing import List, Dict, Any
 
-from pygame import Color
+from d0_helpers import Color
 
 
 # =============== The subclass of the gameconfig class (bellow) ===============
@@ -302,7 +302,7 @@ class NameScore(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def validate(cls, dic):
+    def valide(cls, dic: Dict[str, str | int]) -> Dict[str, str | int]:
 
         # ------------- Verify first that we have a dict -------------
         if not isinstance(dic, dict):
@@ -314,8 +314,8 @@ class NameScore(BaseModel):
             return {"name": "player", "score": 0}
 
         # ---- get the content of dict ----
-        name: str = dic.get("name", None)
-        score: int = dic.get("score", None)
+        name: Any = dic.get("name", None)
+        score: Any = dic.get("score", None)
 
         # ------ verify name (len <= 10 + each char isalnum or isspace) ------
 

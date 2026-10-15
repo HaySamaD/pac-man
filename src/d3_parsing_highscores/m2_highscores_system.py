@@ -1,5 +1,5 @@
 
-from typing import List, Dict
+from typing import List, Dict, Any
 
 import json
 
@@ -33,7 +33,7 @@ class HighScoreSys:
                                        )[:10]
 
     # -------- add a new score and rebuild top 10 high scores --------
-    def add_new_score(self, dict_meta: Dict[str, str | int]) -> None:
+    def add_new_score(self, dict_meta: Dict[str, Any]) -> None:
 
         name_score_obj: NameScore = NameScore(**dict_meta)
 
@@ -46,13 +46,13 @@ class HighScoreSys:
                                        )[:10]
 
     # ---override the content of highscore file by new top 10 scores ---
-    def save_top_10_scores(self):
+    def save_top_10_scores(self) -> List[Dict[str, int]]:
 
         # transforme the top_10_scores_obj to list of dict for save it to json
-        lst_top_10_scores_lst_dict: List[Dict] = [
+        lst_top_10_scores_lst_dict: List[Dict[str, int]] = [
                                                 i.model_dump()
                                                 for i in self.top_10_scores_obj
-                                                 ]
+                                                            ]
 
         # read and overrite the highscore JSON file
         with open(self.highscores_path, 'w') as f:
