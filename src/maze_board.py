@@ -1,16 +1,14 @@
-"""Maze board module: manages grid data, walls, and dots."""
+"""Maze board representation and grid state management."""
 
+from collections import deque
 from dataclasses import dataclass
 from enum import IntEnum
 import random
-from typing import Optional
+from typing import Deque, List, Optional, Set, Tuple
 
 
-# =============================================================================
-# 1. TILE ENUM DEFINITION
-# =============================================================================
 class TileType(IntEnum):
-    """Simple numbers representing what is inside each grid cell."""
+    """Numerical identification of contents located within a grid tile."""
 
     EMPTY = 0
     WALL = 1
@@ -18,52 +16,42 @@ class TileType(IntEnum):
     SUPER_PACGUM = 3
 
 
-# =============================================================================
-# 2. MAZE BOARD DATA CLASS
-# =============================================================================
 @dataclass
 class MazeBoard:
-    """Store the grid map, generator numbers, and remaining dot count."""
+    """Store grid cell data, raw bitmask layout, and collectibles."""
 
     width: int
     height: int
-    grid: list[list[int]]
-    raw_maze: list[list[int]]
+    grid: List[List[int]]
+    raw_maze: List[List[int]]
     remaining_pacgums: int = 0
+    total_pacgums: int = 0
 
     @classmethod
     def from_raw_maze(
         cls,
-        raw_maze: list[list[int]],
+        raw_maze: List[List[int]],
         max_pacgums: Optional[int] = None,
     ) -> "MazeBoard":
-        """Build and populate a MazeBoard instance.
+        """Build and populate a MazeBoard instance from generator data."""
+        if not raw_maze or not raw_maze[0]:
+            raise ValueError("Raw maze data cannot be empty.")
 
-        Class Algo:
-                1. Measure how many rows and columns the maze has.
-                2. Create an empty 2D grid filled with zeros.
-                3. Separate full walls (number 15) from open walking paths.
-                4. Reserve the 4 outer corners for big power pellets.
-                5. Check if the config asked for fewer dots than available.
-                6. Pick random spots and drop small pac-gums.
-                7. Place big super pac-gums in open corners.
-                8. Return the finished board object ready to play.
-        """
-        # =====================================================================
-        # Step 1: Read dimensions and build an empty grid (all zeros)
-        # =====================================================================
         height: int = len(raw_maze)
         width: int = len(raw_maze[0])
-        grid: list[list[int]] = [
+
+        for row in raw_maze:
+            if len(row) != width:
+                raise ValueError(
+                    "Raw maze matrix contains uneven row lengths."
+                )
+
+        grid: List[List[int]] = [
             [int(TileType.EMPTY) for _ in range(width)]
             for _ in range(height)
         ]
-        valid_paths: list[tuple[int, int]] = []
+        valid_paths: List[Tuple[int, int]] = []
 
-        # =====================================================================
-        # Step 2: Find solid blocks and walkable paths
-        # =====================================================================
-        # Number 15 means all four walls are closed (solid block 42)
         for y in range(height):
             for x in range(width):
                 if raw_maze[y][x] == 15:
@@ -71,63 +59,148 @@ class MazeBoard:
                 else:
                     valid_paths.append((x, y))
 
-        # =====================================================================
-        # Step 3: Find four outer corners for super pac-gums
-        # =====================================================================
-        # Coordinates of the four corners of the map
-        corners: list[tuple[int, int]] = [
+        corners: List[Tuple[int, int]] = [
             (0, 0),
             (width - 1, 0),
             (0, height - 1),
             (width - 1, height - 1),
         ]
-        corner_set: set[tuple[int, int]] = set(corners)
+        corner_set: Set[Tuple[int, int]] = set(corners)
 
-        # Keep paths that are not corners for regular small dots
-        regular_paths: list[tuple[int, int]] = [
+        regular_paths: List[Tuple[int, int]] = [
             pos for pos in valid_paths if pos not in corner_set
         ]
 
-        # =====================================================================
-        # Step 4: Validate config limit and pick target count
-        # =====================================================================
         total_available: int = len(regular_paths)
         target_count: int = total_available
+        if max_pacgums is not None and 0 < max_pacgums <= total_available:
+            target_count = max_pacgums
 
-        if max_pacgums is not None:
-            if 0 < max_pacgums <= total_available:
-                target_count = max_pacgums
-
-        # =====================================================================
-        # Step 5: Place normal pac-gums randomly on the paths
-        # =====================================================================
-        # Choose random cell spots based on target count
-        selected_paths: list[tuple[int, int]] = random.sample(
+        selected_paths: List[Tuple[int, int]] = random.sample(
             regular_paths, target_count
         )
-        gums_count: int = 0
 
+        gums_count: int = 0
         for x, y in selected_paths:
             grid[y][x] = int(TileType.PACGUM)
             gums_count += 1
 
-        # =====================================================================
-        # Step 6: Place super pac-gums in the 4 corners
-        # =====================================================================
-        # If a corner is an open corridor, place a super pellet there
         for cx, cy in corners:
             if 0 <= cy < height and 0 <= cx < width:
                 if grid[cy][cx] != int(TileType.WALL):
                     grid[cy][cx] = int(TileType.SUPER_PACGUM)
                     gums_count += 1
 
-        # =====================================================================
-        # Step 7: Pack everything into a new MazeBoard object
-        # =====================================================================
         return cls(
             width=width,
             height=height,
             grid=grid,
             raw_maze=raw_maze,
             remaining_pacgums=gums_count,
+            total_pacgums=gums_count,
         )
+
+    def is_in_bounds(self, x: int, y: int) -> bool:
+        """Check whether a given coordinate falls inside board limits."""
+        return 0 <= x < self.width and 0 <= y < self.height
+
+    def is_wall(self, x: int, y: int) -> bool:
+        """Determine whether a given coordinate holds a solid obstacle wall."""
+        if not self.is_in_bounds(x, y):
+            return True
+        return self.grid[y][x] == int(TileType.WALL)
+
+    def has_wall_bit(self, x: int, y: int, wall_bit: int) -> bool:
+        """Inspect whether a cell's bitmask blocks a directional border."""
+        if not self.is_in_bounds(x, y):
+            return True
+        return bool(self.raw_maze[y][x] & wall_bit)
+
+    def get_tile(self, x: int, y: int) -> TileType:
+        """Retrieve the tile type value at the specified coordinate."""
+        if not self.is_in_bounds(x, y):
+            return TileType.WALL
+        return TileType(self.grid[y][x])
+
+    def consume_tile(self, x: int, y: int) -> Optional[TileType]:
+        """Eat collectible item at (x, y), clearing cell and updating count."""
+        if not self.is_in_bounds(x, y):
+            return None
+
+        tile_val: int = self.grid[y][x]
+        if tile_val == int(TileType.PACGUM):
+            self.grid[y][x] = int(TileType.EMPTY)
+            self.remaining_pacgums -= 1
+            return TileType.PACGUM
+
+        if tile_val == int(TileType.SUPER_PACGUM):
+            self.grid[y][x] = int(TileType.EMPTY)
+            self.remaining_pacgums -= 1
+            return TileType.SUPER_PACGUM
+
+        return None
+
+    def find_spawn_position(self) -> Tuple[int, int]:
+        """Find nearest walkable corridor cell to the maze center via BFS."""
+        cx: int = self.width // 2
+        cy: int = self.height // 2
+
+        if not self.is_wall(cx, cy):
+            return cx, cy
+
+        queue: Deque[Tuple[int, int]] = deque([(cx, cy)])
+        visited: Set[Tuple[int, int]] = {(cx, cy)}
+
+        while queue:
+            curr_x, curr_y = queue.popleft()
+            if not self.is_wall(curr_x, curr_y):
+                return curr_x, curr_y
+
+            for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+                nx: int = curr_x + dx
+                ny: int = curr_y + dy
+                if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
+                    visited.add((nx, ny))
+                    queue.append((nx, ny))
+
+        return cx, cy
+
+    def find_corner_spawn(self, corner_index: int) -> Tuple[int, int]:
+        """Find safe walkable corridor cell at or near a designated corner."""
+        corner_map: List[Tuple[int, int]] = [
+            (0, 0),
+            (self.width - 1, 0),
+            (0, self.height - 1),
+            (self.width - 1, self.height - 1),
+        ]
+        target: Tuple[int, int] = corner_map[corner_index % 4]
+        tx, ty = target
+
+        if not self.is_wall(tx, ty):
+            return tx, ty
+
+        queue: Deque[Tuple[int, int]] = deque([(tx, ty)])
+        visited: Set[Tuple[int, int]] = {(tx, ty)}
+
+        while queue:
+            curr_x, curr_y = queue.popleft()
+            if not self.is_wall(curr_x, curr_y):
+                return curr_x, curr_y
+
+            for dx, dy in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+                nx: int = curr_x + dx
+                ny: int = curr_y + dy
+                if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
+                    visited.add((nx, ny))
+                    queue.append((nx, ny))
+
+        return tx, ty
+
+    def walkable_tiles(self) -> List[Tuple[int, int]]:
+        """Return sorted list of all non-wall tile coordinates."""
+        tiles: List[Tuple[int, int]] = []
+        for y in range(self.height):
+            for x in range(self.width):
+                if not self.is_wall(x, y):
+                    tiles.append((x, y))
+        return sorted(tiles)

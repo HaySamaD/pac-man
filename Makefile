@@ -22,6 +22,8 @@ clean:
 	rm -rf src/parsing_config_file/__pycache__
 	rm -rf .mypy_cache
 	rm -rf __pycache__
+	rm -rf src/d0_helpers/__pycache__
+	rm -rf src/d1_classes/__pycache__
 
 fclean: clean
 	rm -rf $(VENV)
