@@ -18,7 +18,8 @@ class GameState:
     level: int = 1
     time_left: int = 90
     status: str = "MENU"
-    # MENU, PLAYING, PAUSED, GAME_OVER, VICTORY, HIGHSCORES, INSTRUCTIONS
+    # MENU, HIGHSCORES, INSTRUCTIONS, PLAYING (Maze + HUD), PAUSE, GAME_OVER,
+    #                                                                       WIN
 
 
 # =============================
@@ -40,11 +41,3 @@ class Ghost:
     ghost_type: str  # blinky, pinky, inky, clyde
     is_edible: bool = False
     direction: str = "UP"
-
-
-@dataclass
-class Flags:
-    menu: bool = False
-    start_game: bool = False
-    highscores: bool = False
-    INSTRUCTIONS: bool = False

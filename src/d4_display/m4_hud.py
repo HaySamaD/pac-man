@@ -10,19 +10,20 @@ from ..d4_display import Printer
 
 class HUD:
     def __init__(
-                    self, game_state: GameState, resolution: Tuple[int, int]
+                    self,
+                    game_state: GameState,
+                    screen,
+                    title_font,
+                    content_font,
+                    resolution: Tuple[int, int]
                 ) -> None:
 
-        # ------------- init params -------------
+        # -------------- init params ---------------
         self.game_state: GameState = game_state
         self.width, self.height = resolution
-        # ------------------------ init pygame -------------------------
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.clock = pygame.time.Clock()
-        # ---------------------- init fonts ----------------------
-        self.title_font: font.Font = pygame.font.Font(None, 100)
-        self.content_font: font.Font = pygame.font.Font(None, 40)
+        self.screen = screen
+        self.title_font: font.Font = title_font
+        self.content_font: font.Font = content_font
         # ---------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,

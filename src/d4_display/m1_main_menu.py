@@ -11,17 +11,13 @@ from ..d4_display import Printer
 
 class MainMenuPage:
 
-    def __init__(self, resolution: Tuple = (1920, 1080)) -> None:
+    def __init__(self, screen, title_font, content_font, resolution) -> None:
 
-        # ----------- init params -----------
+        # ---------*---- init params --------------
+        self.screen = screen
+        self.title_font: font.Font = title_font
+        self.content_font: font.Font = content_font
         self.width, self.height = resolution
-        # ------------------ init pygame elements ------------------
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.clock = pygame.time.Clock()
-        # ---------------- init fonts of text --------------------
-        self.title_font: font.Font = pygame.font.Font(None, 100)
-        self.content_font: font.Font = pygame.font.Font(None, 50)
         # --------------------- the printer class --------------------
         self.p: Printer = Printer(
                                     self.screen,

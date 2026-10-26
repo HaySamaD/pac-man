@@ -1,6 +1,5 @@
 from typing import Tuple
 
-import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
@@ -9,16 +8,18 @@ from ..d4_display import Printer
 
 
 class InstructionsPage:
-    def __init__(self, resolution: Tuple[int, int] = (1920, 1080)) -> None:
-        # ----------- init params -----------
+    def __init__(
+                    self,
+                    screen,
+                    title_font,
+                    content_font,
+                    resolution: Tuple[int, int] = (1920, 1080)
+                ) -> None:
+        # -------------- init params --------------
+        self.screen = screen
+        self.title_font: font.Font = title_font
+        self.content_font: font.Font = content_font
         self.width, self.height = resolution
-        # ------------------------ init pygame -------------------------
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.clock = pygame.time.Clock()
-        # ---------------------- init fonts ----------------------
-        self.title_font: font.Font = pygame.font.Font(None, 100)
-        self.content_font: font.Font = pygame.font.Font(None, 40)
         # ---------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,

@@ -1,10 +1,11 @@
 from ..d4_display import (
-                            Printer, m1_main_menu, m2_highscore_page,
-                            m3_instruction_page, m4_hud, m5_pause_menu_page,
-                            m6_game_over_page, m7_win_page
+                            Printer, MainMenuPage, HighscoresPage,
+                            InstructionsPage, HUD, PauseMenuPage,
+                            GameOverPage, WinPage
                          )
-from ..d1_classes import m0_pydantic_classes, m1_dataclasses
-from ..d0_helpers import m1_helpers_read
+from ..d1_classes import GameState
+
+from ..d3_parsing_highscores import HighScoreSys
 
 import pygame
 
@@ -12,22 +13,80 @@ from typing import Tuple
 
 
 class GameLoop:
-    def __init__(self, resolution: Tuple[int, int] = (1920, 1080)):
-        # init params
+    def __init__(
+                    self,
+                    highscores_obj: HighScoreSys,
+                    game_state: GameState,
+                    resolution: Tuple[int, int] = (1920, 1080)
+                ) -> None:
+        # ----------- init params -------------------------
+        self.highscores_obj: HighScoreSys = highscores_obj
+        self.game_state: GameState = game_state
         self.width, self.height = resolution
 
     # --------------------------
     def game_loop(self) -> None:
-        # -----------
+        # ---------------------- init pygame ----------------------
         pygame.init()
-        # ------ display the window (width and height------
-        pygame.display.set_mode((self.width, self.height))
-        # -- display the name of the window --
-        pygame.display.set_caption("PAC-MAN")
-        # ------------------
+        screen = pygame.display.set_mode((self.width, self.height))
+        clock = pygame.time.Clock()
+        # ------------- init fonts -------------
+        title_font = pygame.font.Font(None, 135)
+        content_font = pygame.font.Font(None, 50)
+        # -------------------------------------------------------------------
+        menu_obj: MainMenuPage = MainMenuPage(
+                                                screen,
+                                                title_font,
+                                                content_font
+                                                (self.width, self.height)
+                                             )
+        h_score_obj: HighscoresPage = HighscoresPage(
+                                                        self.highscores_obj,
+                                                        screen
+                                                    )
+        inst_obj: InstructionsPage = InstructionsPage(
+                                                    screen,
+                                                    title_font,
+                                                    content_font,
+                                                    (self.width, self.height)
+                                                     )
+        hud_obj: HUD = HUD(
+                            self.game_state,
+                            screen,
+                            title_font,
+                            content_font,
+                            (self.width, self.height)
+                          )
+        pause_obj: PauseMenuPage = PauseMenuPage(
+                                                    screen,
+                                                    title_font,
+                                                    content_font,
+                                                    (self.width, self.height)
+                                                )
+        gm_ovr_obj: GameOverPage = GameOverPage(
+                                        screen,
+                                        title_font,
+                                        content_font,
+                                        (self.width, self.height)
+                                    )
+        win_obj: WinPage = WinPage(
+                                    screen,
+                                    title_font,
+                                    content_font,
+                                    (self.width, self.height)
+                                  )
+        # -------------------------------------------------
         running: bool = True
-        # ---------------------------------------
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                elif event.type == pygame.KEYDOWN:
+                    pass
+            clock.tick(60)
+
+
+"""
+    links:
+    pass
+"""

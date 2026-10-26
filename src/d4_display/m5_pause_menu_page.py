@@ -9,17 +9,19 @@ from ..d4_display import Printer
 
 
 class PauseMenuPage:
-    def __init__(self, resolution: Tuple[int, int]) -> None:
-        # ----------- init params -----------
-        self.width, self.height = resolution
-        # ------------------------ init pygame -------------------------
-        pygame.init()
+    def __init__(
+                    self,
+                    screen,
+                    title_font,
+                    content_font,
+                    resolution: Tuple[int, int]
+                ) -> None:
+        # ------------------------- init params -------------------------
         self.screen = pygame.display.set_mode((self.width, self.height))
-        self.clock = pygame.time.Clock()
-        # ---------------------- init fonts ----------------------
         self.title_font: font.Font = pygame.font.Font(None, 100)
         self.content_font: font.Font = pygame.font.Font(None, 40)
-
+        self.width, self.height = resolution
+        # ---------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,
                                     self.title_font,

@@ -12,18 +12,17 @@ class HighscoresPage:
     def __init__(
                     self,
                     highscores_obj: HighScoreSys,
+                    screen,
+                    title_font,
+                    content_font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
-        # ----------- init params -----------
+        # ------------------ init params ------------------
         self.highscores_obj: HighScoreSys = highscores_obj
+        self.screen = screen
+        self.title_font: font.Font = title_font
+        self.content_font: font.Font = content_font
         self.width, self.height = resolution
-        # ------------------------ init pygame -------------------------
-        pygame.init()
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.clock = pygame.time.Clock()
-        # ---------------------- init fonts ----------------------
-        self.title_font: font.Font = pygame.font.Font(None, 135)
-        self.content_font: font.Font = pygame.font.Font(None, 50)
         # ------------------------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,
