@@ -2,7 +2,7 @@ from pydantic import BaseModel, model_validator
 
 from typing import List, Dict, Any
 
-from d0_helpers import Color
+from ..d0_helpers import Color
 
 
 # =============== The subclass of the gameconfig class (bellow) ===============
@@ -47,7 +47,7 @@ class Level(BaseModel):
         elif not isinstance(val_width, int) or not (14 <= val_width <= 48):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
-                f"\v{Color().GREEN}default value is added{Color().WHITE}"
+                f"\n{Color().GREEN}default value is added{Color().WHITE}"
                  )
             dic['width'] = 42
 

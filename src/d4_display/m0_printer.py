@@ -25,23 +25,22 @@ class Printer:
                         color: Tuple[int, int, int],
                         background: Tuple[int, int, int]
                    ) -> None:
-
+        # --------- create a text object ----------
         text = self.title_font.render(
                                         content,
                                         True,
                                         color,
                                         background
                                      )
-
-        # for central the title
+        # -------------- for central the title --------------
         x: int | float = (self.width - text.get_width()) / 2
         y: int | float = self.height * 0.05
-
+        # ----- display the test -----
         self.screen.blit(text, (x, y))
-
+        # ----------
         return None
 
-    # ------------------------------------------------------------------
+    # -------------- draw a normal text --------------
     def print_text(
                     self,
                     content: str,
@@ -50,14 +49,16 @@ class Printer:
                     background: Tuple[int, int, int],
                     center_text: bool
                   ) -> None:
-
+        # ----------
         x, y = coord
-
+        # -------------------- create a text object ---------------------
         text = self.content_font.render(
                                         content, True, color, background
                                        )
-
+        # ------------------------------------------
         if center_text:
             x = (self.width - text.get_width()) / 2
-
+        # ----- display the test ------
         self.screen.blit(text, (x, y))
+        # ----------
+        return None

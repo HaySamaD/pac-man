@@ -7,16 +7,12 @@ import json
 
 class Helper:
 
-    # --------- read json file and return he content (str format) ---------
-
-    def read_txt_file(self, file_path: str) -> str:
-
+    # ----------- read json file and return he content (str format) -----------
+    def read_config_file(self, file_path: str) -> str:
         try:
-
             with open(file_path, 'r') as f:
                 content: str = f.read()
             return content
-
         except OSError:
             raise Exception(
                             f"{Color().RED}❌ Error: {file_path} not exist or "
@@ -24,17 +20,13 @@ class Helper:
                            )
 
     # --------------------------------------------------------------------------
-
     def read_highscore_json_file(self, file_path: str) -> List[Dict]:
-
         try:
-
             with open(file_path, 'r') as f:
                 content: List[Dict] = json.load(f)
                 if not isinstance(content, list):
                     return []
                 return content
-
         except OSError:
             print(
                     f"{Color().YELLOW}❌ Error: {file_path} not exist or "
@@ -43,7 +35,6 @@ class Helper:
                     f"'highscores.json'{Color().WHITE}"
                  )
             return []
-
         except json.JSONDecodeError:
             print(
                     f"{Color().YELLOW}❌ Error: {file_path}: wrong syntax"

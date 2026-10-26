@@ -3,9 +3,9 @@ from typing import Tuple
 import pygame
 from pygame import font
 
-from d0_helpers.m0_colors_RGB import Rgb
-from d1_classes.m1_dataclasses import GameState
-from d4_display.m0_printer import Printer
+from ..d0_helpers import Rgb
+from ..d1_classes import GameState
+from ..d4_display import Printer
 
 
 class HUD:
@@ -16,16 +16,14 @@ class HUD:
         # ------------- init params -------------
         self.game_state: GameState = game_state
         self.width, self.height = resolution
-
         # ------------------------ init pygame -------------------------
         pygame.init()
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.clock = pygame.time.Clock()
-
         # ---------------------- init fonts ----------------------
         self.title_font: font.Font = pygame.font.Font(None, 100)
         self.content_font: font.Font = pygame.font.Font(None, 40)
-
+        # ---------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,
                                     self.title_font,
@@ -33,16 +31,17 @@ class HUD:
                                     (self.width, self.height)
                                  )
 
+    # -------------------------------------------------------------------
     def print_hud(self) -> None:
-
+        # ----------------------------------------
         score: int = self.game_state.score
         lives: int = self.game_state.lives
         level: int = self.game_state.level
         time_left: int = self.game_state.time_left
-
+        # -----------------------------------
         x: int | float = self.width * 0.20
         y: int | float = self.height * 0.025
-
+        # --------------------------------------------------------------
         self.p.print_text(
                             (
                                 f"Score: {score}                      "
@@ -55,3 +54,5 @@ class HUD:
                             Rgb.BLACK,
                             False
                          )
+        # ----------
+        return None

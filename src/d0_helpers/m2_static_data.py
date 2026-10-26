@@ -9,7 +9,7 @@ DEFAULT_CONFIG_FILE = {
                 "levels_data": [
                                     {"width": 42, "height": 42, "pacgum": 42}
                                     for _ in range(10)
-                            ],
+                               ],
 
                 "lives": 3,
 

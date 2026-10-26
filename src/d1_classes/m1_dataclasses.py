@@ -40,3 +40,11 @@ class Ghost:
     ghost_type: str  # blinky, pinky, inky, clyde
     is_edible: bool = False
     direction: str = "UP"
+
+
+@dataclass
+class Flags:
+    menu: bool = False
+    start_game: bool = False
+    highscores: bool = False
+    INSTRUCTIONS: bool = False
