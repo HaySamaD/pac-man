@@ -88,5 +88,5 @@ class GameLoop:
 
 """
     links:
-    pass
+    - using font for tetx: https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
 """
