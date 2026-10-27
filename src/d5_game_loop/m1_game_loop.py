@@ -89,4 +89,5 @@ class GameLoop:
 """
     links:
     - using font for tetx: https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
+    - using clock for FPS: https://gamedevacademy.org/pygame-fps-tutorial/
 """
