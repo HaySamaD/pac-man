@@ -17,9 +17,9 @@ class PauseMenuPage:
                     resolution: Tuple[int, int]
                 ) -> None:
         # ------------------------- init params -------------------------
-        self.screen = pygame.display.set_mode((self.width, self.height))
-        self.title_font: font.Font = pygame.font.Font(None, 100)
-        self.content_font: font.Font = pygame.font.Font(None, 40)
+        self.screen = screen
+        self.title_font = title_font
+        self.content_font: font.Font = content_font
         self.width, self.height = resolution
         # ---------------------------------------------------
         self.p: Printer = Printer(

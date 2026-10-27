@@ -34,8 +34,20 @@ def main() -> None:
     # ------ config validated ------
     p: Parser = Parser(sys.argv[1])
     config: GameConfig = p.conf_obj
-    # ------------------------------
-    g: GameLoop = GameLoop()
+    # ----------------- highscore object -----------------
+    higher_score_path: int = config.highscore_filename
+    highscores_obj: HighScoreSys = HighScoreSys(higher_score_path)
+    # -------------------------------------
+    game_state_obj: GameState = GameState()
+    game_state_obj.status = "LOSS"
+    # ----------------------------------------------------
+    final_level: int = len(config.levels_data)
+    g: GameLoop = GameLoop(
+                            highscores_obj,
+                            game_state_obj,
+                            final_level,
+                            resolution=(1920, 1080)
+                          )
     g.game_loop()
 
 

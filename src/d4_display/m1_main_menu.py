@@ -37,12 +37,12 @@ class MainMenuPage:
         # ----------------------------------
         x: int | float = -99
         y: int | float = self.height * 0.25
-        # -----------------------------------------
+        # --------------------------------------------------------------------
         for pos, option_content in enumerate(MENU):
             color: Tuple = Rgb.GREEN if pos == self.pos else Rgb.WHITE
             self.p.print_text(
                                 option_content, (x, y), color, Rgb.BLACK, True
                              )
             y += self.height * 0.1
-        # ---------
+        # ----------
         return None
