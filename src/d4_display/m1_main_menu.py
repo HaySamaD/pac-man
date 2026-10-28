@@ -13,7 +13,7 @@ class MainMenuPage:
 
     def __init__(self, screen, title_font, content_font, resolution) -> None:
 
-        # ---------*---- init params --------------
+        # -------------- init params --------------
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font

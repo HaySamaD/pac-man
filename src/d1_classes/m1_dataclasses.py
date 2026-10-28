@@ -19,7 +19,7 @@ class GameState:
     time_left: int = 90
     status: str = "MENU"
     # MENU, HIGHSCORES, INSTRUCTIONS, PLAY (Maze + HUD), PAUSE, LOSS,
-    #                                                                       WIN
+    #                                                                WIN
 
 
 # =============================

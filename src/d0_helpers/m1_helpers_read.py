@@ -30,7 +30,7 @@ class Helper:
         except OSError:
             print(
                     f"{Color().YELLOW}❌ Error: {file_path} not exist or "
-                    "access denied"
+                    "access denied\n"
                     f"{Color().GREEN}n\add default value [] and switch to "
                     f"'highscores.json'{Color().WHITE}"
                  )

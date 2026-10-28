@@ -39,7 +39,7 @@ def main() -> None:
     highscores_obj: HighScoreSys = HighScoreSys(higher_score_path)
     # -------------------------------------
     game_state_obj: GameState = GameState()
-    game_state_obj.status = "LOSS"
+    game_state_obj.status = "INSTRUCTIONS"
     # ----------------------------------------------------
     final_level: int = len(config.levels_data)
     g: GameLoop = GameLoop(
