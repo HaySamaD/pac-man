@@ -31,28 +31,28 @@ def main() -> None:
         raise Exception(
             f"{RED}❌ JSON format: '{sys.argv[1]}' must be a json file{WHITE}\n"
                        )
-    # ------ config validated ------
+    # -------------------------------------------------------------------------
     p: Parser = Parser(sys.argv[1])
     config: GameConfig = p.conf_obj
-    # ----------------- highscore object -----------------
+    # -------------------------------------------------------------------------
     higher_score_path: int = config.highscore_filename
     highscores_obj: HighScoreSys = HighScoreSys(higher_score_path)
-    # -------------------------------------
+    # -------------------------------------------------------------------------
     game_state_obj: GameState = GameState()
-    game_state_obj.status = "INSTRUCTIONS"
-    # ----------------------------------------------------
-    final_level: int = len(config.levels_data)
+    game_state_obj.status = "LOSS"
+    # -------------------------------------------------------------------------
+    nbr_levels: int = len(config.levels_data)
     g: GameLoop = GameLoop(
                             highscores_obj,
                             game_state_obj,
-                            final_level,
+                            nbr_levels,
                             resolution=(1920, 1080)
                           )
     g.game_loop()
 
 
 if __name__ == "__main__":
-    # try:
-    main()
-    # except Exception as e:
-    #     print(e)
+    try:
+        main()
+    except Exception as e:
+        print(e)

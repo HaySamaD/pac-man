@@ -7,7 +7,7 @@ import json
 
 class Helper:
 
-    # ----------- read json file and return he content (str format) -----------
+    # =========== Read json file and return he content (str format) ===========
     def read_config_file(self, file_path: str) -> str:
         try:
             with open(file_path, 'r') as f:
@@ -19,8 +19,8 @@ class Helper:
                             f"access denied{Color().WHITE}"
                            )
 
-    # --------------------------------------------------------------------------
-    def read_highscore_json_file(self, file_path: str) -> List[Dict]:
+    # ==========================================================================
+    def read_highscore_file(self, file_path: str) -> List[Dict]:
         try:
             with open(file_path, 'r') as f:
                 content: List[Dict] = json.load(f)
@@ -37,10 +37,15 @@ class Helper:
             return []
         except json.JSONDecodeError:
             print(
-                    f"{Color().YELLOW}❌ Error: {file_path}: wrong syntax"
-                    f"{Color().GREEN}\nadd default value [] and switch to "
-                    f"'data/highscores.json'{Color().WHITE}"
+                    f"{Color().YELLOW}❌ Error: {file_path}: wrong JSON syntax"
+                    f"\n{Color().GREEN}\nadd default value []"
                  )
             return []
+    # ==========================================================================
 
-# =============================================================================
+
+# 1 - config file parsing: read the json file as a str (not a json): because
+#     after we get the content abd skip the lines startswith "#"
+# 2 - highscore file: read the json file and return [] if:
+#     a - file not found or permition error
+#     b - json syntax error

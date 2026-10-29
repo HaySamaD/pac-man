@@ -1,3 +1,5 @@
+from .m6_win_loss_events import WinLossEvent
+
 from .m5_pause_events import PauseEvent
 
 from .m4_play_events import PlayEvent
@@ -87,6 +89,9 @@ class GameLoop:
                                                                       )
         play_event_obj: PlayEvent = PlayEvent(self.game_state, self.nbr_levels)
         pause_event_obj: PauseEvent = PauseEvent(pause_obj, self.game_state)
+        win_loss_event: WinLossEvent = WinLossEvent(
+                        self.highscores_obj, p, self.game_state, self.height
+                                                   )
         # ------------------------------------------------------------------
         running: bool = True
         player_name: str = ""
@@ -106,11 +111,8 @@ class GameLoop:
                         play_event_obj.run_event(event)
                     elif self.game_state.status == "PAUSE":
                         pause_event_obj.run_event(event)
-                    # ***********************************************************
                     elif self.game_state.status in ["LOSS", "WIN"]:
-                        pass
-                    # ***********************************************************
-
+                        player_name = win_loss_event.run_event(event)
             if self.game_state.status == "MENU":
                 menu_obj.print_main_menu()
             elif self.game_state.status == "HIGHSCORES":
@@ -124,22 +126,35 @@ class GameLoop:
             elif self.game_state.status == "LOSS":
                 gm_ovr_obj.print_game_over_page()
                 p.print_text(
-                                player_name,
+                                f"Your score is: {self.game_state.score}",
                                 (-99, self.height * 0.25),
-                                Rgb.RED,
+                                Rgb.WHITE,
+                                Rgb.BLACK,
+                                True
+                            )
+                p.print_text(
+                                player_name,
+                                (-99, self.height * 0.35),
+                                Rgb.GREEN,
                                 Rgb.BLACK,
                                 True
                             )
             elif self.game_state.status == "WIN":
                 win_obj.print_win_page()
                 p.print_text(
-                                player_name,
+                                f"Your score is: {self.game_state.score}",
                                 (-99, self.height * 0.25),
+                                Rgb.WHITE,
+                                Rgb.BLACK,
+                                True
+                            )
+                p.print_text(
+                                player_name,
+                                (-99, self.height * 0.35),
                                 Rgb.GREEN,
                                 Rgb.BLACK,
                                 True
                             )
-
             clock.tick(60)
             pygame.display.flip()
         # ------------------------------------------------------------------

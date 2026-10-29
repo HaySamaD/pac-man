@@ -1,6 +1,7 @@
 from typing import Tuple
 
 
+# change terminal color
 class Color:
     RED = "\033[31m"
     YELLOW = '\033[93m'
@@ -8,6 +9,7 @@ class Color:
     WHITE = "\033[37m"
 
 
+# change pygame text color
 class Rgb:
     WHITE: Tuple[int, int, int] = (255, 255, 255)
     GREEN: Tuple[int, int, int] = (0, 255, 0)

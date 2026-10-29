@@ -13,27 +13,22 @@ class Level(BaseModel):
     height: int
     pacgum: int
 
-    # ------------- parce the dict before impaking (mode=before) -------------
-
+    # ------------- parce the dict before impaking (mode=before) --------------
     @model_validator(mode="before")
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
-
-        # ----------- check the type of the input (if dict or not) -----------
+        # ----------- check the type of the input (if dict or not) ------------
         if not isinstance(dic, dict):
             print(
                     f"\n{Color().YELLOW}One of levels metadata not a dict. \n"
                     f"{Color().GREEN}Default value is added{Color().WHITE}\n"
                  )
             return {"width": 42, "height": 42, "pacgum": 42}
-
-        # -------- get the dic elements ---------
+        # ----------------------- get the dic elements ------------------------
         val_width: Any = dic.get("width", None)
         val_height: Any = dic.get("height", None)
         val_pacgum: Any = dic.get("pacgum", None)
-
-        # --------------------- handel width value ---------------------------
-
+        # ------------------------ handel width value -------------------------
         if val_width is None:
             print(
                     f"\n{Color().YELLOW}'width' not exist.\n"
@@ -41,18 +36,15 @@ class Level(BaseModel):
                  )
             dic['width'] = 42
             val_width = 42
-
-        # the maze must be >= 14 (to display the 42)
-        # and <= 48 (to less space for HUD)
+        # the maze must be >= 14 (to display the 42 pattern)
+        # and <= 48
         elif not isinstance(val_width, int) or not (14 <= val_width <= 48):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
                  )
             dic['width'] = 42
-
-        # ----------------- handel height value -------------------------
-
+        # ------------------------ handel height value ------------------------
         if val_height is None:
             print(
                     f"\n{Color().YELLOW}'height' not exist."
@@ -60,16 +52,15 @@ class Level(BaseModel):
                  )
             dic['height'] = 42
             val_height = 42
-
-        elif not isinstance(val_height, int) or not (10 <= val_width <= 24):
+        # the maze must be >= 10 (to display the 42 pattern)
+        # and <= 24 (to less space for HUD)
+        elif not isinstance(val_height, int) or not (10 <= val_height <= 24):
             print(
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
-
-        # ----------------- handel pacgums value -------------------------
-
+        # ------------------------ handel pacgums value -----------------------
         if val_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'pacgum' not exist."
@@ -77,7 +68,6 @@ class Level(BaseModel):
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
-
         elif not isinstance(val_pacgum, int) or val_pacgum < 1:
             print(
                     f"\n{Color().YELLOW}'pacgum' not a integer or < 1.\n"
@@ -85,7 +75,6 @@ class Level(BaseModel):
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
-
         elif val_pacgum > (dic['width'] * dic['height']) - 23:
             print(
                 f"\n{Color().YELLOW}'nbr of pacgums more than map capacity "
@@ -94,9 +83,7 @@ class Level(BaseModel):
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
-
-        # ----------------------------------------------------------------
-
+        # ---------------------------------------------------------------------
         return dic
 
 
@@ -113,13 +100,11 @@ class GameConfig(BaseModel):
     seed: int
     level_max_time: int
 
-    # ------------ parce the dict before impaking (mode=before) ---------------
-
+    # ------------- parce the dict before impaking (mode=before) --------------
     @model_validator(mode="before")
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
-
-        # ------------------------ get the dic elements -----------------------
+        # ----------------------- get the dic elements ------------------------
         highscore_filename: Any = dic.get("highscore_filename", None)
         levels_data: Any = dic.get("levels_data", None)
         lives: Any = dic.get("lives", None)
@@ -128,9 +113,7 @@ class GameConfig(BaseModel):
         points_per_ghost: Any = dic.get("points_per_ghost", None)
         seed: Any = dic.get("seed", None)
         level_max_time: Any = dic.get("level_max_time", None)
-
-        # ------------------ handel highscore_filename ------------------
-
+        # --------------------- handel highscore_filename ---------------------
         if highscore_filename is None:
             print(
                     f"\n{Color().YELLOW}'highscore_filename' not exist."
@@ -138,7 +121,6 @@ class GameConfig(BaseModel):
                  )
             dic['highscore_filename'] = "data/highscores.json"
             highscore_filename = "data/highscores.json"
-
         if (
             not isinstance(highscore_filename, str)
             or not highscore_filename.endswith('.json')
@@ -150,9 +132,7 @@ class GameConfig(BaseModel):
                  )
             dic['highscore_filename'] = "data/highscores.json"
             highscore_filename = "data/highscores.json"
-
         # ------------------------ handel levels_data -------------------------
-
         if not isinstance(levels_data, list):
             print(
                     f"\n{Color().YELLOW}'levels_data' not a list.\n"
@@ -163,7 +143,6 @@ class GameConfig(BaseModel):
                                 for _ in range(10)
                                  ]
             levels_data = dic['levels_data']
-
         elif len(levels_data) < 10:
             print(
                     f"\n{Color().YELLOW}'levels_data' less than 10.\n"
@@ -174,9 +153,7 @@ class GameConfig(BaseModel):
                                     {"width": 42, "height": 42, "pacgum": 42}
                                          )
                 levels_data = dic['levels_data']
-
         # ---------------------- handel lives List[Dict] ----------------------
-
         if lives is None:
             print(
                     f"\n{Color().YELLOW}'lives' not exist."
@@ -184,7 +161,6 @@ class GameConfig(BaseModel):
                  )
             dic['lives'] = 3
             lives = 3
-
         if not isinstance(lives, int) or lives < 1:
             print(
                     f"\n{Color().YELLOW}'lives' not a number or less than 1.\n"
@@ -192,9 +168,7 @@ class GameConfig(BaseModel):
                  )
             dic['lives'] = 3
             lives = 3
-
         # --------------------- handel points_per_pacgum ----------------------
-
         if points_per_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'points_per_pacgum' not exist."
@@ -202,7 +176,6 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
-
         if not isinstance(points_per_pacgum, int) or points_per_pacgum < 1:
             print(
                     f"\n{Color().YELLOW}'points_per_pacgum' not a number or"
@@ -211,9 +184,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
-
-        # ----------------- handel points_per_super_pacgum --------------------
-
+        # ------------------- handel points_per_super_pacgum ------------------
         if points_per_super_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'points_per_super_pacgum' not exist."
@@ -221,7 +192,6 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
-
         if (
                 not isinstance(points_per_super_pacgum, int)
                 or points_per_super_pacgum < 1
@@ -233,9 +203,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
-
         # -------------------- handel points_per_ghost -----------------------
-
         if points_per_ghost is None:
             print(
                     f"\n{Color().YELLOW}'points_per_ghost' not exist."
@@ -243,7 +211,6 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
-
         elif not isinstance(points_per_ghost, int) or points_per_ghost < 1:
             print(
                     f"\n{Color().YELLOW}'points_per_ghost' not a number or"
@@ -252,9 +219,7 @@ class GameConfig(BaseModel):
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
-
         # -------------------------- handel seed ------------------------------
-
         if seed is None:
             print(
                     f"\n{Color().YELLOW}'seed' not exist.\n"
@@ -262,7 +227,6 @@ class GameConfig(BaseModel):
                  )
             dic['seed'] = 42
             seed = 42
-
         elif not isinstance(seed, int) or seed < 1:
             print(
                     f"\n{Color().YELLOW}'seed' not a number or "
@@ -271,9 +235,7 @@ class GameConfig(BaseModel):
                  )
             dic['seed'] = 42
             seed = 42
-
         # --------------------- handel level_max_time -------------------------
-
         if level_max_time is None:
             print(
                     f"\n{Color().YELLOW}'level_max_time' not exist."
@@ -281,7 +243,6 @@ class GameConfig(BaseModel):
                  )
             dic['level_max_time'] = 300
             level_max_time = 300
-
         if not isinstance(level_max_time, int) or level_max_time < 1:
             print(
                     f"\n{Color().YELLOW}'level_max_time' not a number or"
@@ -290,7 +251,7 @@ class GameConfig(BaseModel):
                  )
             dic['level_max_time'] = 300
             level_max_time = 300
-
+        # ---------------------------------------------------------------------
         return dic
 
 
@@ -303,7 +264,6 @@ class NameScore(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def valide(cls, dic: Dict[str, str | int]) -> Dict[str, str | int]:
-
         # ------------- Verify first that we have a dict -------------
         if not isinstance(dic, dict):
             print(
@@ -312,13 +272,10 @@ class NameScore(BaseModel):
                     f"{Color().WHITE}"
                  )
             return {"name": "player", "score": 0}
-
         # ---- get the content of dict ----
         name: Any = dic.get("name", None)
         score: Any = dic.get("score", None)
-
         # ------ verify name (len <= 10 + each char isalnum or isspace) ------
-
         if not isinstance(name, str):
             print(
                     f"\n{Color().YELLOW}One of players data han not 'name'\n"
@@ -326,7 +283,6 @@ class NameScore(BaseModel):
                  )
             dic['name'] = 'Player'
             name = 'Player'
-
         elif len(name) > 10:
             print(
                     f"\n{Color().YELLOW}the len of '{name}' if > 10\n"
@@ -334,7 +290,6 @@ class NameScore(BaseModel):
                  )
             dic['name'] = 'Player'
             name = 'Player'
-
         elif not all(c.isalnum() or c.isspace() for c in name):
             print(
                     f"\n{Color().YELLOW}One of chars of '{name}' not a alnum"
@@ -343,7 +298,6 @@ class NameScore(BaseModel):
                  )
             dic['name'] = 'Player'
             name = 'Player'
-
         # --------------------- verefy score is a integer -------------------
         if not isinstance(score, int):
             print(
@@ -351,6 +305,16 @@ class NameScore(BaseModel):
                     f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['score'] = 0
-
-        # ---------
+        # -------------------------------------------------------------------
         return dic
+
+
+"""
+    Remarques:
+
+        - bnisba l width and height (lines 41 and 57):
+                                                a revoir l explication dialha
+
+        - bnisba l handllage dial nbr of pacgums (line 78):
+                                                a revoir l explication dialha
+"""

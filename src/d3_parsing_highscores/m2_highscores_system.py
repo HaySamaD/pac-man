@@ -14,7 +14,7 @@ class HighScoreSys:
         self.highscores_path: str = highscores_path
         # ------------------- get the highscores metadata --------------------
         self.highscores_meta: List[Dict] = (
-                            Helper().read_highscore_json_file(highscores_path)
+                            Helper().read_highscore_file(highscores_path)
                                            )
         # -------- get the highscores_obj after parsing the metadata ---------
         self.highscores_obj: List[NameScore] = [
