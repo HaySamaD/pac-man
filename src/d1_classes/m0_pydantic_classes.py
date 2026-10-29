@@ -89,7 +89,7 @@ class Level(BaseModel):
 
 # ===============================================================================
 
-class GameConfig(BaseModel):
+class Config(BaseModel):
 
     highscore_filename: str
     levels_data: List[Level]
@@ -119,19 +119,19 @@ class GameConfig(BaseModel):
                     f"\n{Color().YELLOW}'highscore_filename' not exist."
                     f"default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_filename'] = "data/highscores.json"
-            highscore_filename = "data/highscores.json"
+            dic['highscore_filename'] = "highscores.json"
+            highscore_filename = dic['highscore_filename']
         if (
             not isinstance(highscore_filename, str)
             or not highscore_filename.endswith('.json')
            ):
             print(
                 f"\n{Color().YELLOW}'highscore_filename' not valid "
-                "(not str or not end with '.json').\n"
+                "(not str or not a JSON file).\n"
                 f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['highscore_filename'] = "data/highscores.json"
-            highscore_filename = "data/highscores.json"
+            dic['highscore_filename'] = "highscores.json"
+            highscore_filename = dic['highscore_filename']
         # ------------------------ handel levels_data -------------------------
         if not isinstance(levels_data, list):
             print(

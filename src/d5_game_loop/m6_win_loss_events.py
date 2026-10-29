@@ -1,21 +1,23 @@
-from typing import Tuple
-
 import pygame
 from pygame.event import Event
 
-from ..d0_helpers import Rgb
-
 from ..d1_classes import GameState
 
-from ..d3_parsing_highscores import HighScoreSys
+from ..d3_parsing_highscores import HigherScore
 
 from ..d4_display import Printer
 
 
 class WinLossEvent:
-    def __init__(self, highscores_obj: HighScoreSys, p: Printer, game_status: GameState, height: int):
-        # -------------------------------------------------
-        self.highscores_obj: HighScoreSys = highscores_obj
+    def __init__(
+                    self,
+                    highscores_obj: HigherScore,
+                    p: Printer,
+                    game_status: GameState,
+                    height: int
+                ) -> None:
+        # ------------------------------------------------
+        self.highscores_obj: HigherScore = highscores_obj
         self.p: Printer = p
         self.game_status: GameState = game_status
         self.height: int = height
@@ -42,5 +44,5 @@ class WinLossEvent:
                 and len(self.player_name) < 10
                ):
                 self.player_name += char
-        # ----------------------
+        # ---------------------------------------------------------------------
         return self.player_name

@@ -1,10 +1,10 @@
 import sys
 
-from src.d1_classes import GameConfig, NameScore, GameState
+from src.d1_classes import Config, NameScore, GameState
 
 from src.d2_parsing_config_file import Parser
 
-from src.d3_parsing_highscores import HighScoreSys
+from src.d3_parsing_highscores import HigherScore
 
 from src.d4_display import MainMenuPage, HighscoresPage, InstructionsPage
 from src.d4_display import HUD, PauseMenuPage, GameOverPage, WinPage
@@ -33,10 +33,10 @@ def main() -> None:
                        )
     # -------------------------------------------------------------------------
     p: Parser = Parser(sys.argv[1])
-    config: GameConfig = p.conf_obj
+    config: Config = p.conf_obj
     # -------------------------------------------------------------------------
     higher_score_path: int = config.highscore_filename
-    highscores_obj: HighScoreSys = HighScoreSys(higher_score_path)
+    highscores_obj: HigherScore = HigherScore(higher_score_path)
     # -------------------------------------------------------------------------
     game_state_obj: GameState = GameState()
     game_state_obj.status = "LOSS"
@@ -52,7 +52,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        print(e)
+    # try:
+    main()
+    # except Exception as e:
+    #     print(e)

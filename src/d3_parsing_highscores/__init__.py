@@ -1,3 +1,3 @@
-from .m2_highscores_system import HighScoreSys
+from .m2_highscores_system import HigherScore
 
-__all__ = ["HighScoreSys"]
+__all__ = ["HigherScore"]

@@ -4,21 +4,21 @@ import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
-from ..d3_parsing_highscores import HighScoreSys
+from ..d3_parsing_highscores import HigherScore
 from ..d4_display import Printer
 
 
 class HighscoresPage:
     def __init__(
                     self,
-                    highscores_obj: HighScoreSys,
+                    highscores_obj: HigherScore,
                     screen,
                     title_font,
                     content_font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
         # ------------------ init params ------------------
-        self.highscores_obj: HighScoreSys = highscores_obj
+        self.highscores_obj: HigherScore = highscores_obj
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
@@ -43,7 +43,7 @@ class HighscoresPage:
         x: int | float = -99
         y: int | float = self.height * 0.20
         # -------------------------------------------------------------
-        for i in self.highscores_obj.top_10_scores_obj:
+        for i in self.highscores_obj.top_10_scores:
             name: str = i.name
             score: int = i.score
             self.p.print_text(

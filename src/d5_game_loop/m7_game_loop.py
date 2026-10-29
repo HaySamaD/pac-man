@@ -17,7 +17,7 @@ from ..d4_display import (
                          )
 from ..d1_classes import GameState
 
-from ..d3_parsing_highscores import HighScoreSys
+from ..d3_parsing_highscores import HigherScore
 
 import pygame
 
@@ -29,13 +29,13 @@ from ..d0_helpers import Rgb
 class GameLoop:
     def __init__(
                     self,
-                    highscores_obj: HighScoreSys,
+                    highscores_obj: HigherScore,
                     game_state: GameState,
                     nbr_levels: int,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
-        # ----------- init params -------------------------
-        self.highscores_obj: HighScoreSys = highscores_obj
+        # ----------------- init params -----------------
+        self.highscores_obj: HigherScore = highscores_obj
         self.game_state: GameState = game_state
         self.nbr_levels = nbr_levels
         self.width, self.height = resolution

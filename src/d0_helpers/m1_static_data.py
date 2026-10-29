@@ -4,7 +4,7 @@ from typing import List
 # use this data if we have a wrong config file (file not found or acces denied)
 DEFAULT_CONFIG_FILE = {
 
-                "highscore_filename": "data/highscores.json",
+                "highscore_filename": "highscores.json",
 
                 "levels_data": [
                                     {"width": 42, "height": 42, "pacgum": 42}
