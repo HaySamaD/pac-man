@@ -3,15 +3,15 @@ from pygame.event import Event
 
 from ..d1_classes import GameState
 
-from ..d4_display import PauseMenuPage
+from ..d4_display import PausePage
 
 
 class PauseEvent:
     def __init__(
-                    self, pause_obj: PauseMenuPage, game_state: GameState
+                    self, pause_obj: PausePage, game_state: GameState
                 ) -> None:
         # ----------------------------------------
-        self.pause_obj: PauseMenuPage = pause_obj
+        self.pause_obj: PausePage = pause_obj
         self.game_state: GameState = game_state
 
     def run_event(self, event: Event):

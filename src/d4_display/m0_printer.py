@@ -18,7 +18,7 @@ class Printer:
         self.text_font: font.Font = text_font
         self.width, self.height = resolution
 
-    # ===================== Draw a title ====================
+    # ========================== Draw a title ==========================
     def print_title(
                         self,
                         content: str,

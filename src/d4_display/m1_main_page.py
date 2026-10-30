@@ -4,10 +4,10 @@ from pygame import font
 
 from ..d0_helpers import Rgb
 from ..d0_helpers import MENU
-from ..d4_display import Printer
+from . import Printer
 
 
-class MainMenuPage:
+class MainPage:
 
     def __init__(
                     self,
@@ -34,11 +34,11 @@ class MainMenuPage:
 
     # ========================================================================
     def print_main_menu(self) -> None:
-        # -------------- fill the screen first before printing --------------
-        # self.screen.fill(Rgb.BLACK)
-        # -------------------------------------------------------------------
+        # -------------- fill the screen first before printing ---------------
+        self.screen.fill(Rgb.BLACK)
+        # --------------------------------------------------------------------
         self.p.print_title("Pac-man", Rgb.YELLOW, Rgb.BLACK)
-        # -------------------------------------------------------------------
+        # --------------------------------------------------------------------
         x: int | float = -99
         y: int | float = self.height * 0.25
         # --------------------------------------------------------------------
@@ -48,5 +48,5 @@ class MainMenuPage:
                                 option_content, (x, y), color, Rgb.BLACK, True
                              )
             y += self.height * 0.1
-        # -------------------------------------------------------------------
+        # --------------------------------------------------------------------
         return None

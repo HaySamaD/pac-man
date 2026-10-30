@@ -1,14 +1,13 @@
 from typing import Tuple
 
-import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
 from ..d0_helpers import PAUSE
-from ..d4_display import Printer
+from .m0_printer import Printer
 
 
-class PauseMenuPage:
+class PausePage:
     def __init__(
                     self,
                     screen,
@@ -16,7 +15,7 @@ class PauseMenuPage:
                     content_font,
                     resolution: Tuple[int, int]
                 ) -> None:
-        # ------------------------- init params -------------------------
+        # ------------------- init params -------------------
         self.screen = screen
         self.title_font = title_font
         self.content_font: font.Font = content_font
@@ -28,14 +27,14 @@ class PauseMenuPage:
                                     self.content_font,
                                     (self.width, self.height)
                                  )
-        # ----------------
+        # ---------------------------------------------------
         self.pos: int = 0
 
-    # ----------------------------------------------------------------------------
+    # ==================================================================
     def print_pause_page(self) -> None:
-        # -----------------------------------------------
+        # --------------------------------------------------------------
         self.p.print_title("Pause", Rgb.GREEN, Rgb.BLACK)
-        # ----------------------------------
+        # --------------------------------------------------------------
         x: int | float = -99
         y: int | float = self.height * 0.18
         # --------------------------------------------------------------
@@ -43,5 +42,5 @@ class PauseMenuPage:
             color: Tuple = Rgb.YELLOW if idx == self.pos else Rgb.WHITE
             self.p.print_text(option, (x, y), color, Rgb.BLACK, True)
             y += self.height * 0.08
-        # ----------
+        # --------------------------------------------------------------
         return None

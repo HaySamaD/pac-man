@@ -1,6 +1,5 @@
 from typing import Tuple
 
-import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
@@ -11,39 +10,39 @@ from ..d4_display import Printer
 class HighscoresPage:
     def __init__(
                     self,
-                    highscores_obj: HigherScore,
+                    highscores: HigherScore,
                     screen,
                     title_font,
                     content_font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
-        # ------------------ init params ------------------
-        self.highscores_obj: HigherScore = highscores_obj
+        # ------------------- init params -------------------
+        self.highscores: HigherScore = highscores
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
         self.width, self.height = resolution
-        # ------------------------------------------------------------------
+        # ---------------------------------------------------
         self.p: Printer = Printer(
                                     self.screen,
                                     self.title_font,
                                     self.content_font,
                                     (self.width, self.height)
                                  )
-        # ----------------
+        # -- the selected option now is the highscores text -
         self.pos: int = 0
 
-    # -----------------------------------------------------------------
+    # =========================================================================
     def print_highscores_page(self) -> None:
-        # -------------------------
+        # ------------- fill the screen first before printing -----------------
         self.screen.fill(Rgb.BLACK)
-        # ---------------------------------------------------
+        # ---------------------------------------------------------------------
         self.p.print_title("Highscores", Rgb.PINK, Rgb.BLACK)
-        # ---------------------------------
+        # ---------------------------------------------------------------------
         x: int | float = -99
         y: int | float = self.height * 0.20
-        # -------------------------------------------------------------
-        for i in self.highscores_obj.top_10_scores:
+        # ---------------------------------------------------------------------
+        for i in self.highscores.top_10_scores:
             name: str = i.name
             score: int = i.score
             self.p.print_text(
@@ -54,7 +53,7 @@ class HighscoresPage:
             y += self.height * 0.05
         # ------------------- print the 'previous' boutton --------------------
         color: Tuple[int, int, int] = Rgb.GREEN if self.pos == 1 else Rgb.WHITE
-        # --------------------------------------------------------
+        # ---------------------------------------------------------------------
         self.p.print_text(
                             "previous",
                             (self.width * 0.8, self.height * 0.8),

@@ -1,16 +1,12 @@
 import sys
 
-from src.d1_classes import Config, NameScore, GameState
+from src.d1_classes import Config, GameState
 
 from src.d2_parsing_config_file import Parser
 
 from src.d3_parsing_highscores import HigherScore
 
-from src.d4_display import MainMenuPage, HighscoresPage, InstructionsPage
-from src.d4_display import HUD, PauseMenuPage, GameOverPage, WinPage
 from src.d5_game_loop import GameLoop
-
-from typing import List
 
 
 RED = "\033[31m"
@@ -18,7 +14,7 @@ GREEN = "\033[32m"
 WHITE = "\033[37m"
 
 
-# --------------------------------------------------------------------------------
+# =============================================================================
 
 def main() -> None:
 
@@ -51,6 +47,7 @@ def main() -> None:
     g.game_loop()
 
 
+# =============================================================================
 if __name__ == "__main__":
     # try:
     main()

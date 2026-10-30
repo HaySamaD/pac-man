@@ -1,13 +1,12 @@
 from typing import Tuple
 
-import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
-from ..d4_display import Printer
+from . import Printer
 
 
-class GameOverPage:
+class LossPage:
     def __init__(
                     self,
                     screen,
@@ -15,7 +14,7 @@ class GameOverPage:
                     content_font,
                     resolution: Tuple[int, int]
                 ) -> None:
-        # -------------- init params ---------------
+        # ------------------- init params --------------------
         self.width, self.height = resolution
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
@@ -28,19 +27,19 @@ class GameOverPage:
                                     (self.width, self.height)
                                  )
 
-    # -------------------------------------------------------------------
+    # ===================================================================
     def print_game_over_page(self) -> None:
         # ---------------------------------------------------------------
         self.p.print_title("Game Over: Try again", Rgb.ORANGE, Rgb.BLACK)
-        # ----------------------------------
+        # ---------------------------------------------------------------
         y: int | float = self.height * 0.17
-        # --------------------------------------------------------------
+        # ---------------------------------------------------------------
         self.p.print_text(
-                            "Enter your name bellow to save your score",
+                            "Enter your name below to save your score",
                             (-99, y),
                             Rgb.WHITE,
                             Rgb.BLACK,
                             center_text=True
                          )
-        # ---------
+        # ---------------------------------------------------------------
         return None

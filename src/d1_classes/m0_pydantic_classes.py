@@ -299,10 +299,10 @@ class NameScore(BaseModel):
             dic['name'] = 'Player'
             name = 'Player'
         # --------------------- verefy score is a integer -------------------
-        if not isinstance(score, int):
+        if not isinstance(score, int) or score < 0:
             print(
-                    f"\n{Color().YELLOW}'{score}' is not a integer\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'{score}' is not a integer or negative"
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['score'] = 0
         # -------------------------------------------------------------------

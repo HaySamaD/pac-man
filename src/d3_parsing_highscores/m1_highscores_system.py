@@ -21,7 +21,7 @@ class HigherScore:
                                             NameScore.model_validate(i)
                                             for i in self.meta
                                            ]
-        # ------------------- get top 10 scores -------------------
+        # ------------------------ get top 10 scores -------------------------
         self.top_10_scores = sorted(
                                     self.highscores,
                                     key=lambda x: x.score,
@@ -30,16 +30,16 @@ class HigherScore:
 
     # =========================================================================
     def add_new_score(self, dict_meta: Dict[str, Any]) -> None:
-        # -------------------------------------------------------------
+        # ----------------------------------------------------------
         name_score: NameScore = NameScore.model_validate(dict_meta)
         self.highscores.append(name_score)
-        # ---------------------------------------------------------
+        # ----------------------------------------------------------
         self.top_10_scores = sorted(
                                     self.highscores,
                                     key=lambda x: x.score,
                                     reverse=True
                                    )[:10]
-        # ----------
+        # ----------------------------------------------------------
         return None
 
     # =========================================================================

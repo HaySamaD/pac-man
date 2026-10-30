@@ -1,6 +1,5 @@
 from typing import Tuple
 
-import pygame
 from pygame import font
 
 from ..d0_helpers import Rgb
@@ -18,7 +17,7 @@ class HUD:
                     resolution: Tuple[int, int]
                 ) -> None:
 
-        # -------------- init params ---------------
+        # ------------------- init params -------------------
         self.game_state: GameState = game_state
         self.width, self.height = resolution
         self.screen = screen
@@ -32,14 +31,14 @@ class HUD:
                                     (self.width, self.height)
                                  )
 
-    # -------------------------------------------------------------------
+    # ==================================================================
     def print_hud(self) -> None:
-        # ----------------------------------------
+        # --------------------------------------------------------------
         score: int = self.game_state.score
         lives: int = self.game_state.lives
         level: int = self.game_state.level
         time_left: int = self.game_state.time_left
-        # -----------------------------------
+        # --------------------------------------------------------------
         x: int | float = self.width * 0.20
         y: int | float = self.height * 0.025
         # --------------------------------------------------------------
@@ -55,5 +54,5 @@ class HUD:
                             Rgb.BLACK,
                             False
                          )
-        # ----------
+        # --------------------------------------------------------------
         return None

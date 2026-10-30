@@ -17,7 +17,7 @@ class Parser:
         self.conf_dic: Dict[str, Any] = self.str_to_dict()
         self.conf_obj: Config = self.create_game_conf_obj()
 
-    # ==================================================
+    # ======================================================================
     def skip_comments(self) -> str:
         # ---------------------------------------------
         lines: List[str] = self.config_txt.splitlines()
@@ -28,7 +28,7 @@ class Parser:
             if not line or line.startswith("#"):
                 continue
             res.append(line)
-        # -----------------
+        # ---------------------------------------------
         return "".join(res)
 
     # ======================================================================
