@@ -10,7 +10,7 @@ class PlayEvent:
         self.game_state: GameState = game_state
         self.nbr_levels: int = nbr_levels
 
-    def run_event(self, event: Event):
+    def run_event(self, event: Event) -> None:
         # ----------------------------------------------------------------
         if event.key == pygame.K_ESCAPE:
             self.game_state.status = "PAUSE"

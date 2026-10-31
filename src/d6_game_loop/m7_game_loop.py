@@ -48,7 +48,7 @@ class GameLoop:
         clock = pygame.time.Clock()
         # ---------------------------- init fonts -----------------------------
         title_font = pygame.font.Font(None, 135)
-        content_font = pygame.font.Font(None, 50)
+        content_font = pygame.font.Font(None, 40)
         # --------------------------- printer text ----------------------------
         p: Printer = Printer(
                                 screen,
@@ -163,8 +163,12 @@ class GameLoop:
 
 """
     links:
-    - game loop: https://www.pygame.fr/en/bb-01-game-loop/
-    - using Font for text: https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
-    - using clock for FPS: https://gamedevacademy.org/pygame-fps-tutorial/
-    - print a text in pygame: https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/
+    - game loop:
+        https://www.pygame.fr/en/bb-01-game-loop/
+    - using Font for text:
+        https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
+    - using clock for FPS:
+        https://gamedevacademy.org/pygame-fps-tutorial/
+    - print a text in pygame:
+        https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/
 """

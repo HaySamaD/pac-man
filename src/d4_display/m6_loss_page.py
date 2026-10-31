@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from pygame import font
+from pygame.surface import Surface
 
 from ..d0_helpers import Rgb
 from . import Printer
@@ -9,9 +10,9 @@ from . import Printer
 class LossPage:
     def __init__(
                     self,
-                    screen,
-                    title_font,
-                    content_font,
+                    screen: Surface,
+                    title_font: font.Font,
+                    content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
         # ------------------- init params --------------------

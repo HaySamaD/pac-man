@@ -14,7 +14,7 @@ class PauseEvent:
         self.pause_obj: PausePage = pause_obj
         self.game_state: GameState = game_state
 
-    def run_event(self, event: Event):
+    def run_event(self, event: Event) -> None:
         # ---------------------------------------
         if event.key == pygame.K_DOWN:
             self.pause_obj.pos += 1

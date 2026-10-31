@@ -1,5 +1,6 @@
 from typing import Tuple
 
+from pygame.surface import Surface
 from pygame import font
 
 from ..d0_helpers import Rgb
@@ -11,9 +12,9 @@ class HighscoresPage:
     def __init__(
                     self,
                     highscores: HigherScore,
-                    screen,
-                    title_font,
-                    content_font,
+                    screen: Surface,
+                    title_font: font.Font,
+                    content_font: font.Font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
         # ------------------- init params -------------------

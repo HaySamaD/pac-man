@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from pygame import font
+from pygame.surface import Surface
 
 from ..d0_helpers import Rgb
 from ..d4_display import Printer
@@ -10,14 +11,14 @@ class WinPage:
 
     def __init__(
                     self,
-                    screen,
-                    title_font,
-                    content_font,
+                    screen: Surface,
+                    title_font: font.Font,
+                    content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
 
         # ------------------- init params --------------------
-        self.screen = screen
+        self.screen: Surface = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
         self.width, self.height = resolution

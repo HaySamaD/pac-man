@@ -1,12 +1,9 @@
 import sys
 
 from src.d1_classes import Config, GameState
-
 from src.d2_parsing_config_file import Parser
-
 from src.d3_parsing_highscores import HigherScore
-
-from src.d5_game_loop import GameLoop
+from src.d6_game_loop import GameLoop
 
 
 RED = "\033[31m"
@@ -31,7 +28,7 @@ def main() -> None:
     p: Parser = Parser(sys.argv[1])
     config: Config = p.conf_obj
     # -------------------------------------------------------------------------
-    higher_score_path: int = config.highscore_filename
+    higher_score_path: str = config.highscore_filename
     highscores_obj: HigherScore = HigherScore(higher_score_path)
     # -------------------------------------------------------------------------
     game_state_obj: GameState = GameState()

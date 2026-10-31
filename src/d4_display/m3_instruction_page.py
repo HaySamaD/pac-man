@@ -1,6 +1,7 @@
 from typing import Tuple
 
 from pygame import font
+from pygame.surface import Surface
 
 from ..d0_helpers import Rgb
 from ..d0_helpers import INSTRUCTIONS
@@ -10,9 +11,9 @@ from ..d4_display import Printer
 class InstructionsPage:
     def __init__(
                     self,
-                    screen,
-                    title_font,
-                    content_font,
+                    screen: Surface,
+                    title_font: font.Font,
+                    content_font: font.Font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
         # ------------------- init params -------------------

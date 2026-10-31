@@ -23,7 +23,7 @@ class WinLossEvent:
         self.height: int = height
         self.player_name: str = ""
 
-    def run_event(self, event: Event) -> None:
+    def run_event(self, event: Event) -> str:
         # ---------------------------------------------------------------------
         if event.key == pygame.K_RETURN:
             if self.player_name.strip():

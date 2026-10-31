@@ -18,4 +18,5 @@ clean:
 	@rm -rf src/d3_parsing_highscores/__pycache__
 	@rm -rf src/d0_helpers/__pycache__
 	@rm -rf src/d4_display/__pycache__
-	@rm -rf /home/ybajdou/1-my_projects/pac-man/src/d5_game_loop/__pycache__
+	@rm -rf /home/ybajdou/1-my_projects/pac-man/src/d6_game_loop/__pycache__
+	@ rm -rf src/d6_game_loop/.mypy_cache

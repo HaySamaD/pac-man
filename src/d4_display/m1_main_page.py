@@ -12,9 +12,9 @@ class MainPage:
     def __init__(
                     self,
                     screen: Any,
-                    title_font,
-                    content_font,
-                    resolution
+                    title_font: font.Font,
+                    content_font: font.Font,
+                    resolution: Tuple[int, int]
                 ) -> None:
 
         # ------------------- init params -------------------

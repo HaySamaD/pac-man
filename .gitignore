@@ -1,7 +1,29 @@
+# virtual env
+.venv
+.myvenv
+
+# vscode cache
+.vscode
+
+# docs (subject.pdf, ...)
+docs
+
+# mypy cache
 src/__pycache__
 src/.mypy_cache
-.venv
+src/parsing_config_file/__pycache__
 .mypy_cache
-.myvenv
-.vscode
-docs
+src/d0_helpers/.mypy_cache
+src/d1_classes/.mypy_cache
+src/d2_parsing_config_file/.mypy_cache
+src/d3_parsing_highscores/.mypy_cache
+src/d4_game_manager/.mypy_cache
+src/d5_display/.mypy_cache
+src/d4_display/.mypy_cache
+src/d1_classes/__pycache__
+src/d2_parsing_config_file/__pycache__
+src/d3_parsing_highscores/__pycache__
+src/d0_helpers/__pycache__
+src/d4_display/__pycache__
+/home/ybajdou/1-my_projects/pac-man/src/d6_game_loop/__pycache__
+src/d6_game_loop/.mypy_cache
