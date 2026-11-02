@@ -1,3 +1,5 @@
+"""Renders the game instructions and control guidelines screen."""
+
 from typing import Tuple
 
 from pygame import font
@@ -9,6 +11,18 @@ from ..d4_display import Printer
 
 
 class InstructionsPage:
+    """
+        Handles rendering instructions text and navigation options.
+
+        Attributes:
+            screen (Surface): Pygame display surface.
+            title_font (font.Font): Font for the title.
+            content_font (font.Font): Font for instructions content.
+            width (int): Screen width.
+            height (int): Screen height.
+            p (Printer): Printer utility instance.
+            pos (int): Current selected navigation option.
+    """
     def __init__(
                     self,
                     screen: Surface,
@@ -16,6 +30,15 @@ class InstructionsPage:
                     content_font: font.Font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
+        """
+            Initializes instructions page layout.
+
+            Args:
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
         # ------------------- init params -------------------
         self.screen = screen
         self.title_font: font.Font = title_font
@@ -33,6 +56,7 @@ class InstructionsPage:
 
     # =========================================================================
     def print_instruction_page(self) -> None:
+        """Renders formatted instruction guidelines and previous button."""
         # -------------- fill the screen first before printing ----------------
         self.screen.fill(Rgb.BLACK)
         # ---------------------------------------------------------------------

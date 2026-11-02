@@ -1,8 +1,11 @@
+"""Defines terminal color codes and Pygame RGB color tuples."""
+
 from typing import Tuple
 
 
 # change terminal color
 class Color:
+    """ Terminal text coloring"""
     RED = "\033[31m"
     YELLOW = '\033[93m'
     GREEN = "\033[32m"
@@ -11,6 +14,7 @@ class Color:
 
 # change pygame text color
 class Rgb:
+    """ RGB colors for pygame"""
     WHITE: Tuple[int, int, int] = (255, 255, 255)
     GREEN: Tuple[int, int, int] = (0, 255, 0)
     YELLOW: Tuple[int, int, int] = (255, 255, 0)

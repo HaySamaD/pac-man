@@ -1,3 +1,5 @@
+"""Renders the victory congratulation screen."""
+
 from typing import Tuple
 
 from pygame import font
@@ -8,7 +10,17 @@ from ..d4_display import Printer
 
 
 class WinPage:
+    """
+        Handles rendering victory title and score saving prompt.
 
+        Attributes:
+            screen (Surface): Pygame display surface.
+            title_font (font.Font): Title font object.
+            content_font (font.Font): Content font object.
+            width (int): Screen width.
+            height (int): Screen height.
+            p (Printer): Printer utility instance.
+    """
     def __init__(
                     self,
                     screen: Surface,
@@ -16,6 +28,15 @@ class WinPage:
                     content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
+        """
+            Initializes win page layout.
+
+            Args:
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
 
         # ------------------- init params --------------------
         self.screen: Surface = screen
@@ -32,6 +53,7 @@ class WinPage:
 
     # ======================================================================
     def print_win_page(self) -> None:
+        """Renders victory congratulation title and name entry prompt."""
         # ------------------------------------------------------------------
         self.p.print_title("Congratulations: You Win", Rgb.GREEN, Rgb.BLACK)
         # ------------------------------------------------------------------

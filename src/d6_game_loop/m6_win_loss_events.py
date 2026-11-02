@@ -1,3 +1,5 @@
+"""Manages player name input and highscore saving on win or loss screens."""
+
 import pygame
 from pygame.event import Event
 
@@ -9,6 +11,16 @@ from ..d4_display import Printer
 
 
 class WinLossEvent:
+    """
+        Handles character entry for player names and updates highscores.
+
+        Attributes:
+            highscores_obj (HigherScore): Highscore management instance.
+            p (Printer): Printer utility instance.
+            game_status (GameState): Active game state instance.
+            height (int): Screen height resolution.
+            player_name (str): Current input string for player name.
+    """
     def __init__(
                     self,
                     highscores_obj: HigherScore,
@@ -16,6 +28,15 @@ class WinLossEvent:
                     game_status: GameState,
                     height: int
                 ) -> None:
+        """
+            Initializes win/loss event handler.
+
+            Args:
+                highscores_obj (HigherScore): Highscore manager instance.
+                p (Printer): Printer utility instance.
+                game_status (GameState): Game state instance.
+                height (int): Screen height.
+        """
         # ------------------------------------------------
         self.highscores_obj: HigherScore = highscores_obj
         self.p: Printer = p
@@ -24,6 +45,16 @@ class WinLossEvent:
         self.player_name: str = ""
 
     def run_event(self, event: Event) -> str:
+        """
+            Captures keyboard inputs for player name entry and saves score on
+                                                                        enter.
+
+            Args:
+                event (Event): Pygame event object.
+
+            Returns:
+                str: Updated player name string.
+        """
         # ---------------------------------------------------------------------
         if event.key == pygame.K_RETURN:
             if self.player_name.strip():

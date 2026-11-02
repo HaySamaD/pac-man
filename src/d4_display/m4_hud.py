@@ -1,3 +1,5 @@
+"""Renders the in-game Heads-Up Display (HUD)."""
+
 from typing import Tuple
 
 from pygame import font
@@ -9,6 +11,18 @@ from ..d4_display import Printer
 
 
 class HUD:
+    """
+        Handles displaying active game statistics during gameplay.
+
+        Attributes:
+            game_state (GameState): Current game state object.
+            width (int): Screen width.
+            height (int): Screen height.
+            screen (Surface): Pygame display surface.
+            title_font (font.Font): Title font object.
+            content_font (font.Font): Content font object.
+            p (Printer): Printer utility instance.
+    """
     def __init__(
                     self,
                     game_state: GameState,
@@ -17,6 +31,16 @@ class HUD:
                     content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
+        """
+            Initializes HUD with game state reference and display settings.
+
+            Args:
+                game_state (GameState): Game state instance.
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
 
         # ------------------- init params -------------------
         self.game_state: GameState = game_state
@@ -34,6 +58,7 @@ class HUD:
 
     # ==================================================================
     def print_hud(self) -> None:
+        """Renders score, lives, level, and remaining time on screen."""
         # --------------------------------------------------------------
         score: int = self.game_state.score
         lives: int = self.game_state.lives

@@ -1,3 +1,8 @@
+"""
+      Package initialization for d4_display module.
+      Exports UI pages, HUD, and text printing utility classes.
+"""
+
 from .m0_printer import Printer
 from .m1_main_page import MainPage
 from .m2_highscore_page import HighscoresPage

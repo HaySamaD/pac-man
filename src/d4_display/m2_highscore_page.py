@@ -1,3 +1,5 @@
+"""Renders the highscores leaderboard screen."""
+
 from typing import Tuple
 
 from pygame.surface import Surface
@@ -9,6 +11,19 @@ from ..d4_display import Printer
 
 
 class HighscoresPage:
+    """
+        Handles rendering top player scores and navigation buttons.
+
+        Attributes:
+            highscores (HigherScore): Highscore manager instance.
+            screen (Surface): Pygame display surface.
+            title_font (font.Font): Font for the page title.
+            content_font (font.Font): Font for score entries.
+            width (int): Screen width.
+            height (int): Screen height.
+            p (Printer): Printer utility instance.
+            pos (int): Current selected navigation option.
+    """
     def __init__(
                     self,
                     highscores: HigherScore,
@@ -17,6 +32,16 @@ class HighscoresPage:
                     content_font: font.Font,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
+        """
+            Initializes highscores page with data source and fonts.
+
+            Args:
+                highscores (HigherScore): Highscore records instance.
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
         # ------------------- init params -------------------
         self.highscores: HigherScore = highscores
         self.screen = screen
@@ -35,6 +60,7 @@ class HighscoresPage:
 
     # =========================================================================
     def print_highscores_page(self) -> None:
+        """Renders the top 10 leaderboard list and previous button."""
         # ------------- fill the screen first before printing -----------------
         self.screen.fill(Rgb.BLACK)
         # ---------------------------------------------------------------------

@@ -1,3 +1,10 @@
+"""
+    Main entry point script for the Pac-Man application.
+
+    Handles command-line argument validation, configuration loading, highscore
+    initialization, and launching the core game loop.
+"""
+
 import sys
 
 from src.d1_classes import Config, GameState
@@ -11,9 +18,21 @@ GREEN = "\033[32m"
 WHITE = "\033[37m"
 
 
-# =============================================================================
+# ==============================================================================
 
 def main() -> None:
+    """
+        Validates command-line arguments, initializes parser, highscores, and
+                                                                    game loop.
+
+        Verifies that exactly one JSON configuration file path is passed as an
+        argument, loads configurations, sets up highscores and game state, then
+        starts execution of the main game loop.
+
+        Raises:
+            Exception: If the argument count is not equal to 2 or the file
+            does not end with '.json'.
+    """
 
     # ------------ if we have more than one arg || not a json file ------------
     if len(sys.argv) != 2:
@@ -46,7 +65,7 @@ def main() -> None:
 
 # =============================================================================
 if __name__ == "__main__":
-    # try:
-    main()
-    # except Exception as e:
-    #     print(e)
+    try:
+        main()
+    except Exception as e:
+        print(e)

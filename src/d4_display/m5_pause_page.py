@@ -1,3 +1,5 @@
+"""Renders the pause menu interface."""
+
 from typing import Tuple
 
 from pygame import font
@@ -9,6 +11,18 @@ from .m0_printer import Printer
 
 
 class PausePage:
+    """
+        Handles rendering pause menu options and title.
+
+        Attributes:
+            screen (Surface): Pygame display surface.
+            title_font (font.Font): Title font object.
+            content_font (font.Font): Content font object.
+            width (int): Screen width.
+            height (int): Screen height.
+            p (Printer): Printer utility instance.
+            pos (int): Current selected pause option index.
+    """
     def __init__(
                     self,
                     screen: Surface,
@@ -16,6 +30,15 @@ class PausePage:
                     content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
+        """
+            Initializes pause page layout.
+
+            Args:
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
         # ------------------- init params -------------------
         self.screen = screen
         self.title_font = title_font
@@ -33,6 +56,7 @@ class PausePage:
 
     # ==================================================================
     def print_pause_page(self) -> None:
+        """Renders pause title and options with selection highlights."""
         # --------------------------------------------------------------
         self.p.print_title("Pause", Rgb.GREEN, Rgb.BLACK)
         # --------------------------------------------------------------

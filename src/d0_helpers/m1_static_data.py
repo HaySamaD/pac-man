@@ -1,3 +1,10 @@
+"""
+    Provides static constants including:
+    - default config
+    - menu options
+    - game instructions.
+"""
+
 from typing import List
 
 

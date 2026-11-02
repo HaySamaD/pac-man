@@ -5,6 +5,13 @@ install:
 run:
 	python3 pac-man.py config.json
 
+lint:
+	flake8 .
+	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+
+package:
+	pyinstaller --onefile pac-man.py
+
 clean:
 	@rm -rf src/__pycache__
 	@rm -rf src/.mypy_cache

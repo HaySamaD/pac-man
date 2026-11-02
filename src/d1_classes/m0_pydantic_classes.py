@@ -1,3 +1,8 @@
+"""
+    Defines Pydantic models for validating game configuration,
+                                                        levels, and highscores.
+"""
+
 from pydantic import BaseModel, model_validator
 
 from typing import List, Dict, Any
@@ -8,6 +13,14 @@ from ..d0_helpers import Color
 # =============== The subclass of the gameconfig class (bellow) ===============
 
 class Level(BaseModel):
+    """
+        Validates individual level parameters (dimensions and pacgum count).
+
+        Attributes:
+            width (int): Width of the maze grid.
+            height (int): Height of the maze grid.
+            pacgum (int): Number of pacgums in the level.
+    """
 
     width: int
     height: int
@@ -16,7 +29,18 @@ class Level(BaseModel):
     # ------------- parce the dict before impaking (mode=before) --------------
     @model_validator(mode="before")
     @classmethod
-    def validate_raw_dic(cls, dic: Any) -> Any:
+    def validate_raw_dic(cls, dic: Any) -> Dict[str, Any]:
+        """
+            Validates and return raw level dictionary data before model
+                                                                    creation.
+
+            Args:
+                dic (Any): Raw input data to validate.
+
+            Returns:
+                Dict[str, Any]: Validated dictionary with safe defaults if
+                                                                    invalid.
+        """
         # ----------- check the type of the input (if dict or not) ------------
         if not isinstance(dic, dict):
             print(
@@ -90,6 +114,19 @@ class Level(BaseModel):
 # ===============================================================================
 
 class Config(BaseModel):
+    """
+        Validates overall game configuration settings loaded from JSON.
+
+        Attributes:
+            highscore_filename (str): File path for highscore data storage.
+            levels_data (List[Level]): List of level configurations.
+            lives (int): Initial player lives count.
+            points_per_pacgum (int): Points awarded per regular pacgum.
+            points_per_super_pacgum (int): Points awarded per super pacgum.
+            points_per_ghost (int): Points awarded per eaten ghost.
+            seed (int): Random seed for level generation.
+            level_max_time (int): Maximum time limit per level in seconds.
+    """
 
     highscore_filename: str
     levels_data: List[Level]
@@ -104,6 +141,15 @@ class Config(BaseModel):
     @model_validator(mode="before")
     @classmethod
     def validate_raw_dic(cls, dic: Any) -> Any:
+        """
+            Validates raw configuration dictionary data.
+
+            Args:
+                dic (Any): Raw configuration input data.
+
+            Returns:
+                Any: Validated configuration dictionary with fallback defaults.
+        """
         # ----------------------- get the dic elements ------------------------
         highscore_filename: Any = dic.get("highscore_filename", None)
         levels_data: Any = dic.get("levels_data", None)
@@ -258,12 +304,28 @@ class Config(BaseModel):
 # =============================================================================
 
 class NameScore(BaseModel):
+    """
+        Validates player name and score leaderboard entries.
+
+        Attributes:
+            name (str): Player name (alphanumeric and spaces, max 10 chars).
+            score (int): Non-negative player score.
+    """
     name: str
     score: int
 
     @model_validator(mode="before")
     @classmethod
     def valide(cls, dic: Dict[str, str | int]) -> Dict[str, str | int]:
+        """
+            Validates and normalizes player name and score entry.
+
+            Args:
+                dic (Dict[str, str | int]): Raw name-score dictionary.
+
+            Returns:
+                Dict[str, str | int]: Validated name-score dictionary.
+        """
         # ------------- Verify first that we have a dict -------------
         if not isinstance(dic, dict):
             print(
@@ -308,13 +370,12 @@ class NameScore(BaseModel):
         # -------------------------------------------------------------------
         return dic
 
+# ==========================================================================
+# Remarques:
 
-"""
-    Remarques:
+#     - bnisba l width and height (lines 41 and 57):
+#                                             a revoir l explication dialha
 
-        - bnisba l width and height (lines 41 and 57):
-                                                a revoir l explication dialha
-
-        - bnisba l handllage dial nbr of pacgums (line 78):
-                                                a revoir l explication dialha
-"""
+#     - bnisba l handllage dial nbr of pacgums (line 78):
+#                                             a revoir l explication dialha
+# ==========================================================================

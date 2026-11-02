@@ -1,3 +1,5 @@
+"""Renders the game over (loss) screen."""
+
 from typing import Tuple
 
 from pygame import font
@@ -8,6 +10,17 @@ from . import Printer
 
 
 class LossPage:
+    """
+        Handles rendering game over title and name entry prompt.
+
+        Attributes:
+            width (int): Screen width.
+            height (int): Screen height.
+            title_font (font.Font): Title font object.
+            content_font (font.Font): Content font object.
+            screen (Surface): Pygame display surface.
+            p (Printer): Printer utility instance.
+    """
     def __init__(
                     self,
                     screen: Surface,
@@ -15,6 +28,15 @@ class LossPage:
                     content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
+        """
+            Initializes loss page layout.
+
+            Args:
+                screen (Surface): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen resolution.
+        """
         # ------------------- init params --------------------
         self.width, self.height = resolution
         self.title_font: font.Font = title_font
@@ -29,7 +51,8 @@ class LossPage:
                                  )
 
     # ===================================================================
-    def print_game_over_page(self) -> None:
+    def print_loss_page(self) -> None:
+        """Renders game over title and name input instructions."""
         # ---------------------------------------------------------------
         self.p.print_title("Game Over: Try again", Rgb.ORANGE, Rgb.BLACK)
         # ---------------------------------------------------------------

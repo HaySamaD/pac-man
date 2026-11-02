@@ -1,87 +1,70 @@
 {
-    # Global comments should be ignored
     "highscore_filename": "highscores.json",
-    "lives": 5,
+    "lives": 3,
     "points_per_pacgum": 10,
-    "points_per_super_pacgum": 50,
-    "points_per_ghost": 100,
+    "points_per_super_pacgum": 20,
+    "points_per_ghost": 30,
     "seed": 42,
     "level_max_time": 90,
 
-    # Unknown keys should be ignored
-    "hello": "unknown key",
-    "random_value": 12345,
-
-    # Only 8 levels -> your program should add 2 defaults
     "levels_data": [
-        # Level 1: completely valid
-        {
-            "width": 15,
-            "height": 15,
-            "pacgum": 42
-        },
+                        {
+                            "width": 15,
+                            "height": 15,
+                            "pacgum": 42
+                        },
 
-        # Level 2: width too small
-        {
-            "width": 15,
-            "height": 15,
-            "pacgum": 20
-        },
+                        {
+                            "width": 16,
+                            "height": 16,
+                            "pacgum": 42
+                        },
 
-        # Level 3: height too small
-        {
-            "width": 18,
-            "height": 10,
-            "pacgum": 20
-        },
+                        {
+                            "width": 17,
+                            "height": 17,
+                            "pacgum": 20
+                        },
 
-        # Level 4: pacgum <= 0
-        {
-            "width": 18,
-            "height": 15,
-            "pacgum": 10
-        },
+                        {
+                            "width": 18,
+                            "height": 18,
+                            "pacgum": 10
+                        },
 
-        # Level 5: pacgum too large for width * height - 19
-        {
-            "width": 15,
-            "height": 10,
-            "pacgum": 100
-        },
+                        {
+                            "width": 19,
+                            "height": 19,
+                            "pacgum": 100
+                        },
 
-        # Level 6: wrong types
-        {
-            "width": 15,
-            "height": 10,
-            "pacgum": 5
-        },
+                        {
+                            "width": 20,
+                            "height": 20,
+                            "pacgum": 5
+                        },
 
-        # Level 7: unknown keys + valid required fields
-        {
-            "width": 18,
-            "height": 15,
-            "pacgum": 42,
-            "unknown_key": "should be ignored",
-            "another_unknown_key": 123
-        },
+                        {
+                            "width": 21,
+                            "height": 21,
+                            "pacgum": 42
+                        },
 
-        # Level 8: missing width
-        {
-            "width": 18,
-            "height": 15,
-            "pacgum": 42
-        },
-        # Level 9: missing width
-        {
-            "width": 18,
-            "height": 15,
-            "pacgum": 42
-        },
-        # Level 10: missing width
-        {
-            "width": 18,
-            "height": 15,
-            "pacgum": 42
-        }
-    ]
+                        {
+                            "width": 22,
+                            "height": 22,
+                            "pacgum": 42
+                        },
+                        {
+                            "width": 23,
+                            "height": 23,
+                            "pacgum": 42
+                        },
+
+                        {
+                            "width": 24,
+                            "height": 24,
+                            "pacgum": 42
+                        }
+                    ]
 }

@@ -1,3 +1,8 @@
+"""
+    Core game loop orchestrator managing Pygame initialization, screen updates,
+                                                            and event routing.
+"""
+
 from .m6_win_loss_events import WinLossEvent
 
 from .m5_pause_events import PauseEvent
@@ -27,6 +32,17 @@ from ..d0_helpers import Rgb
 
 
 class GameLoop:
+    """
+        Manages main application execution, display rendering, and state
+                                                                    dispatching.
+
+        Attributes:
+            highscores_obj (HigherScore): Highscore management instance.
+            game_state (GameState): Active game state instance.
+            nbr_levels (int): Total number of game levels.
+            width (int): Screen width resolution.
+            height (int): Screen height resolution.
+    """
     def __init__(
                     self,
                     highscores_obj: HigherScore,
@@ -34,6 +50,17 @@ class GameLoop:
                     nbr_levels: int,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
+        """
+            Initializes game loop controller with configuration and state
+                                                                    objects.
+
+            Args:
+                highscores_obj (HigherScore): Highscore manager instance.
+                game_state (GameState): Game state instance.
+                nbr_levels (int): Number of levels.
+                resolution (Tuple[int, int]): Window resolution width and
+                                                                        height.
+        """
         # ----------------- init params -----------------
         self.highscores_obj: HigherScore = highscores_obj
         self.game_state: GameState = game_state
@@ -42,6 +69,10 @@ class GameLoop:
 
     # =========================================================================
     def game_loop(self) -> None:
+        """
+            Runs the main application execution loop, handling events and
+            rendering active pages at 60 FPS.
+        """
         # ---------------------------- init pygame ----------------------------
         pygame.init()
         screen = pygame.display.set_mode((self.width, self.height))
@@ -124,7 +155,7 @@ class GameLoop:
             elif self.game_state.status == "PAUSE":
                 pause_page.print_pause_page()
             elif self.game_state.status == "LOSS":
-                loss_page.print_game_over_page()
+                loss_page.print_loss_page()
                 p.print_text(
                                 f"Your score is: {self.game_state.score}",
                                 (-99, self.height * 0.25),
@@ -161,14 +192,13 @@ class GameLoop:
         pygame.quit()
 
 
-"""
-    links:
-    - game loop:
-        https://www.pygame.fr/en/bb-01-game-loop/
-    - using Font for text:
-        https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
-    - using clock for FPS:
-        https://gamedevacademy.org/pygame-fps-tutorial/
-    - print a text in pygame:
-        https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/
-"""
+#    links:
+#    - game loop:
+#        https://www.pygame.fr/en/bb-01-game-loop/
+#    - using Font for text:
+#        https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
+#    - using clock for FPS:
+#        https://gamedevacademy.org/pygame-fps-tutorial/
+#    - print a text in pygame:
+#        https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/
+#

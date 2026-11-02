@@ -1,3 +1,5 @@
+"""Renders the main menu interface with navigation options."""
+
 from typing import Any, Tuple
 
 from pygame import font
@@ -8,6 +10,18 @@ from . import Printer
 
 
 class MainPage:
+    """
+        Handles rendering and navigation state of the main menu.
+
+        Attributes:
+            screen (Any): Pygame display surface.
+            title_font (font.Font): Font for the main title.
+            content_font (font.Font): Font for menu items.
+            width (int): Screen width.
+            height (int): Screen height.
+            p (Printer): Printer utility instance.
+            pos (int): Current selected menu option index.
+    """
 
     def __init__(
                     self,
@@ -16,6 +30,15 @@ class MainPage:
                     content_font: font.Font,
                     resolution: Tuple[int, int]
                 ) -> None:
+        """
+            Initializes main page layout and printer utility.
+
+            Args:
+                screen (Any): Target display surface.
+                title_font (font.Font): Title font object.
+                content_font (font.Font): Content font object.
+                resolution (Tuple[int, int]): Screen dimensions.
+        """
 
         # ------------------- init params -------------------
         self.screen = screen
@@ -34,6 +57,10 @@ class MainPage:
 
     # ========================================================================
     def print_main_menu(self) -> None:
+        """
+            Clears screen and renders the main menu options with selection
+                                                                    highlights.
+        """
         # -------------- fill the screen first before printing ---------------
         self.screen.fill(Rgb.BLACK)
         # --------------------------------------------------------------------
