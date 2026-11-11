@@ -40,11 +40,8 @@ class MazeBoard:
         height: int = len(raw_maze)
         width: int = len(raw_maze[0])
 
-        for row in raw_maze:
-            if len(row) != width:
-                raise ValueError(
-                    "Raw maze matrix contains uneven row lengths."
-                )
+        if any(len(row) != width for row in raw_maze):
+            raise ValueError("Raw maze matrix contains uneven row lengths.")
 
         grid: List[List[int]] = [
             [int(TileType.EMPTY) for _ in range(width)]
@@ -71,9 +68,8 @@ class MazeBoard:
             pos for pos in valid_paths if pos not in corner_set
         ]
 
-        total_available: int = len(regular_paths)
-        target_count: int = total_available
-        if max_pacgums is not None and 0 < max_pacgums <= total_available:
+        target_count: int = len(regular_paths)
+        if max_pacgums is not None and 0 < max_pacgums <= target_count:
             target_count = max_pacgums
 
         selected_paths: List[Tuple[int, int]] = random.sample(
@@ -128,28 +124,22 @@ class MazeBoard:
             return None
 
         tile_val: int = self.grid[y][x]
-        if tile_val == int(TileType.PACGUM):
+        if tile_val in (int(TileType.PACGUM), int(TileType.SUPER_PACGUM)):
             self.grid[y][x] = int(TileType.EMPTY)
             self.remaining_pacgums -= 1
-            return TileType.PACGUM
-
-        if tile_val == int(TileType.SUPER_PACGUM):
-            self.grid[y][x] = int(TileType.EMPTY)
-            self.remaining_pacgums -= 1
-            return TileType.SUPER_PACGUM
+            return TileType(tile_val)
 
         return None
 
-    def find_spawn_position(self) -> Tuple[int, int]:
-        """Find nearest walkable corridor cell to the maze center via BFS."""
-        cx: int = self.width // 2
-        cy: int = self.height // 2
+    def _find_nearest_walkable(
+        self, start_x: int, start_y: int
+    ) -> Tuple[int, int]:
+        """Find nearest walkable corridor tile to origin via BFS."""
+        if not self.is_wall(start_x, start_y):
+            return start_x, start_y
 
-        if not self.is_wall(cx, cy):
-            return cx, cy
-
-        queue: Deque[Tuple[int, int]] = deque([(cx, cy)])
-        visited: Set[Tuple[int, int]] = {(cx, cy)}
+        queue: Deque[Tuple[int, int]] = deque([(start_x, start_y)])
+        visited: Set[Tuple[int, int]] = {(start_x, start_y)}
 
         while queue:
             curr_x, curr_y = queue.popleft()
@@ -157,50 +147,33 @@ class MazeBoard:
                 return curr_x, curr_y
 
             for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
-                nx: int = curr_x + dx
-                ny: int = curr_y + dy
+                nx, ny = curr_x + dx, curr_y + dy
                 if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
                     visited.add((nx, ny))
                     queue.append((nx, ny))
 
-        return cx, cy
+        return start_x, start_y
+
+    def find_spawn_position(self) -> Tuple[int, int]:
+        """Find nearest walkable corridor cell to the maze center via BFS."""
+        return self._find_nearest_walkable(self.width // 2, self.height // 2)
 
     def find_corner_spawn(self, corner_index: int) -> Tuple[int, int]:
         """Find safe walkable corridor cell at or near a designated corner."""
-        corner_map: List[Tuple[int, int]] = [
+        corners: List[Tuple[int, int]] = [
             (0, 0),
             (self.width - 1, 0),
             (0, self.height - 1),
             (self.width - 1, self.height - 1),
         ]
-        target: Tuple[int, int] = corner_map[corner_index % 4]
-        tx, ty = target
-
-        if not self.is_wall(tx, ty):
-            return tx, ty
-
-        queue: Deque[Tuple[int, int]] = deque([(tx, ty)])
-        visited: Set[Tuple[int, int]] = {(tx, ty)}
-
-        while queue:
-            curr_x, curr_y = queue.popleft()
-            if not self.is_wall(curr_x, curr_y):
-                return curr_x, curr_y
-
-            for dx, dy in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-                nx: int = curr_x + dx
-                ny: int = curr_y + dy
-                if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
-                    visited.add((nx, ny))
-                    queue.append((nx, ny))
-
-        return tx, ty
+        cx, cy = corners[corner_index % 4]
+        return self._find_nearest_walkable(cx, cy)
 
     def walkable_tiles(self) -> List[Tuple[int, int]]:
         """Return sorted list of all non-wall tile coordinates."""
-        tiles: List[Tuple[int, int]] = []
-        for y in range(self.height):
-            for x in range(self.width):
-                if not self.is_wall(x, y):
-                    tiles.append((x, y))
-        return sorted(tiles)
+        return [
+            (x, y)
+            for y in range(self.height)
+            for x in range(self.width)
+            if not self.is_wall(x, y)
+        ]

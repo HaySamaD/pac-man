@@ -130,8 +130,7 @@ class GhostController(MovementController):
                 return cx, cy
 
             for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
-                nx = cx + dx
-                ny = cy + dy
+                nx, ny = cx + dx, cy + dy
                 if (
                     0 <= nx < board.width
                     and 0 <= ny < board.height
@@ -163,8 +162,7 @@ class GhostController(MovementController):
                 Direction.RIGHT,
             ):
                 dx, dy = d.vector
-                nx = cx + dx
-                ny = cy + dy
+                nx, ny = cx + dx, cy + dy
 
                 if (
                     0 <= nx < board.width
@@ -180,8 +178,7 @@ class GhostController(MovementController):
     def _bfs_farthest_corner(
         self,
         board: MazeBoard,
-        player_x: int,
-        player_y: int,
+        dist_map: Dict[Tuple[int, int], int],
     ) -> Tuple[int, int]:
         """Return the walkable corner cell with maximum BFS distance."""
         corners: List[Tuple[int, int]] = [
@@ -190,18 +187,11 @@ class GhostController(MovementController):
             (0, board.height - 1),
             (board.width - 1, board.height - 1),
         ]
-        dist_map = self._bfs_distance_map(board, (player_x, player_y))
-        farthest_corner: Tuple[int, int] = corners[0]
-        max_dist_from_pacman: int = -1
-
-        for cx, cy in corners:
-            walkable_c = self._get_nearest_walkable_tile(board, cx, cy)
-            d = dist_map.get(walkable_c, 0)
-            if d > max_dist_from_pacman:
-                max_dist_from_pacman = d
-                farthest_corner = walkable_c
-
-        return farthest_corner
+        walkable_corners = [
+            self._get_nearest_walkable_tile(board, cx, cy)
+            for cx, cy in corners
+        ]
+        return max(walkable_corners, key=lambda c: dist_map.get(c, 0))
 
     def _choose_target(
         self,
@@ -253,7 +243,7 @@ class GhostController(MovementController):
                 target_x, target_y = pivot_x, pivot_y
             return self._get_nearest_walkable_tile(board, target_x, target_y)
 
-        # Clyde logic with 8/12 hysteresis gap
+        # Clyde cowardice retreat with 8/12 hysteresis gap
         dist_map = self._bfs_distance_map(board, (player_x, player_y))
         dist_to_player = dist_map.get((self.position.x, self.position.y), 999)
 
@@ -267,7 +257,7 @@ class GhostController(MovementController):
             self._clyde_retreating = False
 
         if self._clyde_retreating:
-            return self._bfs_farthest_corner(board, player_x, player_y)
+            return self._bfs_farthest_corner(board, dist_map)
 
         return player_x, player_y
 
@@ -309,60 +299,45 @@ class GhostController(MovementController):
 
         if self.data.is_edible and not self.is_eaten:
             dist_map = self._bfs_distance_map(board, (player_x, player_y))
-            cand_scores: Dict[Direction, int] = {}
-            for d in valid_dirs:
+
+            def flee_score(d: Direction) -> int:
                 dx, dy = d.vector
                 cand_pos = (cur_gx + dx, cur_gy + dy)
-                cand_dist = dist_map.get(cand_pos, -1)
-                if cand_pos in crowd_set:
-                    cand_dist -= _CROWD_PENALTY_FLEE
-                cand_scores[d] = cand_dist
+                penalty = _CROWD_PENALTY_FLEE if cand_pos in crowd_set else 0
+                return dist_map.get(cand_pos, -1) - penalty
 
-            max_score = max(cand_scores.values())
-            best_dirs_tied: List[Direction] = [
-                d for d in valid_dirs if cand_scores[d] == max_score
-            ]
-
-            if len(best_dirs_tied) == 1:
-                self.next_direction = best_dirs_tied[0]
-            else:
-                self.next_direction = max(
-                    best_dirs_tied,
-                    key=lambda d: self.euclidean_distance_sq(
-                        float(cur_gx + d.vector[0]),
-                        float(cur_gy + d.vector[1]),
-                        float(player_x),
-                        float(player_y),
-                    ),
-                )
+            max_score = max(flee_score(d) for d in valid_dirs)
+            best_dirs = [d for d in valid_dirs if flee_score(d) == max_score]
+            self.next_direction = max(
+                best_dirs,
+                key=lambda d: self.euclidean_distance_sq(
+                    float(cur_gx + d.vector[0]),
+                    float(cur_gy + d.vector[1]),
+                    float(player_x),
+                    float(player_y),
+                ),
+            )
             return
 
         dist_map = self._bfs_distance_map(board, (target_x, target_y))
-        best_dir = valid_dirs[0]
-        min_dist: int = 999999
 
-        for d in valid_dirs:
+        def chase_cost(d: Direction) -> int:
             dx, dy = d.vector
             cand_pos = (cur_gx + dx, cur_gy + dy)
-            cand_dist = dist_map.get(cand_pos, 999999)
-            if cand_pos in crowd_set:
-                cand_dist += _CROWD_PENALTY_CHASE
-            if cand_dist < min_dist:
-                min_dist = cand_dist
-                best_dir = d
+            penalty = _CROWD_PENALTY_CHASE if cand_pos in crowd_set else 0
+            return dist_map.get(cand_pos, 999999) + penalty
 
-        if min_dist >= 999999:
-            best_sq: float = float("inf")
-            for d in valid_dirs:
-                dx, dy = d.vector
-                cx = cur_gx + dx
-                cy = cur_gy + dy
-                dist_sq = self.euclidean_distance_sq(
-                    float(cx), float(cy), float(target_x), float(target_y)
-                )
-                if dist_sq < best_sq:
-                    best_sq = dist_sq
-                    best_dir = d
+        best_dir = min(valid_dirs, key=chase_cost)
+        if chase_cost(best_dir) >= 999999:
+            best_dir = min(
+                valid_dirs,
+                key=lambda d: self.euclidean_distance_sq(
+                    float(cur_gx + d.vector[0]),
+                    float(cur_gy + d.vector[1]),
+                    float(target_x),
+                    float(target_y),
+                ),
+            )
 
         self.next_direction = best_dir
 

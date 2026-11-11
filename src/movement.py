@@ -92,23 +92,15 @@ class MovementController:
                 self.current_direction = self.next_direction
 
         dx, dy = self.current_direction.vector
-        can_continue: bool = True
-        if dx > 0 and self.pixel_x >= target_px:
-            can_continue = self.can_move(
-                board, self.current_direction, cur_gx, cur_gy
-            )
-        elif dx < 0 and self.pixel_x <= target_px:
-            can_continue = self.can_move(
-                board, self.current_direction, cur_gx, cur_gy
-            )
-        if dy > 0 and self.pixel_y >= target_py:
-            can_continue = self.can_move(
-                board, self.current_direction, cur_gx, cur_gy
-            )
-        elif dy < 0 and self.pixel_y <= target_py:
-            can_continue = self.can_move(
-                board, self.current_direction, cur_gx, cur_gy
-            )
+        past_center = (
+            (dx > 0 and self.pixel_x >= target_px)
+            or (dx < 0 and self.pixel_x <= target_px)
+            or (dy > 0 and self.pixel_y >= target_py)
+            or (dy < 0 and self.pixel_y <= target_py)
+        )
+        can_continue = not past_center or self.can_move(
+            board, self.current_direction, cur_gx, cur_gy
+        )
 
         if can_continue and self.current_direction != Direction.NONE:
             self.pixel_x += dx * self.speed

@@ -95,7 +95,7 @@ class GameState:
     score: int = 0
     lives: int = 3
     level: int = 1
-    time_left: int = 90
+    time_left: int = 10
     status: GameStatus = GameStatus.MENU
 
 

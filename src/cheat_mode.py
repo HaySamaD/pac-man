@@ -7,6 +7,43 @@ from src.d1_classes.m1_dataclasses import GameState
 from src.player import PlayerController
 
 
+def _draw_box(
+    surface: pygame.Surface,
+    x: int,
+    y: int,
+    w: int,
+    h: int,
+    color: Tuple[int, int, int],
+) -> None:
+    """Draw solid rectangle using MLX-equivalent Surface blit."""
+    box = pygame.Surface((w, h))
+    box.fill(color)
+    surface.blit(box, (x, y))
+
+
+def _draw_frame(
+    surface: pygame.Surface,
+    x: int,
+    y: int,
+    w: int,
+    h: int,
+    thickness: int,
+    color: Tuple[int, int, int],
+) -> None:
+    """Draw rectangle border using MLX-equivalent Surface blit."""
+    _draw_box(surface, x, y, w, thickness, color)
+    _draw_box(surface, x, y + h - thickness, w, thickness, color)
+    _draw_box(surface, x, y, thickness, h, color)
+    _draw_box(surface, x + w - thickness, y, thickness, h, color)
+
+
+def _point_in_box(
+    px: int, py: int, x: int, y: int, w: int, h: int
+) -> bool:
+    """Check if point (px, py) falls inside box (x, y, w, h)."""
+    return x <= px <= x + w and y <= py <= y + h
+
+
 class CheatController:
     """Manage cheat state toggles and evaluation UI interactions."""
 
@@ -18,7 +55,7 @@ class CheatController:
         self.speed_boost: bool = False
         self.base_speed: Optional[int] = None
         self.menu_open: bool = False
-        self.btn_rect: pygame.Rect = pygame.Rect(760, 480, 400, 70)
+        self.btn_box: Tuple[int, int, int, int] = (760, 480, 400, 70)
 
     def set_enabled(self, enabled: bool) -> None:
         """Turn master cheat switch on or off cleanly."""
@@ -52,11 +89,9 @@ class CheatController:
             self.base_speed = player_ctrl.speed
 
         self.speed_boost = not self.speed_boost
-        if self.speed_boost:
-            player_ctrl.speed = self.base_speed * 2
-        else:
-            player_ctrl.speed = self.base_speed
-
+        player_ctrl.speed = (
+            self.base_speed * 2 if self.speed_boost else self.base_speed
+        )
         return self.speed_boost
 
     def add_life(self, game_state: GameState) -> int:
@@ -77,7 +112,7 @@ class CheatController:
 
         mx, my = pos
         if not self.menu_open:
-            if self.btn_rect.collidepoint(mx, my):
+            if _point_in_box(mx, my, *self.btn_box):
                 self.menu_open = True
             return False
 
@@ -86,8 +121,8 @@ class CheatController:
         opts = ["god", "freeze", "speed", "life", "skip", "close"]
 
         for idx, opt in enumerate(opts):
-            r = pygame.Rect(710, start_y + idx * opt_height, 500, 45)
-            if r.collidepoint(mx, my):
+            bx, by, bw, bh = 710, start_y + idx * opt_height, 500, 45
+            if _point_in_box(mx, my, bx, by, bw, bh):
                 if opt == "god":
                     self.toggle_god_mode()
                 elif opt == "freeze":
@@ -114,15 +149,18 @@ class CheatController:
         if not self.is_enabled or event.type != pygame.KEYDOWN:
             return False
 
-        if event.key == pygame.K_g:
-            self.toggle_god_mode()
-        elif event.key == pygame.K_f:
-            self.toggle_freeze()
-        elif event.key == pygame.K_b:
-            self.toggle_speed(player_ctrl)
-        elif event.key == pygame.K_h:
-            self.add_life(game_state)
-        elif event.key == pygame.K_l:
+        key_map = {
+            pygame.K_g: self.toggle_god_mode,
+            pygame.K_f: self.toggle_freeze,
+            pygame.K_b: lambda: self.toggle_speed(player_ctrl),
+            pygame.K_h: lambda: self.add_life(game_state),
+        }
+
+        if event.key in key_map:
+            key_map[event.key]()
+            return False
+
+        if event.key == pygame.K_l:
             return True
 
         return False
@@ -133,11 +171,8 @@ class CheatController:
         font_title: pygame.font.Font,
         font_body: pygame.font.Font,
     ) -> None:
-        """Draw Pause Screen and optional Cheat Mode UI button."""
-        frame_rect = pygame.Rect(200, 60, 1520, 960)
-        pygame.draw.rect(
-            surface, (230, 115, 115), frame_rect, width=4, border_radius=30
-        )
+        """Draw Pause Screen and optional Cheat UI with MLX primitives."""
+        _draw_frame(surface, 200, 60, 1520, 960, 4, (230, 115, 115))
 
         title_surf = font_title.render("Game Paused", True, (240, 120, 120))
         tx = (surface.get_width() - title_surf.get_width()) // 2
@@ -147,18 +182,9 @@ class CheatController:
             return
 
         if not self.menu_open:
-            bx, by, bw, bh = self.btn_rect
-            btn_surf = pygame.Surface((bw, bh))
-            btn_surf.fill((215, 218, 222))
-            surface.blit(btn_surf, (bx, by))
-
-            pygame.draw.rect(
-                surface,
-                (240, 120, 120),
-                self.btn_rect,
-                width=3,
-                border_radius=16,
-            )
+            bx, by, bw, bh = self.btn_box
+            _draw_box(surface, bx, by, bw, bh, (215, 218, 222))
+            _draw_frame(surface, bx, by, bw, bh, 3, (240, 120, 120))
 
             text_surf = font_body.render(
                 "Cheat Mode Settings", True, Rgb.BLACK
@@ -172,7 +198,7 @@ class CheatController:
     def _render_settings_list(
         self, surface: pygame.Surface, font_body: pygame.font.Font
     ) -> None:
-        """Draw interactive cheat toggles list when button is clicked."""
+        """Draw interactive cheat toggles list strictly with MLX primitives."""
         items: List[Tuple[str, str, Tuple[int, int, int]]] = [
             (
                 "1. God Mode",
@@ -196,13 +222,9 @@ class CheatController:
 
         start_y: int = 380
         for idx, (label, state_str, col) in enumerate(items):
-            box_r = pygame.Rect(710, start_y + idx * 50, 500, 45)
-            pygame.draw.rect(
-                surface, (30, 32, 40), box_r, border_radius=8
-            )
-            pygame.draw.rect(
-                surface, (70, 75, 95), box_r, width=2, border_radius=8
-            )
+            bx, by, bw, bh = 710, start_y + idx * 50, 500, 45
+            _draw_box(surface, bx, by, bw, bh, (30, 32, 40))
+            _draw_frame(surface, bx, by, bw, bh, 2, (70, 75, 95))
 
             txt = font_body.render(f"{label}: {state_str}", True, col)
-            surface.blit(txt, (box_r.x + 20, box_r.y + 8))
+            surface.blit(txt, (bx + 20, by + 8))

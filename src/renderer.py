@@ -30,9 +30,14 @@ class Renderer:
         pygame.init()
         self.screen_w: int = 1920
         self.screen_h: int = 1080
-        self.screen: pygame.Surface = pygame.display.set_mode(
-            (self.screen_w, self.screen_h), pygame.FULLSCREEN
-        )
+        try:
+            self.screen: pygame.Surface = pygame.display.set_mode(
+                (self.screen_w, self.screen_h), pygame.FULLSCREEN
+            )
+        except pygame.error:
+            self.screen = pygame.display.set_mode(
+                (self.screen_w, self.screen_h)
+            )
         pygame.display.set_caption("Pac-Man")
 
         self.hud_height: int = self.screen_h * 10 // 100
@@ -114,7 +119,7 @@ class Renderer:
         width: int,
         height: int,
     ) -> None:
-        """Fill solid rectangle pixel-by-pixel without using pygame.draw."""
+        """Fill solid rectangle pixel-by-pixel."""
         for row in range(height):
             for col in range(width):
                 px: int = x + col
