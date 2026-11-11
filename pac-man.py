@@ -44,8 +44,7 @@ def main() -> None:
             f"{RED}❌ JSON format: '{sys.argv[1]}' must be a json file{WHITE}\n"
                        )
     # -------------------------------------------------------------------------
-    p: Parser = Parser(sys.argv[1])
-    config: Config = p.conf_obj
+    config: Config = Parser(sys.argv[1]).conf_obj
     # -------------------------------------------------------------------------
     higher_score_path: str = config.highscore_filename
     highscores_obj: HigherScore = HigherScore(higher_score_path)
@@ -67,5 +66,5 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         main()
-    except Exception as e:
+    except (Exception, KeyboardInterrupt) as e:
         print(e)
