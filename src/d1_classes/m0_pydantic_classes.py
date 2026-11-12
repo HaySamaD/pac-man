@@ -61,7 +61,7 @@ class Level(BaseModel):
             dic['width'] = 42
             val_width = 42
         # the maze must be >= 14 (to display the 42 pattern)
-        # and <= 48
+        # and <= 48 (to display the full maze in screen)
         elif not isinstance(val_width, int) or not (14 <= val_width <= 48):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
@@ -77,7 +77,7 @@ class Level(BaseModel):
             dic['height'] = 42
             val_height = 42
         # the maze must be >= 10 (to display the 42 pattern)
-        # and <= 24 (to less space for HUD)
+        # and <= 24 (to less space for HUD + display the full maze in screen)
         elif not isinstance(val_height, int) or not (10 <= val_height <= 24):
             print(
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
@@ -301,7 +301,7 @@ class Config(BaseModel):
         return dic
 
 
-# =============================================================================
+# =============== this class for validate the highscores file ===============
 
 class NameScore(BaseModel):
     """

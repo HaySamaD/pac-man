@@ -1,11 +1,8 @@
 """Defines dataclasses for the game and him state management."""
 
-from dataclasses import dataclass
-
 
 # ===============================================================================
 
-@dataclass
 class Position:
     """
         Represents 2D grid coordinates (x, y) for entities.
@@ -20,7 +17,6 @@ class Position:
 
 # ===============================================================================
 
-@dataclass
 class GameState:
     """
         Tracks active game state parameters and progression status.
@@ -43,7 +39,6 @@ class GameState:
 
 # ===============================================================================
 
-@dataclass
 class Player:
     """
         Stores player position, movement direction, and status.
@@ -60,7 +55,6 @@ class Player:
 
 # ===============================================================================
 
-@dataclass
 class Ghost:
     """
     Stores ghost position, entity type, edible state, and direction.

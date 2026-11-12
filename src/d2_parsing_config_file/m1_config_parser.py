@@ -9,7 +9,7 @@ import json
 
 from ..d0_helpers import Color
 from ..d0_helpers import Helper
-from ..d0_helpers import DEFAULT_CONFIG_FILE
+from ..d0_helpers import DEFAULT_CONFIG
 from ..d1_classes import Config
 
 
@@ -79,7 +79,7 @@ class Parser:
                 f"{Color().GREEN}switching to default config data ...\n"
                 f"{Color().WHITE}"
                  )
-            conf_dic = DEFAULT_CONFIG_FILE
+            conf_dic = DEFAULT_CONFIG
         # ------------------------------------------------------------------
         return conf_dic
 
@@ -99,7 +99,7 @@ class Parser:
                     f"\n{Color().YELLOW}the config is not a dictionary. \n"
                     f"{Color().GREEN}default config is added{Color().WHITE}\n"
                  )
-            self.conf_dic = DEFAULT_CONFIG_FILE
+            self.conf_dic = DEFAULT_CONFIG
         # ---------------------------------------------------------------------
         config_obj: Config = Config.model_validate(self.conf_dic)
         # ---------------------------------------------------------------------

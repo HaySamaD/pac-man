@@ -1,6 +1,6 @@
 install:
-	pip install -r dependencies/requirements.txt
-	pip install dependencies/mazegenerator-2.1.0-py3-none-any.whl
+	pip install -r requirements.txt
+	pip install mazegenerator-2.1.0-py3-none-any.whl
 
 run:
 	python3 pac-man.py config.json

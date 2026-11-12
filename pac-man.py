@@ -46,12 +46,10 @@ def main() -> None:
     # -------------------------------------------------------------------------
     config: Config = Parser(sys.argv[1]).conf_obj
     # -------------------------------------------------------------------------
-    higher_score_path: str = config.highscore_filename
-    highscores_obj: HigherScore = HigherScore(higher_score_path)
+    highscores_obj: HigherScore = HigherScore(config.highscore_filename)
     # -------------------------------------------------------------------------
     game_state_obj: GameState = GameState()
-    game_state_obj.status = "LOSS"
-    # -------------------------------------------------------------------------
+    # --------------------------- run the game loop ---------------------------
     nbr_levels: int = len(config.levels_data)
     g: GameLoop = GameLoop(
                             highscores_obj,
@@ -66,5 +64,5 @@ def main() -> None:
 if __name__ == "__main__":
     try:
         main()
-    except (Exception, KeyboardInterrupt) as e:
+    except (Exception, KeyboardInterrupt, ImportError) as e:
         print(e)

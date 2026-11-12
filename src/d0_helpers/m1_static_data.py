@@ -9,7 +9,7 @@ from typing import List
 
 
 # use this data if we have a wrong config file (file not found or acces denied)
-DEFAULT_CONFIG_FILE = {
+DEFAULT_CONFIG = {
 
                 "highscore_filename": "highscores.json",
 
@@ -30,7 +30,7 @@ DEFAULT_CONFIG_FILE = {
 
                 "level_max_time": 300
 
-                    }
+                }
 
 # ------------------------- the main menu options --------------------------
 MENU: List[str] = ["Start Game", "View Highscores", "Instructions", "Exit"]

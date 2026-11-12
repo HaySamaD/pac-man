@@ -34,6 +34,7 @@ class Helper:
             Raises:
                 Exception: If file does not exist or access is denied.
         """
+        # ---------------------------------------------------------------------
         try:
             with open(file_path, 'r') as f:
                 content: str = f.read()
@@ -43,6 +44,7 @@ class Helper:
                             f"{Color().RED}❌ Error: {file_path} not exist or "
                             f"access denied{Color().WHITE}"
                            )
+        # ---------------------------------------------------------------------
 
     # ==========================================================================
     def read_highscore_file(self, file_path: str) -> List[Dict]:
@@ -56,6 +58,7 @@ class Helper:
                 List[Dict]: List of highscore dictionaries,
                                                         or empty list on error.
         """
+        # ----------------------------------------------------------------------
         try:
             with open(file_path, 'r') as f:
                 content: List[Dict] = json.load(f)
@@ -76,7 +79,7 @@ class Helper:
                     f"\n{Color().GREEN}\nadd default value []"
                  )
             return []
-    # ==========================================================================
+        # ----------------------------------------------------------------------
 
 
 # 1 - config file parsing: read the json file as a str (not a json): because
