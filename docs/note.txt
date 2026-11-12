@@ -1,0 +1,23 @@
+player spawn
+
+remove:
+    enum
+    dataclass
+    property
+    staticmethod
+    classmethod
+    or any decorators
+
+    cheat mode:
+        ghosts_frozen
+        speed_boost
+        base_speed
+        menu_open
+        pause
+
+    protected syntax '_' or "__" or in classes
+
+Add-ons:
+    cheat mode:
+        god mode
+        next level
