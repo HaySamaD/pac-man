@@ -72,7 +72,7 @@ class Level(BaseModel):
         if val_height is None:
             print(
                     f"\n{Color().YELLOW}'height' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['height'] = 42
             val_height = 42
@@ -87,8 +87,8 @@ class Level(BaseModel):
         # ------------------------ handel pacgums value -----------------------
         if val_pacgum is None:
             print(
-                    f"\n{Color().YELLOW}'pacgum' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'pacgum' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
@@ -162,8 +162,8 @@ class Config(BaseModel):
         # --------------------- handel highscore_filename ---------------------
         if highscore_filename is None:
             print(
-                    f"\n{Color().YELLOW}'highscore_filename' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'highscore_filename' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['highscore_filename'] = "highscores.json"
             highscore_filename = dic['highscore_filename']
@@ -202,8 +202,8 @@ class Config(BaseModel):
         # ---------------------- handel lives List[Dict] ----------------------
         if lives is None:
             print(
-                    f"\n{Color().YELLOW}'lives' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'lives' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['lives'] = 3
             lives = 3
@@ -217,8 +217,8 @@ class Config(BaseModel):
         # --------------------- handel points_per_pacgum ----------------------
         if points_per_pacgum is None:
             print(
-                    f"\n{Color().YELLOW}'points_per_pacgum' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'points_per_pacgum' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
@@ -233,8 +233,8 @@ class Config(BaseModel):
         # ------------------- handel points_per_super_pacgum ------------------
         if points_per_super_pacgum is None:
             print(
-                    f"\n{Color().YELLOW}'points_per_super_pacgum' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'points_per_super_pacgum' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
@@ -252,8 +252,8 @@ class Config(BaseModel):
         # -------------------- handel points_per_ghost -----------------------
         if points_per_ghost is None:
             print(
-                    f"\n{Color().YELLOW}'points_per_ghost' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'points_per_ghost' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
@@ -284,8 +284,8 @@ class Config(BaseModel):
         # --------------------- handel level_max_time -------------------------
         if level_max_time is None:
             print(
-                    f"\n{Color().YELLOW}'level_max_time' not exist."
-                    f"default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}'level_max_time' not exist.\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
             dic['level_max_time'] = 300
             level_max_time = 300
