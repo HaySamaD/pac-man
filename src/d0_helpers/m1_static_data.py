@@ -14,8 +14,8 @@ DEFAULT_CONFIG = {
                 "highscore_filename": "highscores.json",
 
                 "levels_data": [
-                                    {"width": 42, "height": 42, "pacgum": 42}
-                                    for _ in range(10)
+                                {"width": 42, "height": 42, "pacgum": 42}
+                                for _ in range(10)
                                ],
 
                 "lives": 3,
