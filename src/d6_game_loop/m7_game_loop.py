@@ -15,20 +15,24 @@ from .m2_highscores_events import HighScoresEvent
 
 from .m1_menu_events import MenuEvent
 
-from ..d4_display import (
+from ..d5_display import (
                             Printer, MainPage, HighscoresPage,
                             InstructionsPage, HUD, PausePage,
                             LossPage, WinPage
                          )
-from ..d1_classes import GameState
+from ..d2_classes import GameState
 
-from ..d3_parsing_highscores import HigherScore
+from ..d4_parsing_highscores import HigherScore
 
 import pygame
 
 from typing import Tuple
 
-from ..d0_helpers import Rgb
+from ..d1_helpers import Rgb
+
+from ..d5_display import Gameplay
+
+from ..d2_classes import Config
 
 
 class GameLoop:
@@ -45,6 +49,7 @@ class GameLoop:
     """
     def __init__(
                     self,
+                    config: Config,
                     highscores_obj: HigherScore,
                     game_state: GameState,
                     nbr_levels: int,
@@ -62,6 +67,7 @@ class GameLoop:
                                                                         height.
         """
         # ----------------- init params -----------------
+        self.config: Config = config
         self.highscores_obj: HigherScore = highscores_obj
         self.game_state: GameState = game_state
         self.nbr_levels = nbr_levels
@@ -110,6 +116,9 @@ class GameLoop:
         win_page: WinPage = WinPage(
                     screen, title_font, content_font, (self.width, self.height)
                                    )
+        gameplay_page: Gameplay = Gameplay(
+                                        screen, self.config, self.game_state
+                                          )
         # ----------------------------------------------------------------------
         menu_event_obj: MenuEvent = MenuEvent(main_page, self.game_state)
         highscore_event_obj: HighScoresEvent = HighScoresEvent(
@@ -152,6 +161,7 @@ class GameLoop:
                 instruction_page.print_instruction_page()
             elif self.game_state.status == "PLAY":
                 hud.print_hud()
+                gameplay_page.update_and_render()
             elif self.game_state.status == "PAUSE":
                 pause_page.print_pause_page()
             elif self.game_state.status == "LOSS":

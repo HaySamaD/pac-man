@@ -6,9 +6,9 @@
 import pygame
 from pygame.event import Event
 
-from ..d1_classes import GameState
+from ..d2_classes import GameState
 
-from ..d4_display import InstructionsPage
+from ..d5_display import InstructionsPage
 
 
 class InstructionsEvents:

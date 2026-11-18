@@ -7,8 +7,8 @@ import pygame
 
 from pygame.event import Event
 
-from ..d1_classes.m1_dataclasses import GameState
-from ..d4_display.m1_main_page import MainPage
+from ..d2_classes.m1_dataclasses import GameState
+from ..d5_display import MainPage
 
 
 class MenuEvent:

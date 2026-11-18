@@ -6,9 +6,9 @@
 import pygame
 from pygame.event import Event
 
-from ..d4_display import HighscoresPage
+from ..d5_display import HighscoresPage
 
-from ..d1_classes import GameState
+from ..d2_classes import GameState
 
 
 class HighScoresEvent:

@@ -3,11 +3,11 @@
 import pygame
 from pygame.event import Event
 
-from ..d1_classes import GameState
+from ..d2_classes import GameState
 
-from ..d3_parsing_highscores import HigherScore
+from ..d4_parsing_highscores import HigherScore
 
-from ..d4_display import Printer
+from ..d5_display import Printer
 
 
 class WinLossEvent:
