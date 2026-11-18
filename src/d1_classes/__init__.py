@@ -3,9 +3,7 @@
 from .m1_dataclasses import (
     Direction,
     GameState,
-    GameStatus,
     Ghost,
-    GhostType,
     Player,
     Position,
 )
@@ -13,9 +11,7 @@ from .m1_dataclasses import (
 __all__ = [
     "Direction",
     "GameState",
-    "GameStatus",
     "Ghost",
-    "GhostType",
     "Player",
     "Position",
 ]

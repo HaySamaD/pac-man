@@ -1,118 +1,106 @@
-"""Shared dataclasses and enumerations for game state, entities, and tiles."""
+"""Shared data structures and constants for game state and entities."""
 
-from dataclasses import dataclass
-from enum import Enum
-from typing import Tuple
+from typing import Dict, Tuple
 
 
-class Direction(str, Enum):
-    """
-    Movement directions combining string representation and coordinate vectors.
+class Direction:
+    """Movement direction constants and directional lookup tables."""
 
-    Inheriting from (str, Enum) ensures string compatibility while providing
-    type-safe direction management and mathematical delta vectors.
-    """
+    UP: str = "UP"
+    DOWN: str = "DOWN"
+    LEFT: str = "LEFT"
+    RIGHT: str = "RIGHT"
+    NONE: str = "NONE"
 
-    UP = "UP"
-    DOWN = "DOWN"
-    LEFT = "LEFT"
-    RIGHT = "RIGHT"
-    NONE = "NONE"
+    VECTORS: Dict[str, Tuple[int, int]] = {
+        "UP": (0, -1),
+        "DOWN": (0, 1),
+        "LEFT": (-1, 0),
+        "RIGHT": (1, 0),
+        "NONE": (0, 0),
+    }
 
-    @property
-    def vector(self) -> Tuple[int, int]:
-        """Return the (dx, dy) movement offset on the grid."""
-        vectors = {
-            Direction.UP: (0, -1),
-            Direction.DOWN: (0, 1),
-            Direction.LEFT: (-1, 0),
-            Direction.RIGHT: (1, 0),
-            Direction.NONE: (0, 0),
-        }
-        return vectors[self]
+    WALL_BITS: Dict[str, int] = {
+        "UP": 1,
+        "RIGHT": 2,
+        "DOWN": 4,
+        "LEFT": 8,
+        "NONE": 0,
+    }
 
-    @property
-    def wall_bit(self) -> int:
-        """Return the bitmask wall value (1=North, 2=East, 4=South, 8=West)."""
-        bits = {
-            Direction.UP: 1,
-            Direction.RIGHT: 2,
-            Direction.DOWN: 4,
-            Direction.LEFT: 8,
-            Direction.NONE: 0,
-        }
-        return bits[self]
-
-    @property
-    def opposite(self) -> "Direction":
-        """Return the exact reverse direction."""
-        opposites = {
-            Direction.UP: Direction.DOWN,
-            Direction.DOWN: Direction.UP,
-            Direction.LEFT: Direction.RIGHT,
-            Direction.RIGHT: Direction.LEFT,
-            Direction.NONE: Direction.NONE,
-        }
-        return opposites[self]
+    OPPOSITES: Dict[str, str] = {
+        "UP": "DOWN",
+        "DOWN": "UP",
+        "LEFT": "RIGHT",
+        "RIGHT": "LEFT",
+        "NONE": "NONE",
+    }
 
 
-class GhostType(str, Enum):
-    """The four classic ghost personalities."""
+class TileType:
+    """Numerical constants representing grid cell contents."""
 
-    BLINKY = "blinky"
-    PINKY = "pinky"
-    INKY = "inky"
-    CLYDE = "clyde"
-
-
-class GameStatus(str, Enum):
-    """Game loop progression states."""
-
-    MENU = "MENU"
-    PLAYING = "PLAYING"
-    PAUSED = "PAUSED"
-    GAME_OVER = "GAME_OVER"
-    VICTORY = "VICTORY"
+    EMPTY: int = 0
+    WALL: int = 1
+    PACGUM: int = 2
+    SUPER_PACGUM: int = 3
 
 
-# =============================================================================
-# DATA CLASSES
-# =============================================================================
-
-
-@dataclass
 class Position:
-    """Object position (x, y) on the grid board."""
+    """Represents 2D grid coordinates (x, y) for entities."""
 
-    x: int
-    y: int
+    def __init__(self, x: int, y: int) -> None:
+        """Initialize grid coordinates."""
+        self.x: int = x
+        self.y: int = y
 
 
-@dataclass
 class GameState:
-    """State of the game progression and metrics."""
+    """Tracks active game state parameters and progression status."""
 
-    score: int = 0
-    lives: int = 3
-    level: int = 1
-    time_left: int = 10
-    status: GameStatus = GameStatus.MENU
+    def __init__(
+        self,
+        score: int = 0,
+        lives: int = 3,
+        level: int = 1,
+        time_left: int = 90,
+        status: str = "MENU",
+    ) -> None:
+        """Initialize game state metrics."""
+        self.score: int = score
+        self.lives: int = lives
+        self.level: int = level
+        self.time_left: int = time_left
+        self.status: str = status
 
 
-@dataclass
 class Player:
-    """Player runtime entity data."""
+    """Stores player position, movement direction, and status."""
 
-    position: Position
-    direction: Direction = Direction.RIGHT
-    is_alive: bool = True
+    def __init__(
+        self,
+        position: Position,
+        direction: str = "RIGHT",
+        is_alive: bool = True,
+    ) -> None:
+        """Initialize player runtime data."""
+        self.position: Position = position
+        self.direction: str = direction
+        self.is_alive: bool = is_alive
 
 
-@dataclass
 class Ghost:
-    """Ghost runtime entity data."""
+    """Stores ghost position, entity type, edible state, and direction."""
 
-    position: Position
-    ghost_type: GhostType
-    is_edible: bool = False
-    direction: Direction = Direction.UP
+    def __init__(
+        self,
+        position: Position,
+        ghost_type: str,
+        is_edible: bool = False,
+        direction: str = "UP",
+    ) -> None:
+        """Initialize ghost runtime data."""
+        self.position: Position = position
+        self.ghost_type: str = ghost_type
+        self.is_edible: bool = is_edible
+        self.direction: str = direction
