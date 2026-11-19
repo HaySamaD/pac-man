@@ -105,11 +105,11 @@ class Gameplay:
             else random.randint(1000, 999999)
         )
         self.board = MazeBoard(
-            min(lvl_cfg.width, 46),
-            min(lvl_cfg.height, 24),
-            seed,
-            lvl_cfg.pacgum,
-        )
+                                lvl_cfg.width,
+                                lvl_cfg.height,
+                                seed,
+                                lvl_cfg.pacgum,
+                              )
         self.renderer.set_board(self.board)
         self.spawn_pos = self.board.find_spawn_position()
         self.ghosts = self.create_ghosts()

@@ -74,8 +74,8 @@ class Level(BaseModel):
                     f"\n{Color().YELLOW}'height' not exist."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['height'] = 42
-            val_height = 42
+            dic['height'] = 24
+            val_height = 24
         # the maze must be >= 10 (to display the 42 pattern)
         # and <= 24 (to less space for HUD + display the full maze in screen)
         elif not isinstance(val_height, int) or not (10 <= val_height <= 24):
@@ -83,7 +83,7 @@ class Level(BaseModel):
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
                  )
-            dic['height'] = 42
+            dic['height'] = 24
         # ------------------------ handel pacgums value -----------------------
         if val_pacgum is None:
             print(

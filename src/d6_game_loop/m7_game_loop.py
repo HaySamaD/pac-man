@@ -81,7 +81,10 @@ class GameLoop:
         """
         # ---------------------------- init pygame ----------------------------
         pygame.init()
-        screen = pygame.display.set_mode((self.width, self.height))
+        screen = pygame.display.set_mode(
+                                            (self.width, self.height),
+                                            pygame.FULLSCREEN
+                                        )
         clock = pygame.time.Clock()
         # ---------------------------- init fonts -----------------------------
         title_font = pygame.font.Font(None, 135)
@@ -138,9 +141,12 @@ class GameLoop:
         while running:
             screen.fill(Rgb.BLACK)
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.KEYDOWN:
+                    if (
+                            event.key == pygame.K_q
+                            and self.game_state.status not in ["WIN", "LOSS"]
+                       ):
+                        running = False
                     if self.game_state.status == "MENU":
                         running = menu_event_obj.run_event(event, running)
                     elif self.game_state.status == "HIGHSCORES":
