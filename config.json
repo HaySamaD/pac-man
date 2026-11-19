@@ -8,9 +8,9 @@
 
     "levels_data": [
                         {
-                            "width": -15,
+                            "width":  -15,
                             "height": 15,
-                            "pacgum": 42
+                            "pacgum": 400
                         },
 
                         {

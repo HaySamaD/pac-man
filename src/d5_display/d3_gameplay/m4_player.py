@@ -45,8 +45,8 @@ class PlayerController(MovementController):
         self.position.y = spawn_y
         self.pixel_x = float(spawn_x * self.tile_size)
         self.pixel_y = float(spawn_y * self.tile_size)
-        self.current_direction = Direction.RIGHT
-        self.next_direction = Direction.RIGHT
+        self.current_direction = Direction.NONE
+        self.next_direction = Direction.NONE
         self.data.direction = Direction.RIGHT
 
     def update(

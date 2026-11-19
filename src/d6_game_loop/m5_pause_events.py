@@ -3,6 +3,8 @@
 import pygame
 from pygame.event import Event
 
+from ..d5_display import Gameplay
+
 from ..d2_classes import GameState
 
 from ..d5_display import PausePage
@@ -30,7 +32,7 @@ class PauseEvent:
         self.pause_obj: PausePage = pause_obj
         self.game_state: GameState = game_state
 
-    def run_event(self, event: Event) -> None:
+    def run_event(self, event: Event, gameplay_page: Gameplay) -> None:
         """
             Processes keyboard inputs to resume game or return to menu.
 
@@ -51,5 +53,6 @@ class PauseEvent:
                 self.game_state.status = "PLAY"
             elif self.pause_obj.pos == 1:
                 self.game_state.status = "MENU"
+                gameplay_page.start_new_game()
         # ----------
         return None

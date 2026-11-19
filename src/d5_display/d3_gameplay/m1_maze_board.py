@@ -78,9 +78,7 @@ class MazeBoard:
             pos for pos in valid_paths if pos not in corner_set
         ]
 
-        count: int = len(regular_paths)
-        if 0 < max_pacgums <= count:
-            count = max_pacgums
+        count: int = max_pacgums
 
         for x, y in random.sample(regular_paths, count):
             self.grid[y][x] = TileType.PACGUM

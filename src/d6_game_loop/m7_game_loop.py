@@ -149,8 +149,9 @@ class GameLoop:
                         instruction_event_obj.run_events(event)
                     elif self.game_state.status == "PLAY":
                         play_event_obj.run_event(event)
+                        gameplay_page.handle_event(event)
                     elif self.game_state.status == "PAUSE":
-                        pause_event_obj.run_event(event)
+                        pause_event_obj.run_event(event, gameplay_page)
                     elif self.game_state.status in ["LOSS", "WIN"]:
                         player_name = win_loss_event.run_event(event)
             if self.game_state.status == "MENU":
@@ -160,8 +161,8 @@ class GameLoop:
             elif self.game_state.status == "INSTRUCTIONS":
                 instruction_page.print_instruction_page()
             elif self.game_state.status == "PLAY":
-                hud.print_hud()
                 gameplay_page.update_and_render()
+                hud.print_hud()
             elif self.game_state.status == "PAUSE":
                 pause_page.print_pause_page()
             elif self.game_state.status == "LOSS":
