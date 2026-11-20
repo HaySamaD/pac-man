@@ -88,7 +88,7 @@ class GameLoop:
         clock = pygame.time.Clock()
         # ---------------------------- init fonts -----------------------------
         title_font = pygame.font.Font(None, 135)
-        content_font = pygame.font.Font(None, 40)
+        content_font = pygame.font.Font(None, 35)
         # --------------------------- printer text ----------------------------
         p: Printer = Printer(
                                 screen,

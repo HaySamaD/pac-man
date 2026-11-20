@@ -5,8 +5,6 @@
 # vscode cache
 .vscode
 
-# docs (subject.pdf, ...)
-docs
 
 # mypy cache
 src/__pycache__

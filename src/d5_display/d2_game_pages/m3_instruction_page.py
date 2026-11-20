@@ -66,10 +66,10 @@ class InstructionsPage:
         y: int | float = self.height * 0.15
         # ---------------------------------------------------------------------
         for i in INSTRUCTIONS:
-            if i.startswith(("1", "2", "3", "4")):
-                y += self.height * 0.08
-            elif i.startswith(" -"):
-                y += self.height * 0.028
+            if i.startswith(("1", "2", "3", "4", "5")):
+                y += self.height * 0.06
+            elif i.startswith((" -", "-")):
+                y += self.height * 0.03
             else:
                 y += self.height * 0.0128
             self.p.print_text(i, (x, y), Rgb.WHITE, Rgb.BLACK, False)

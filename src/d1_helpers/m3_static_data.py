@@ -37,43 +37,32 @@ MENU: List[str] = ["Start Game", "View Highscores", "Instructions", "Exit"]
 
 # -------------------------- the instructions content -------------------------
 INSTRUCTIONS: List[str] = [
-
-        "CONTROLS & GAME INSTRUCTIONS:",
-
-        "1. Player Movement:",
-
-        " - Use ARROW KEYS or WASD to move Pac-Man through the corridors.",
-
-        " - Pac-Man can only move through open corridors, not through walls.",
-
-        "2. Objectives:",
-
-        " - Eat all Pacgums (small dots) scattered across the corridors to win"
-        " the current level.",
-
-        " - Avoid ghosts. Touching a ghost causes Pac-Man to lose a life and"
-        " restart in the middle.",
-
-        " - The game ends when all lives are lost or all 10 levels are"
-        " completed.",
-
-        "3. Power Pellets (Super-Pacgums):",
-
-        " - Located in the 4 corners of the maze.",
-
-        " - Eating a super-pacgum grants points and makes ghosts edible for a"
-        " short time.",
-
-        " - Eating edible ghosts awards extra points.",
-
-        "4. Pause & Navigation:",
-
-        " - Press ESC to pause the game at any time.",
-
-        " - Use the Main Menu to view Top 10 Highscores, read instructions, or"
-        " exit."
-
-                            ]
+    "CONTROLS & GAME INSTRUCTIONS:",
+    "1. Player Movement:",
+    " - Use ARROW KEYS or WASD to move Pac-Man through the corridors.",
+    " - Pac-Man can only move through open corridors, not through walls.",
+    "2. Objectives:",
+    " - Eat all Pacgums (small dots) scattered across the corridors to win"
+    " the current level.",
+    " - Avoid ghosts. Touching a ghost causes Pac-Man to lose a life and"
+    " restart in the middle.",
+    " - The game ends when all lives are lost or all 10 levels are"
+    " completed.",
+    "3. Power Pellets (Super-Pacgums):",
+    " - Located in the 4 corners of the maze.",
+    " - Eating a super-pacgum grants points and makes ghosts edible for a"
+    " short time.",
+    " - Eating edible ghosts awards extra points.",
+    "4. Pause & Navigation:",
+    " - Press ESC to pause or resume the game at any time.",
+    " - Use the Main Menu to view Top 10 Highscores, read instructions, or"
+    " exit.",
+    "5. Cheat Mode:",
+    " - Press C to toggle Cheat Mode ON or OFF.",
+    " - When Cheat Mode is active, you have two options:",
+    "   - Press S to toggle Super Mode ON or OFF.",
+    "   - Press N to toggle Level Skip ON or OFF (or skip to the next level).",
+                        ]
 
 # ------ the pause options ------
 PAUSE = ["Resume", "Go to menu"]
