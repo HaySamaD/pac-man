@@ -41,7 +41,7 @@ class Helper:
             return content
         except OSError:
             raise Exception(
-                            f"{Color().RED}❌Error: {file_path} not exist or "
+                            f"{Color().RED}❌Error: '{file_path}' not exist or "
                             f"access denied{Color().WHITE}"
                            )
         # ---------------------------------------------------------------------
@@ -67,7 +67,7 @@ class Helper:
                 return content
         except OSError:
             print(
-                    f"\n{Color().YELLOW}❌Error: {file_path} not exist or "
+                    f"\n{Color().YELLOW}❌Error: '{file_path}' not exist or "
                     "access denied\n"
                     f"{Color().GREEN}add default value [] and switch to "
                     f"'highscores.json'{Color().WHITE}"

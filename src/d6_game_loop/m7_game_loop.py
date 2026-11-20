@@ -141,12 +141,9 @@ class GameLoop:
         while running:
             screen.fill(Rgb.BLACK)
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
                 if event.type == pygame.KEYDOWN:
-                    if (
-                            event.key == pygame.K_q
-                            and self.game_state.status not in ["WIN", "LOSS"]
-                       ):
-                        running = False
                     if self.game_state.status == "MENU":
                         running = menu_event_obj.run_event(event, running)
                     elif self.game_state.status == "HIGHSCORES":

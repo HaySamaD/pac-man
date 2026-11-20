@@ -56,7 +56,8 @@ class Level(BaseModel):
         if val_width is None:
             print(
                     f"\n{Color().YELLOW}'width' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " width -> 42\n"
                  )
             dic['width'] = 42
             val_width = 42
@@ -66,13 +67,15 @@ class Level(BaseModel):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
+                " width -> 42\n"
                  )
             dic['width'] = 42
         # ------------------------ handel height value ------------------------
         if val_height is None:
             print(
                     f"\n{Color().YELLOW}'height' not exist."
-                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}"
+                    " height -> 24\n"
                  )
             dic['height'] = 24
             val_height = 24
@@ -81,21 +84,24 @@ class Level(BaseModel):
         elif not isinstance(val_height, int) or not (10 <= val_height <= 24):
             print(
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
-                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}"
+                    " height -> 24\n"
                  )
             dic['height'] = 24
         # ------------------------ handel pacgums value -----------------------
         if val_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'pacgum' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " pacgum -> 42\n"
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
         elif not isinstance(val_pacgum, int) or val_pacgum < 1:
             print(
                     f"\n{Color().YELLOW}'pacgum' not a integer or < 1.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " pacgum -> 42\n"
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
@@ -103,7 +109,8 @@ class Level(BaseModel):
             print(
                 f"\n{Color().YELLOW}'nbr of pacgums more than map capacity "
                 f"must be btwn 1 and {(dic['width'] * dic['height']) - 23}"
-                f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
+                f"\n{Color().GREEN}default value is added{Color().WHITE}"
+                " pacgum -> 42\n"
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
@@ -163,7 +170,8 @@ class Config(BaseModel):
         if highscore_filename is None:
             print(
                     f"\n{Color().YELLOW}'highscore_filename' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " -> highscores.json\n"
                  )
             dic['highscore_filename'] = "highscores.json"
             highscore_filename = dic['highscore_filename']
@@ -174,7 +182,8 @@ class Config(BaseModel):
             print(
                 f"\n{Color().YELLOW}'highscore_filename' not valid "
                 "(not str or not a JSON file).\n"
-                f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                f"{Color().GREEN}default value is added{Color().WHITE}"
+                " -> highscores.json\n"
                  )
             dic['highscore_filename'] = "highscores.json"
             highscore_filename = dic['highscore_filename']
@@ -203,7 +212,8 @@ class Config(BaseModel):
         if lives is None:
             print(
                     f"\n{Color().YELLOW}'lives' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " -> lives: 3\n"
                  )
             dic['lives'] = 3
             lives = 3
@@ -211,6 +221,7 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'lives' not a number or less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    " -> lives: 3\n"
                  )
             dic['lives'] = 3
             lives = 3
@@ -218,7 +229,8 @@ class Config(BaseModel):
         if points_per_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'points_per_pacgum' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " points_per_pacgum -> 10\n"
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
@@ -226,7 +238,8 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'points_per_pacgum' not a number or"
                     " less than 1.\n"
-                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}"
+                    " points_per_pacgum -> 10\n"
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
@@ -234,7 +247,8 @@ class Config(BaseModel):
         if points_per_super_pacgum is None:
             print(
                     f"\n{Color().YELLOW}'points_per_super_pacgum' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " points_per_super_pacgum -> 20\n"
                  )
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
@@ -245,7 +259,8 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'points_per_super_pacgum' not a number"
                     " or less than 1.\n"
-                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}"
+                    " points_per_super_pacgum -> 20\n"
                  )
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
@@ -253,7 +268,8 @@ class Config(BaseModel):
         if points_per_ghost is None:
             print(
                     f"\n{Color().YELLOW}'points_per_ghost' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " points_per_ghost -> 40\n"
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
@@ -261,7 +277,8 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'points_per_ghost' not a number or"
                     " less than 1.\n"
-                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}"
+                    " points_per_ghost -> 40\n"
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
@@ -269,7 +286,8 @@ class Config(BaseModel):
         if seed is None:
             print(
                     f"\n{Color().YELLOW}'seed' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " seed -> 42\n"
                  )
             dic['seed'] = 42
             seed = 42
@@ -277,7 +295,8 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'seed' not a number or "
                     "less than 1.\n"
-                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}"
+                    " seed -> 42\n"
                  )
             dic['seed'] = 42
             seed = 42
@@ -285,7 +304,8 @@ class Config(BaseModel):
         if level_max_time is None:
             print(
                     f"\n{Color().YELLOW}'level_max_time' not exist.\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " level_max_time -> 300\n"
                  )
             dic['level_max_time'] = 300
             level_max_time = 300
@@ -293,7 +313,8 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'level_max_time' not a number or"
                     "less than 1.\n"
-                    f"{Color().GREEN}add a default level data{Color().WHITE}\n"
+                    f"{Color().GREEN}add a default level data{Color().WHITE}"
+                    " level_max_time -> 300\n"
                  )
             dic['level_max_time'] = 300
             level_max_time = 300
@@ -341,14 +362,16 @@ class NameScore(BaseModel):
         if not isinstance(name, str):
             print(
                     f"\n{Color().YELLOW}One of players data han not 'name'\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " name -> Player\n"
                  )
             dic['name'] = 'Player'
             name = 'Player'
         elif len(name) > 10:
             print(
-                    f"\n{Color().YELLOW}the len of '{name}' if > 10\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().YELLOW}the len of '{name}' is > 10\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " name -> Player\n"
                  )
             dic['name'] = 'Player'
             name = 'Player'
@@ -356,7 +379,8 @@ class NameScore(BaseModel):
             print(
                     f"\n{Color().YELLOW}One of chars of '{name}' not a alnum"
                     f" or space\n"
-                    f"{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"{Color().GREEN}default value is added{Color().WHITE}"
+                    " name -> Player\n"
                  )
             dic['name'] = 'Player'
             name = 'Player'
@@ -364,18 +388,9 @@ class NameScore(BaseModel):
         if not isinstance(score, int) or score < 0:
             print(
                     f"\n{Color().YELLOW}'{score}' is not a integer or negative"
-                    f"\n{Color().GREEN}default value is added{Color().WHITE}\n"
+                    f"\n{Color().GREEN}default value is added{Color().WHITE}"
+                    " score -> 0\n"
                  )
             dic['score'] = 0
         # -------------------------------------------------------------------
         return dic
-
-# ==========================================================================
-# Remarques:
-
-#     - bnisba l width and height (lines 41 and 57):
-#                                             a revoir l explication dialha
-
-#     - bnisba l handllage dial nbr of pacgums (line 78):
-#                                             a revoir l explication dialha
-# ==========================================================================

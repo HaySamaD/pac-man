@@ -41,9 +41,11 @@ class PlayEvent:
         # --------------------------------------------------------------------
         if event.key == pygame.K_ESCAPE:
             self.game_state.status = "PAUSE"
-        elif self.game_state.lives <= 0 or self.game_state.time_left <= 0:
+        if self.game_state.time_left <= 0:
+            self.game_state.lives -= 1
+        if self.game_state.lives <= 0:
             self.game_state.status = "LOSS"
-        elif self.game_state.level > self.nbr_levels:
+        if self.game_state.level > self.nbr_levels:
             self.game_state.status = "WIN"
         # --------------------------------------------------------------------
         return None
