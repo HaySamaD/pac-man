@@ -76,7 +76,7 @@ class Helper:
         except json.JSONDecodeError:
             print(
                     f"\n{Color().YELLOW}❌Error: {file_path}: wrong JSON syntax"
-                    f"\n{Color().GREEN}\nadd default value []"
+                    f"\n{Color().GREEN}\nadd default value []{Color().WHITE}"
                  )
             return []
         # ----------------------------------------------------------------------
