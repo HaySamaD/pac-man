@@ -26,7 +26,7 @@ class Renderer:
         self.tile_size: int = tile_size
         self.screen_w: int = screen.get_width()
         self.screen_h: int = screen.get_height()
-        self.hud_height: int = self.screen_h * 8 // 100
+        self.hud_height: int = self.screen_h * 1 // 100
         self.offset_x: int = 0
         self.offset_y: int = 0
 

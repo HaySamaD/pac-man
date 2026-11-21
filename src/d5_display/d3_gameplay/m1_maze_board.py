@@ -140,8 +140,11 @@ class MazeBoard:
         return start_x, start_y
 
     def find_spawn_position(self) -> Tuple[int, int]:
-        """Return walkable cell nearest to the center of the maze."""
-        return self.find_nearest_open(self.width // 2, self.height // 2)
+        """Return walkable cell nearest to the center of the maze.
+            And remove pucgums from respown point."""
+        x, y = self.find_nearest_open(self.width // 2, self.height // 2)
+        self.grid[y][x] = TileType.EMPTY
+        return x, y
 
     def find_corner_spawn(self, corner_index: int) -> Tuple[int, int]:
         """Return walkable cell nearest to one of the 4 corners."""

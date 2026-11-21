@@ -2,9 +2,7 @@
 
 ## 1. External Package Risk (`A-Maze-ing` Package)
 ###
-#############################################
-What was the biggest risk or problem you worried about with the A-Maze-ing package?
-#############################################
+I don't have any problem because i enter safe default values
 ###
 
 

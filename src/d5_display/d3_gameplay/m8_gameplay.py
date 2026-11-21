@@ -40,8 +40,8 @@ class Gameplay:
 
         lvl_cfg = self.config.levels_data[0]
         self.board: MazeBoard = MazeBoard(
-            min(lvl_cfg.width, 46),
-            min(lvl_cfg.height, 24),
+            lvl_cfg.width,
+            lvl_cfg.height,
             self.config.seed,
             lvl_cfg.pacgum,
         )
