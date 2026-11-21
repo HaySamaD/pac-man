@@ -1,0 +1,2 @@
+1 - When eyes arrive to spawn point freez 6 sec and then ghost spawning
+2 - fix: pacman spawn to have no pacgum there

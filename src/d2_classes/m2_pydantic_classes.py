@@ -57,37 +57,37 @@ class Level(BaseModel):
             print(
                     f"\n{Color().YELLOW}'width' not exist.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}"
-                    " width -> 42\n"
+                    " width -> 46\n"
                  )
-            dic['width'] = 42
-            val_width = 42
+            dic['width'] = 46
+            val_width = 46
         # the maze must be >= 14 (to display the 42 pattern)
         # and <= 48 (to display the full maze in screen)
-        elif not isinstance(val_width, int) or not (14 <= val_width <= 48):
+        elif not isinstance(val_width, int) or not (14 <= val_width <= 46):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
-                " width -> 42\n"
+                " width -> 46\n"
                  )
-            dic['width'] = 42
+            dic['width'] = 46
         # ------------------------ handel height value ------------------------
         if val_height is None:
             print(
                     f"\n{Color().YELLOW}'height' not exist."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}"
-                    " height -> 24\n"
+                    " height -> 22\n"
                  )
-            dic['height'] = 24
-            val_height = 24
+            dic['height'] = 22
+            val_height = 22
         # the maze must be >= 10 (to display the 42 pattern)
         # and <= 24 (to less space for HUD + display the full maze in screen)
-        elif not isinstance(val_height, int) or not (10 <= val_height <= 24):
+        elif not isinstance(val_height, int) or not (10 <= val_height <= 22):
             print(
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}"
                     " height -> 24\n"
                  )
-            dic['height'] = 24
+            dic['height'] = 22
         # ------------------------ handel pacgums value -----------------------
         if val_pacgum is None:
             print(
