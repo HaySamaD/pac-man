@@ -24,3 +24,4 @@ clean:
 	@rm -rf src/d5_display/__pycache__ src/d5_display/d1_helpers/__pycache__ src/d5_display/d2_game_pages/__pycache__
 	@rm -rf src/d6_game_loop/__pycache__
 	@rm -rf src/d5_display/d3_gameplay/__pycache__
+	@rm -rf .mypy_cache

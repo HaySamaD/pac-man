@@ -3,36 +3,23 @@
                                                             and event routing.
 """
 
+from .m1_menu_events import MenuEvent
+from .m2_highscores_events import HighScoresEvent
+from .m3_instructions_events import InstructionsEvents
+from .m4_play_events import PlayEvent
+from .m5_pause_events import PauseEvent
 from .m6_win_loss_events import WinLossEvent
 
-from .m5_pause_events import PauseEvent
-
-from .m4_play_events import PlayEvent
-
-from .m3_instructions_events import InstructionsEvents
-
-from .m2_highscores_events import HighScoresEvent
-
-from .m1_menu_events import MenuEvent
-
+from ..d1_helpers import Rgb
+from ..d2_classes import Config, GameState
+from ..d4_parsing_highscores import HigherScore
 from ..d5_display import (
                             Printer, MainPage, HighscoresPage,
                             InstructionsPage, HUD, PausePage,
-                            LossPage, WinPage
+                            LossPage, WinPage, Gameplay
                          )
-from ..d2_classes import GameState
-
-from ..d4_parsing_highscores import HigherScore
 
 import pygame
-
-from typing import Tuple
-
-from ..d1_helpers import Rgb
-
-from ..d5_display import Gameplay
-
-from ..d2_classes import Config
 
 
 class GameLoop:
@@ -53,7 +40,6 @@ class GameLoop:
                     highscores_obj: HigherScore,
                     game_state: GameState,
                     nbr_levels: int,
-                    resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
         """
             Initializes game loop controller with configuration and state
@@ -66,12 +52,29 @@ class GameLoop:
                 resolution (Tuple[int, int]): Window resolution width and
                                                                         height.
         """
-        # ----------------- init params -----------------
+        # ----------------------- init params --------------------------
         self.config: Config = config
         self.highscores_obj: HigherScore = highscores_obj
         self.game_state: GameState = game_state
         self.nbr_levels = nbr_levels
-        self.width, self.height = resolution
+
+        # ------------------------ init pygame -------------------------
+        pygame.init()
+
+        infos = pygame.display.Info()
+        self.width, self.height = infos.current_w, infos.current_h
+
+        self.screen = pygame.display.set_mode((self.width, self.height))
+        self.title_font = pygame.font.Font(None, 135)
+        self.content_font = pygame.font.Font(None, 35)
+        self.clock = pygame.time.Clock()
+        # --------------------- the printer object ---------------------
+        self.p: Printer = Printer(
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    (self.width, self.height)
+                                 )
 
     # =========================================================================
     def game_loop(self) -> None:
@@ -79,67 +82,81 @@ class GameLoop:
             Runs the main application execution loop, handling events and
             rendering active pages at 60 FPS.
         """
-        # ---------------------------- init pygame ----------------------------
-        pygame.init()
-        screen = pygame.display.set_mode(
-                                            (self.width, self.height),
-                                            pygame.FULLSCREEN
-                                        )
-        clock = pygame.time.Clock()
-        # ---------------------------- init fonts -----------------------------
-        title_font = pygame.font.Font(None, 135)
-        content_font = pygame.font.Font(None, 35)
-        # --------------------------- printer text ----------------------------
-        p: Printer = Printer(
-                                screen,
-                                title_font,
-                                content_font,
-                                (self.width, self.height)
-                            )
-        # ----------------------------------------------------------------------
+        # ---------------------- the pages of each menu -----------------------
         main_page: MainPage = MainPage(
-                    screen, title_font, content_font, (self.width, self.height)
+                                        self.screen,
+                                        self.title_font,
+                                        self.content_font,
+                                        (self.width, self.height)
                                       )
         higher_score_page: HighscoresPage = HighscoresPage(
-                        self.highscores_obj, screen, title_font, content_font
+                                                        self.highscores_obj,
+                                                        self.screen,
+                                                        self.title_font,
+                                                        self.content_font
                                                           )
         instruction_page: InstructionsPage = InstructionsPage(
-                    screen, title_font, content_font, (self.width, self.height)
-                                                            )
+                                                    self.screen,
+                                                    self.title_font,
+                                                    self.content_font,
+                                                    (self.width, self.height)
+                                                             )
         hud: HUD = HUD(
-                        self.game_state, screen, title_font, content_font,
+                        self.game_state,
+                        self.screen,
+                        self.title_font,
+                        self.content_font,
                         (self.width, self.height)
                       )
         pause_page: PausePage = PausePage(
-                    screen, title_font, content_font, (self.width, self.height)
+                                            self.screen,
+                                            self.title_font,
+                                            self.content_font,
+                                            (self.width, self.height)
                                          )
         loss_page: LossPage = LossPage(
-                    screen, title_font, content_font, (self.width, self.height)
+                                        self.screen,
+                                        self.title_font,
+                                        self.content_font,
+                                        self.game_state,
+                                        (self.width, self.height)
                                       )
         win_page: WinPage = WinPage(
-                    screen, title_font, content_font, (self.width, self.height)
+                                    self.screen,
+                                    self.title_font,
+                                    self.content_font,
+                                    self.game_state,
+                                    (self.width, self.height)
                                    )
         gameplay_page: Gameplay = Gameplay(
-                                        screen, self.config, self.game_state
+                                            self.screen,
+                                            self.config,
+                                            self.game_state
                                           )
-        # ----------------------------------------------------------------------
+        # ---------------------- the events of each page ----------------------
         menu_event_obj: MenuEvent = MenuEvent(main_page, self.game_state)
         highscore_event_obj: HighScoresEvent = HighScoresEvent(
-                                            self.game_state, higher_score_page
+                                                            self.game_state,
+                                                            higher_score_page
                                                               )
         instruction_event_obj: InstructionsEvents = InstructionsEvents(
-                                            instruction_page, self.game_state
+                                                            instruction_page,
+                                                            self.game_state
                                                                       )
         play_event_obj: PlayEvent = PlayEvent(self.game_state, self.nbr_levels)
         pause_event_obj: PauseEvent = PauseEvent(pause_page, self.game_state)
         win_loss_event: WinLossEvent = WinLossEvent(
-                        self.highscores_obj, p, self.game_state, self.height
+                                                        self.highscores_obj,
+                                                        self.p,
+                                                        self.game_state,
+                                                        self.height
                                                    )
-        # ----------------------------------------------------------------------
+        # ---------------------------------------------------------------------
         running: bool = True
         player_name: str = ""
         while running:
-            screen.fill(Rgb.BLACK)
+            self.screen.fill(Rgb.BLACK)
+            # ------------------------------------------------------------
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -157,6 +174,7 @@ class GameLoop:
                         pause_event_obj.run_event(event, gameplay_page)
                     elif self.game_state.status in ["LOSS", "WIN"]:
                         player_name = win_loss_event.run_event(event)
+            # ------------------------------------------------------------
             if self.game_state.status == "MENU":
                 main_page.print_main_menu()
             elif self.game_state.status == "HIGHSCORES":
@@ -170,49 +188,26 @@ class GameLoop:
                 pause_page.print_pause_page()
             elif self.game_state.status == "LOSS":
                 loss_page.print_loss_page()
-                p.print_text(
-                                f"Your score is: {self.game_state.score}",
-                                (-99, self.height * 0.25),
-                                Rgb.WHITE,
-                                Rgb.BLACK,
-                                True
-                            )
-                p.print_text(
-                                player_name,
-                                (-99, self.height * 0.35),
-                                Rgb.GREEN,
-                                Rgb.BLACK,
-                                True
-                            )
+                self.p.print_text(
+                                    player_name,
+                                    (-99, self.height * 0.35),
+                                    Rgb.GREEN,
+                                    Rgb.BLACK,
+                                    center_text=True
+                                 )
             elif self.game_state.status == "WIN":
                 win_page.print_win_page()
-                p.print_text(
-                                f"Your score is: {self.game_state.score}",
-                                (-99, self.height * 0.25),
-                                Rgb.WHITE,
-                                Rgb.BLACK,
-                                True
-                            )
-                p.print_text(
-                                player_name,
-                                (-99, self.height * 0.35),
-                                Rgb.GREEN,
-                                Rgb.BLACK,
-                                True
-                            )
-            clock.tick(60)
+                self.p.print_text(
+                                    player_name,
+                                    (-99, self.height * 0.35),
+                                    Rgb.GREEN,
+                                    Rgb.BLACK,
+                                    center_text=True
+                                 )
+            self.clock.tick(60)
             pygame.display.update()
         # ------------------------------------------------------------------
         pygame.quit()
 
-
-#    links:
-#    - game loop:
-#        https://www.pygame.fr/en/bb-01-game-loop/
-#    - using Font for text:
-#        https://www.geeksforgeeks.org/python/python-display-text-to-pygame-window/
-#    - using clock for FPS:
-#        https://gamedevacademy.org/pygame-fps-tutorial/
-#    - print a text in pygame:
-#        https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/
-#
+# get the size of any screen :
+#        https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size

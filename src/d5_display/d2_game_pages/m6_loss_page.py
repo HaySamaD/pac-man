@@ -5,6 +5,8 @@ from typing import Tuple
 from pygame import font
 from pygame.surface import Surface
 
+from ...d2_classes import GameState
+
 from ...d1_helpers import Rgb
 from .. import Printer
 
@@ -26,6 +28,7 @@ class LossPage:
                     screen: Surface,
                     title_font: font.Font,
                     content_font: font.Font,
+                    game_state: GameState,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -41,6 +44,7 @@ class LossPage:
         self.width, self.height = resolution
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
+        self.game_state: GameState = game_state
         self.screen = screen
         # ----------------------------------------------------
         self.p: Printer = Printer(
@@ -55,9 +59,15 @@ class LossPage:
         """Renders game over title and name input instructions."""
         # ---------------------------------------------------------------
         self.p.print_title("Game Over: Try again", Rgb.ORANGE, Rgb.BLACK)
+        self.p.print_text(
+                            f"Your score is: {self.game_state.score}",
+                            (-99, self.height * 0.25),
+                            Rgb.WHITE,
+                            Rgb.BLACK,
+                            center_text=True
+                          )
         # ---------------------------------------------------------------
         y: int | float = self.height * 0.17
-        # ---------------------------------------------------------------
         self.p.print_text(
                             "Enter your name below to save your score",
                             (-99, y),

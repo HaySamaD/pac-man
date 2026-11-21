@@ -6,6 +6,7 @@ from pygame import font
 from pygame.surface import Surface
 
 from ...d1_helpers import Rgb
+from ...d2_classes import GameState
 from .. import Printer
 
 
@@ -26,6 +27,7 @@ class WinPage:
                     screen: Surface,
                     title_font: font.Font,
                     content_font: font.Font,
+                    game_state: GameState,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -42,6 +44,7 @@ class WinPage:
         self.screen: Surface = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
+        self.game_state: GameState = game_state
         self.width, self.height = resolution
         # ----------------------------------------------------
         self.p: Printer = Printer(
@@ -56,6 +59,13 @@ class WinPage:
         """Renders victory congratulation title and name entry prompt."""
         # ------------------------------------------------------------------
         self.p.print_title("Congratulations: You Win", Rgb.GREEN, Rgb.BLACK)
+        self.p.print_text(
+                            f"Your score is: {self.game_state.score}",
+                            (-99, self.height * 0.25),
+                            Rgb.WHITE,
+                            Rgb.BLACK,
+                            center_text=True
+                         )
         # ------------------------------------------------------------------
         x: int | float = -99
         y: int | float = self.height * 0.17

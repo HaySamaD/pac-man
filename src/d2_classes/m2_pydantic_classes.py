@@ -105,10 +105,10 @@ class Level(BaseModel):
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
-        elif val_pacgum > (dic['width'] * dic['height']) - 23:
+        elif val_pacgum > (dic['width'] * dic['height']) - 22:
             print(
                 f"\n{Color().YELLOW}'nbr of pacgums more than map capacity "
-                f"must be btwn 1 and {(dic['width'] * dic['height']) - 23}"
+                f"must be btwn 1 and {(dic['width'] * dic['height']) - 22}"
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
                 " pacgum -> 42\n"
                  )
