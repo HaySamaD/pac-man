@@ -1,2 +1,4 @@
 1 - When eyes arrive to spawn point freez 6 sec and then ghost spawning
-2 - fix: pacman spawn to have no pacgum there
+2 - fix: pacman spawn to have no pacgum there (Fix)
+3 - Remove Fullscreen and update the HUD and max maze size default value (Fix)
+4 - Ghost algo update: Remove first 5s no target, Remove return to spawn point always target player,
