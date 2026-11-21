@@ -62,10 +62,10 @@ class Level(BaseModel):
             dic['width'] = 46
             val_width = 46
         # the maze must be >= 14 (to display the 42 pattern)
-        # and <= 48 (to display the full maze in screen)
+        # and <= 46 (to display the full maze in screen)
         elif not isinstance(val_width, int) or not (14 <= val_width <= 46):
             print(
-                f"\n{Color().YELLOW}'width' not a integer or out of [14, 48]."
+                f"\n{Color().YELLOW}'width' not a integer or out of [14, 46]."
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
                 " width -> 46\n"
                  )
@@ -80,12 +80,12 @@ class Level(BaseModel):
             dic['height'] = 22
             val_height = 22
         # the maze must be >= 10 (to display the 42 pattern)
-        # and <= 24 (to less space for HUD + display the full maze in screen)
+        # and <= 22 (to less space for HUD + display the full maze in screen)
         elif not isinstance(val_height, int) or not (10 <= val_height <= 22):
             print(
-                    f"\n{Color().YELLOW}'height' not a int or out of [10, 24]."
+                    f"\n{Color().YELLOW}'height' not a int or out of [10, 22]."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}"
-                    " height -> 24\n"
+                    " height -> 22\n"
                  )
             dic['height'] = 22
         # ------------------------ handel pacgums value -----------------------
