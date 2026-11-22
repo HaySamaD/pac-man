@@ -28,6 +28,7 @@ class PausePage:
                     screen: Surface,
                     title_font: font.Font,
                     content_font: font.Font,
+                    p: Printer,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -43,14 +44,8 @@ class PausePage:
         self.screen = screen
         self.title_font = title_font
         self.content_font: font.Font = content_font
+        self.p: Printer = p
         self.width, self.height = resolution
-        # ---------------------------------------------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
         # ---------------------------------------------------
         self.pos: int = 0
 

@@ -60,7 +60,7 @@ INSTRUCTIONS: List[str] = [
     "5. Cheat Mode:",
     " - Press C to toggle Cheat Mode ON or OFF.",
     " - When Cheat Mode is active, you have two options:",
-    "   - Press S to toggle Super Mode ON or OFF.",
+    "   - Press i to toggle invincibility Mode ON or OFF.",
     "   - Press N to toggle Level Skip ON or OFF (or skip to the next level).",
                         ]
 

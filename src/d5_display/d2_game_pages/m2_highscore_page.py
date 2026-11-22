@@ -30,6 +30,7 @@ class HighscoresPage:
                     screen: Surface,
                     title_font: font.Font,
                     content_font: font.Font,
+                    p: Printer,
                     resolution: Tuple[int, int] = (1920, 1080)
                 ) -> None:
         """
@@ -47,14 +48,8 @@ class HighscoresPage:
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
+        self.p: Printer = p
         self.width, self.height = resolution
-        # ---------------------------------------------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
         # -- the selected option now is the highscores text -
         self.pos: int = 0
 

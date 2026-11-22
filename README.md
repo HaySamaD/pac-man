@@ -13,6 +13,7 @@ This project is a Python recreation of the classic arcade game **Pac-Man** using
 * Python 3.10 or higher
 * Pygame library
 * Pydantic library
+* Pyinstaller library
 
 ### Installation & Execution
 
@@ -157,20 +158,19 @@ The file stores a list of player objects. Each object contains:
 
 The code is organized into clear packages:
 
-* `d0_helpers`: Colors (`Rgb`, `Color`), static menus, instructions text, and safe file reading utilities.
-* `d1_classes`: Pydantic validation models (`Config`, `Level`, `NameScore`) and dataclasses (`GameState`, `Player`, `Ghost`, `Position`).
-* `d2_parsing_config_file`: Parses custom JSON config files and handles errors safely.
-* `d3_parsing_highscores`: Loads, updates, sorts, and saves top 10 highscores.
-* `d4_display`: UI rendering engine (`Printer`) for Main Menu, Highscores page, Instructions page, HUD, Pause, Win, and Loss screens.
-* `d6_game_loop`: Handles keyboard events and game state transitions.
+* `d1_helpers`: Colors (`Rgb`, `Color`), static menus, instructions text, and safe file reading utilities.
+* `d2_classes`: Pydantic validation models (`Config`, `Level`, `NameScore`) and dataclasses (`GameState`, `Player`, `Ghost`, `Position`).
+* `d3_parsing_config_file`: Parses custom JSON config files and handles errors safely.
+* `d4_parsing_highscores`: Reads and saves the Top 10 high scores in a JSON file.
 
-*(Note: Gameplay logic and maze rendering by aryahi will be added to `d7_gameplay` later).*
+* `d5_display`: UI rendering engine (`Printer`) for Main Menu, Highscores page, Instructions page, HUD, Pause, Win, Loss, and the gameplay screens.
+* `d6_game_loop`: Handles keyboard events and game state transitions.
 
 ---
 
 ## Project Management
 
-You can view the project timeline, task breakdown, and risk analysis in the [Project Management Document](./project_management.md).
+You can view the project timeline, task breakdown, and others in the [Project Management Document](./project_management).
 
 ---
 
@@ -180,6 +180,7 @@ You can view the project timeline, task breakdown, and risk analysis in the [Pro
 * [Game Loop](https://www.pygame.fr/en/bb-01-game-loop/)
 * [Display Text](https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/)
 * [FPS Tutorial](https://gamedevacademy.org/pygame-fps-tutorial/)
+* [Get the size of any screen](https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size)
 
 ### AI Usage Disclosure
 Throughout the development of this project, the AI was used exclusively as a supporting tool to better understand the general project requirements and architecture, as well as to generate custom test cases for verifying and testing the codebase's functionality.

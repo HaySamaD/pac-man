@@ -37,7 +37,7 @@ class MenuEvent:
         self.main_obj: MainPage = main_obj
         self.game_state: GameState = game_state
 
-    # =======================================================
+    # ==========================================================================
     def run_event(self, event: Event, running: bool) -> bool:
         """
             Processes keyboard events to navigate menu items and update game

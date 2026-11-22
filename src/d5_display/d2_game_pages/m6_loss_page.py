@@ -29,6 +29,7 @@ class LossPage:
                     title_font: font.Font,
                     content_font: font.Font,
                     game_state: GameState,
+                    p: Printer,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -41,18 +42,12 @@ class LossPage:
                 resolution (Tuple[int, int]): Screen resolution.
         """
         # ------------------- init params --------------------
-        self.width, self.height = resolution
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
         self.game_state: GameState = game_state
         self.screen = screen
-        # ----------------------------------------------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
+        self.p: Printer = p
+        self.width, self.height = resolution
 
     # ===================================================================
     def print_loss_page(self) -> None:

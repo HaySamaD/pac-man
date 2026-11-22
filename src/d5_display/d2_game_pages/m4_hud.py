@@ -29,7 +29,8 @@ class HUD:
                     screen: Surface,
                     title_font: font.Font,
                     content_font: font.Font,
-                    resolution: Tuple[int, int]
+                    p: Printer,
+                    resolution: Tuple[int, int],
                 ) -> None:
         """
             Initializes HUD with game state reference and display settings.
@@ -44,17 +45,11 @@ class HUD:
 
         # ------------------- init params -------------------
         self.game_state: GameState = game_state
-        self.width, self.height = resolution
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
-        # ---------------------------------------------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
+        self.p: Printer = p
+        self.width, self.height = resolution
 
     # ==================================================================
     def print_hud(self) -> None:

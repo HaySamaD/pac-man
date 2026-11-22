@@ -28,6 +28,7 @@ class MainPage:
                     screen: Any,
                     title_font: font.Font,
                     content_font: font.Font,
+                    p: Printer,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -44,14 +45,8 @@ class MainPage:
         self.screen = screen
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
+        self.p: Printer = p
         self.width, self.height = resolution
-        # ---------------- the printer class ----------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
         # ----- the selected option now is 'Start Game' -----
         self.pos: int = 0
 

@@ -28,6 +28,7 @@ class WinPage:
                     title_font: font.Font,
                     content_font: font.Font,
                     game_state: GameState,
+                    p: Printer,
                     resolution: Tuple[int, int]
                 ) -> None:
         """
@@ -45,14 +46,8 @@ class WinPage:
         self.title_font: font.Font = title_font
         self.content_font: font.Font = content_font
         self.game_state: GameState = game_state
+        self.p: Printer = p
         self.width, self.height = resolution
-        # ----------------------------------------------------
-        self.p: Printer = Printer(
-                                    self.screen,
-                                    self.title_font,
-                                    self.content_font,
-                                    (self.width, self.height)
-                                 )
 
     # ======================================================================
     def print_win_page(self) -> None:

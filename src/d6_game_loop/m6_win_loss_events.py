@@ -7,8 +7,6 @@ from ..d2_classes import GameState
 
 from ..d4_parsing_highscores import HigherScore
 
-from ..d5_display import Printer
-
 
 class WinLossEvent:
     """
@@ -24,7 +22,6 @@ class WinLossEvent:
     def __init__(
                     self,
                     highscores_obj: HigherScore,
-                    p: Printer,
                     game_status: GameState,
                     height: int
                 ) -> None:
@@ -39,7 +36,6 @@ class WinLossEvent:
         """
         # ------------------------------------------------
         self.highscores_obj: HigherScore = highscores_obj
-        self.p: Printer = p
         self.game_status: GameState = game_status
         self.height: int = height
         self.player_name: str = ""
