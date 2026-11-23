@@ -204,7 +204,7 @@ class Gameplay:
                 self.player.position.y,
                 self.player.current_direction,
                 blinky_pos,
-                occupied,
+                occupied
             )
 
         self.check_collisions()
