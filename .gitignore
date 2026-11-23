@@ -28,3 +28,4 @@ src/d6_game_loop/.mypy_cache
 build
 dist
 highscores.json
+assets/instructions/instructions_resized.jpeg

@@ -9,15 +9,15 @@ class CheatController:
     def __init__(self) -> None:
         """Initialize cheat flags to disabled state."""
         self.is_enabled: bool = False
-        self.god_mode: bool = False
+        self.invinc_mode: bool = False
 
     def handle_key(self, key: int) -> bool:
         """Process cheat keys; return True if level skip is triggered."""
         if key == pygame.K_c:
             self.is_enabled = not self.is_enabled
-            self.god_mode = self.god_mode and self.is_enabled
-        elif self.is_enabled and key == pygame.K_g:
-            self.god_mode = not self.god_mode
+            self.invinc_mode = self.invinc_mode and self.is_enabled
+        elif self.is_enabled and key == pygame.K_i:
+            self.invinc_mode = not self.invinc_mode
         elif self.is_enabled and key == pygame.K_n:
             return True
         return False

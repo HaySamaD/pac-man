@@ -115,7 +115,7 @@ class Gameplay:
 
     def lose_life(self) -> bool:
         """Decrement lives unless in god mode; return True on game loss."""
-        if self.cheat.god_mode:
+        if self.cheat.invinc_mode:
             return False
         self.game_state.lives -= 1
         if self.game_state.lives <= 0:
@@ -163,7 +163,7 @@ class Gameplay:
                     ghost.make_eaten()
                     self.game_state.score += self.config.points_per_ghost
                 else:
-                    if not self.cheat.god_mode and not self.lose_life():
+                    if not self.cheat.invinc_mode and not self.lose_life():
                         self.reset_positions()
                     break
 
