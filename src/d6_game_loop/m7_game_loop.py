@@ -10,7 +10,7 @@ from .m4_play_events import PlayEvent
 from .m5_pause_events import PauseEvent
 from .m6_win_loss_events import WinLossEvent
 
-from ..d1_helpers import Rgb
+from ..d1_helpers import Rgb, Resizer
 from ..d2_classes import Config, GameState
 from ..d4_parsing_highscores import HigherScore
 from ..d5_display import (
@@ -62,10 +62,16 @@ class GameLoop:
         # ------------- get the resolution of the monitor --------------
         infos = pygame.display.Info()
         self.width, self.height = infos.current_w, infos.current_h
-        # --------------------------------------------------------------
+        # ---------------------- init the screen -----------------------
         self.screen = pygame.display.set_mode((self.width, self.height))
+        # ------------------------- init font --------------------------
         self.title_font = pygame.font.Font(None, 135)
         self.content_font = pygame.font.Font(None, 35)
+        # ----------- resize and load the instruction image ------------
+        Resizer((self.width, self.height))
+        self.image = pygame.image.load(
+                                "assets/instructions/instructions_resized.jpeg"
+                                      )
         self.clock = pygame.time.Clock()
         # --------------------- the printer object ---------------------
         self.p: Printer = Printer(
@@ -102,6 +108,7 @@ class GameLoop:
                                                     self.title_font,
                                                     self.content_font,
                                                     self.p,
+                                                    self.image,
                                                     (self.width, self.height)
                                                              )
         hud: HUD = HUD(

@@ -181,6 +181,8 @@ You can view the project timeline, task breakdown, and others in the [Project Ma
 * [Display Text](https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/)
 * [FPS Tutorial](https://gamedevacademy.org/pygame-fps-tutorial/)
 * [Get the size of any screen](https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size)
+* [Load a image in pygame](https://gamedevacademy.org/pygame-image-load-tutorial-complete-guide/)
+* [Resizing a image using pillow (PIL)](https://dev.to/mary_kariuki_944435052aa9/how-to-resize-an-image-in-python-using-pil-pillow-5hmj)
 
 ### AI Usage Disclosure
 Throughout the development of this project, the AI was used exclusively as a supporting tool to better understand the general project requirements and architecture, as well as to generate custom test cases for verifying and testing the codebase's functionality.
