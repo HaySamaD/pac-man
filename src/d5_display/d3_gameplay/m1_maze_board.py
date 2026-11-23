@@ -26,7 +26,7 @@ class MazeBoard:
             width, height, seed
         )
         self.grid: List[List[int]] = [
-            [TileType.EMPTY for _ in range(width)] for _ in range(height)
+            [TileType.EMPTY] * width for _ in range(height)
         ]
         self.remaining_pacgums: int = 0
         self.populate_collectibles(max_pacgums)
@@ -48,43 +48,34 @@ class MazeBoard:
         except Exception:
             pass
 
-        fallback: List[List[int]] = [[0] * width for _ in range(height)]
-        for col in range(width):
-            fallback[0][col] |= 1
-            fallback[height - 1][col] |= 4
-        for row in range(height):
-            fallback[row][0] |= 8
-            fallback[row][width - 1] |= 2
+        fallback = [[0] * width for _ in range(height)]
+        for x in range(width):
+            fallback[0][x] |= 1
+            fallback[height - 1][x] |= 4
+        for y in range(height):
+            fallback[y][0] |= 8
+            fallback[y][width - 1] |= 2
         return fallback
 
     def populate_collectibles(self, max_pacgums: int) -> None:
         """Place pacgums in corridors and super-pacgums in the 4 corners."""
-        valid_paths: List[Tuple[int, int]] = []
+        paths: List[Tuple[int, int]] = []
         for y in range(self.height):
             for x in range(self.width):
                 if self.raw_maze[y][x] == 15:
                     self.grid[y][x] = TileType.WALL
                 else:
-                    valid_paths.append((x, y))
+                    paths.append((x, y))
 
-        corners: List[Tuple[int, int]] = [
-            self.find_corner_spawn(0),
-            self.find_corner_spawn(1),
-            self.find_corner_spawn(2),
-            self.find_corner_spawn(3),
-        ]
-        corner_set: Set[Tuple[int, int]] = set(corners)
-        regular_paths: List[Tuple[int, int]] = [
-            pos for pos in valid_paths if pos not in corner_set
-        ]
+        corners = {self.find_corner_spawn(i) for i in range(4)}
+        regular = [pos for pos in paths if pos not in corners]
+        count = min(max_pacgums, len(regular))
 
-        count: int = max_pacgums
-
-        for x, y in random.sample(regular_paths, count):
+        for x, y in random.sample(regular, count):
             self.grid[y][x] = TileType.PACGUM
             self.remaining_pacgums += 1
 
-        for cx, cy in corner_set:
+        for cx, cy in corners:
             if not self.is_wall(cx, cy):
                 self.grid[cy][cx] = TileType.SUPER_PACGUM
                 self.remaining_pacgums += 1
@@ -95,18 +86,16 @@ class MazeBoard:
 
     def is_wall(self, x: int, y: int) -> bool:
         """Return True if cell is out of bounds or a solid block wall."""
-        if not self.is_in_bounds(x, y):
-            return True
-        return self.grid[y][x] == TileType.WALL
+        return not self.is_in_bounds(x, y) or self.grid[y][x] == TileType.WALL
 
     def can_move(self, x: int, y: int, direction: str) -> bool:
         """Check if movement from (x, y) in direction is unobstructed."""
         if direction == Direction.NONE:
             return True
-        if not self.is_in_bounds(x, y):
-            return False
-        bit: int = Direction.WALL_BITS[direction]
-        if bool(self.raw_maze[y][x] & bit):
+        if (
+            not self.is_in_bounds(x, y)
+            or self.raw_maze[y][x] & Direction.WALL_BITS[direction]
+        ):
             return False
         dx, dy = Direction.VECTORS[direction]
         return not self.is_wall(x + dx, y + dy)
@@ -115,7 +104,7 @@ class MazeBoard:
         """Consume pacgum at (x, y) and decrement remaining count."""
         if not self.is_in_bounds(x, y):
             return None
-        val: int = self.grid[y][x]
+        val = self.grid[y][x]
         if val in (TileType.PACGUM, TileType.SUPER_PACGUM):
             self.grid[y][x] = TileType.EMPTY
             self.remaining_pacgums -= 1
@@ -124,35 +113,35 @@ class MazeBoard:
 
     def find_nearest_open(self, start_x: int, start_y: int) -> Tuple[int, int]:
         """Find closest walkable cell starting from given coordinates."""
-        if not self.is_wall(start_x, start_y):
-            return start_x, start_y
-        queue: Deque[Tuple[int, int]] = deque([(start_x, start_y)])
-        visited: Set[Tuple[int, int]] = {(start_x, start_y)}
+        sx = max(0, min(self.width - 1, start_x))
+        sy = max(0, min(self.height - 1, start_y))
+        queue: Deque[Tuple[int, int]] = deque([(sx, sy)])
+        visited: Set[Tuple[int, int]] = {(sx, sy)}
+
         while queue:
             cx, cy = queue.popleft()
             if not self.is_wall(cx, cy):
                 return cx, cy
-            for dx, dy in ((0, -1), (0, 1), (-1, 0), (1, 0)):
+            for dx, dy in ((0, -1), (-1, 0), (0, 1), (1, 0)):
                 nx, ny = cx + dx, cy + dy
                 if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
                     visited.add((nx, ny))
                     queue.append((nx, ny))
-        return start_x, start_y
+        return sx, sy
 
     def find_spawn_position(self) -> Tuple[int, int]:
-        """Return walkable cell nearest to the center of the maze.
-            And remove pucgums from respown point."""
+        """Return center walkable cell and clear any pacgum on it."""
         x, y = self.find_nearest_open(self.width // 2, self.height // 2)
-        self.grid[y][x] = TileType.EMPTY
+        self.consume_tile(x, y)
         return x, y
 
     def find_corner_spawn(self, corner_index: int) -> Tuple[int, int]:
         """Return walkable cell nearest to one of the 4 corners."""
-        corners: List[Tuple[int, int]] = [
+        corners = (
             (0, 0),
             (self.width - 1, 0),
             (0, self.height - 1),
             (self.width - 1, self.height - 1),
-        ]
+        )
         cx, cy = corners[corner_index % 4]
         return self.find_nearest_open(cx, cy)

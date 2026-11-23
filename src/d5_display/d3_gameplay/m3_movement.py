@@ -29,9 +29,25 @@ class MovementController:
 
     def get_grid_coords(self) -> Tuple[int, int]:
         """Return rounded grid coordinates from current pixel position."""
-        gx: int = int(round(self.pixel_x / self.tile_size))
-        gy: int = int(round(self.pixel_y / self.tile_size))
-        return gx, gy
+        return (
+            int(round(self.pixel_x / self.tile_size)),
+            int(round(self.pixel_y / self.tile_size)),
+        )
+
+    def set_grid_pos(self, gx: int, gy: int) -> None:
+        """Snap both grid and pixel coordinates to a specific tile."""
+        self.position.x = gx
+        self.position.y = gy
+        self.pixel_x = float(gx * self.tile_size)
+        self.pixel_y = float(gy * self.tile_size)
+
+    def is_near_center(self) -> bool:
+        """Return True when entity is aligned near its current tile center."""
+        gx, gy = self.get_grid_coords()
+        return (
+            abs(self.pixel_x - gx * self.tile_size) <= self.speed
+            and abs(self.pixel_y - gy * self.tile_size) <= self.speed
+        )
 
     def distance_sq(self, x1: float, y1: float, x2: float, y2: float) -> float:
         """Compute squared Euclidean distance between two points."""
@@ -39,50 +55,40 @@ class MovementController:
 
     def advance_position(self, board: MazeBoard) -> None:
         """Move entity along corridors and align on intersections."""
-        ts: int = self.tile_size
         gx, gy = self.get_grid_coords()
-        target_px: float = float(gx * ts)
-        target_py: float = float(gy * ts)
-        dist_x: float = abs(self.pixel_x - target_px)
-        dist_y: float = abs(self.pixel_y - target_py)
-
+        tx: float = float(gx * self.tile_size)
+        ty: float = float(gy * self.tile_size)
         opp: str = Direction.OPPOSITES[self.current_direction]
+
         if (
-                self.next_direction == opp
-                and self.next_direction != Direction.NONE
-           ):
+            self.next_direction != Direction.NONE
+            and self.next_direction == opp
+        ):
             self.current_direction = self.next_direction
         elif (
             self.next_direction != self.current_direction
-            and dist_x <= self.speed
-            and dist_y <= self.speed
+            and self.is_near_center()
+            and board.can_move(gx, gy, self.next_direction)
         ):
-            if board.can_move(gx, gy, self.next_direction):
-                self.pixel_x = target_px
-                self.pixel_y = target_py
-                self.current_direction = self.next_direction
+            self.pixel_x, self.pixel_y = tx, ty
+            self.current_direction = self.next_direction
 
         dx, dy = Direction.VECTORS[self.current_direction]
         past_center: bool = (
-            (dx > 0 and self.pixel_x >= target_px)
-            or (dx < 0 and self.pixel_x <= target_px)
-            or (dy > 0 and self.pixel_y >= target_py)
-            or (dy < 0 and self.pixel_y <= target_py)
+            dx * (self.pixel_x - tx) + dy * (self.pixel_y - ty) >= 0
         )
-        can_go: bool = not past_center or board.can_move(
-            gx, gy, self.current_direction
+        can_go: bool = (
+            not past_center
+            or board.can_move(gx, gy, self.current_direction)
         )
-
-        if can_go and self.current_direction != Direction.NONE:
+        if self.current_direction != Direction.NONE and can_go:
             self.pixel_x += dx * self.speed
             self.pixel_y += dy * self.speed
             self.anim_counter += 1
             if self.anim_counter % 6 == 0:
                 self.anim_frame = (self.anim_frame + 1) % 4
         else:
-            self.pixel_x = target_px
-            self.pixel_y = target_py
+            self.pixel_x, self.pixel_y = tx, ty
             self.current_direction = Direction.NONE
 
-        self.position.x = int(round(self.pixel_x / ts))
-        self.position.y = int(round(self.pixel_y / ts))
+        self.position.x, self.position.y = self.get_grid_coords()

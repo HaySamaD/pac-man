@@ -1,4 +1,4 @@
-"""Unified gameplay facade connecting Core UI with Maze, Entities, and AI."""
+"""Unified gameplay facade connecting Core UI with Maze, Entities, AI."""
 
 import random
 from typing import List, Optional, Set, Tuple
@@ -6,14 +6,21 @@ from typing import List, Optional, Set, Tuple
 import pygame
 from pygame.event import Event
 
-from ...d2_classes import Config, GameState, Ghost, Player, Position
-from ...d2_classes import Direction, TileType
-from .m2_bfs import Bfs
-from .m7_cheat_mode import CheatController
-from .m5_ghost import GhostController
+from ...d2_classes import (
+    Config,
+    Direction,
+    GameState,
+    Ghost,
+    Player,
+    Position,
+    TileType,
+)
 from .m1_maze_board import MazeBoard
+from .m2_bfs import Bfs
 from .m4_player import PlayerController
+from .m5_ghost import GhostController
 from .m6_renderer import Renderer
+from .m7_cheat_mode import CheatController
 
 
 class Gameplay:
@@ -32,19 +39,11 @@ class Gameplay:
         self.tile_size: int = 40
         self.speed: int = 2
         self.frame_counter: int = 0
-        self.wave_timer: int = 0
         self.session_active: bool = False
 
         self.bfs: Bfs = Bfs()
         self.cheat: CheatController = CheatController()
-
-        lvl_cfg = self.config.levels_data[0]
-        self.board: MazeBoard = MazeBoard(
-            lvl_cfg.width,
-            lvl_cfg.height,
-            self.config.seed,
-            lvl_cfg.pacgum,
-        )
+        self.board: MazeBoard = self.make_board(1)
         self.renderer: Renderer = Renderer(
             self.screen, self.board, self.tile_size
         )
@@ -63,22 +62,27 @@ class Gameplay:
         )
         self.ghosts: List[GhostController] = self.create_ghosts()
 
+    def make_board(self, level_num: int) -> MazeBoard:
+        """Build a MazeBoard for the given 1-based level number."""
+        max_idx: int = len(self.config.levels_data) - 1
+        lvl = self.config.levels_data[max(0, min(max_idx, level_num - 1))]
+        seed: int = (
+            self.config.seed
+            if level_num == 1
+            else random.randint(1000, 999999)
+        )
+        return MazeBoard(lvl.width, lvl.height, seed, lvl.pacgum)
+
     def create_ghosts(self) -> List[GhostController]:
         """Instantiate the 4 arcade ghosts in their respective corners."""
-        names: List[str] = ["blinky", "pinky", "inky", "clyde"]
+        names: Tuple[str, ...] = ("blinky", "pinky", "inky", "clyde")
         result: List[GhostController] = []
         for idx, name in enumerate(names):
             cx, cy = self.board.find_corner_spawn(idx)
-            g_data: Ghost = Ghost(
-                Position(cx, cy), name, False, Direction.UP
-            )
+            g_data: Ghost = Ghost(Position(cx, cy), name, False, Direction.UP)
             result.append(
                 GhostController(
-                    g_data,
-                    (cx, cy),
-                    self.bfs,
-                    self.tile_size,
-                    self.speed,
+                    g_data, (cx, cy), self.bfs, self.tile_size, self.speed
                 )
             )
         return result
@@ -95,28 +99,13 @@ class Gameplay:
 
     def load_level(self, level_num: int) -> None:
         """Build maze for specified level index and reset positions."""
-        idx: int = max(
-            0, min(len(self.config.levels_data) - 1, level_num - 1)
-        )
-        lvl_cfg = self.config.levels_data[idx]
-        seed: int = (
-            self.config.seed
-            if level_num == 1
-            else random.randint(1000, 999999)
-        )
-        self.board = MazeBoard(
-                                lvl_cfg.width,
-                                lvl_cfg.height,
-                                seed,
-                                lvl_cfg.pacgum,
-                              )
+        self.board = self.make_board(level_num)
         self.renderer.set_board(self.board)
         self.spawn_pos = self.board.find_spawn_position()
         self.ghosts = self.create_ghosts()
         self.reset_positions()
         self.game_state.time_left = self.config.level_max_time
         self.frame_counter = 0
-        self.wave_timer = 0
 
     def reset_positions(self) -> None:
         """Respawn player at center and ghosts at their home corners."""
@@ -124,10 +113,21 @@ class Gameplay:
         for ghost in self.ghosts:
             ghost.reset_to_spawn()
 
+    def lose_life(self) -> bool:
+        """Decrement lives unless in god mode; return True on game loss."""
+        if self.cheat.god_mode:
+            return False
+        self.game_state.lives -= 1
+        if self.game_state.lives <= 0:
+            self.player.data.is_alive = False
+            self.game_state.status = "LOSS"
+            self.session_active = False
+            return True
+        return False
+
     def advance_level(self) -> None:
         """Move to next level or trigger WIN status if all completed."""
-        total_levels: int = len(self.config.levels_data)
-        if self.game_state.level < total_levels:
+        if self.game_state.level < len(self.config.levels_data):
             self.game_state.level += 1
             self.load_level(self.game_state.level)
         else:
@@ -145,7 +145,10 @@ class Gameplay:
     def check_collisions(self) -> None:
         """Handle overlaps between player and ghosts."""
         thresh_sq: float = (self.tile_size * 0.7) ** 2
+        px, py = self.player.position.x, self.player.position.y
         for ghost in self.ghosts:
+            if ghost.is_eaten:
+                continue
             dist_sq: float = self.player.distance_sq(
                 self.player.pixel_x,
                 self.player.pixel_y,
@@ -153,22 +156,15 @@ class Gameplay:
                 ghost.pixel_y,
             )
             same_tile: bool = (
-                ghost.position.x == self.player.position.x
-                and ghost.position.y == self.player.position.y
+                ghost.position.x == px and ghost.position.y == py
             )
             if dist_sq <= thresh_sq or same_tile:
-                if ghost.data.is_edible and not ghost.is_eaten:
+                if ghost.data.is_edible:
                     ghost.make_eaten()
                     self.game_state.score += self.config.points_per_ghost
-                elif not ghost.data.is_edible and not ghost.is_eaten:
-                    if not self.cheat.god_mode:
-                        self.game_state.lives -= 1
-                        if self.game_state.lives <= 0:
-                            self.player.data.is_alive = False
-                            self.game_state.status = "LOSS"
-                            self.session_active = False
-                        else:
-                            self.reset_positions()
+                else:
+                    if not self.cheat.god_mode and not self.lose_life():
+                        self.reset_positions()
                     break
 
     def update_and_render(self) -> None:
@@ -177,18 +173,11 @@ class Gameplay:
             self.start_new_game()
 
         self.frame_counter += 1
-        self.wave_timer = (self.wave_timer + 1) % 1620
-        is_scatter: bool = self.wave_timer < 420
-
         if self.frame_counter % 60 == 0:
             self.game_state.time_left -= 1
             if self.game_state.time_left <= 0:
-                if not self.cheat.god_mode:
-                    self.game_state.lives -= 1
-                    if self.game_state.lives <= 0:
-                        self.game_state.status = "LOSS"
-                        self.session_active = False
-                        return
+                if self.lose_life():
+                    return
                 self.game_state.time_left = self.config.level_max_time
                 self.reset_positions()
 
@@ -216,7 +205,6 @@ class Gameplay:
                 self.player.current_direction,
                 blinky_pos,
                 occupied,
-                is_scatter,
             )
 
         self.check_collisions()
