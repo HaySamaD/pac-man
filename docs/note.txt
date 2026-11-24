@@ -5,8 +5,8 @@
 5 - Ghosts should not be aligned with one another, and orange ghost must flee if it comes within a distance of 8 cells from the player. (Fixed)
 
 clean:
-    1 - makefile
+    1 - makefile (DOne)
     2 - remove docs
 
 add:
-    in redeme, adding the ressources of aryahi
+    in redeme, adding the ressources of aryahi. (Done)

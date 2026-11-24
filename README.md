@@ -217,12 +217,19 @@ You can view the project timeline, task breakdown, and others in the [Project Ma
 ## Resources & AI Usage
 
 ### References & Links
+
+#### Core System & UI (`ybajdou`)
 * [Game Loop](https://www.pygame.fr/en/bb-01-game-loop/)
 * [Display Text](https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/)
 * [FPS Tutorial](https://gamedevacademy.org/pygame-fps-tutorial/)
 * [Get the size of any screen](https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size)
 * [Load a image in pygame](https://gamedevacademy.org/pygame-image-load-tutorial-complete-guide/)
 * [Resizing a image using pillow (PIL)](https://dev.to/mary_kariuki_944435052aa9/how-to-resize-an-image-in-python-using-pil-pillow-5hmj)
+
+#### Gameplay, AI & Rendering (`aryahi`)
+* **Pac-Man Ghost AI Personality & Targeting:** [The Pac-Man Dossier by Jamey Pittman](https://cs.au.dk/~ocaprani/GameAI/PacMan/The%20Pac-Man%20Dossier.pdf) & [Pac-Man Patterns — Ghost Movement](https://dev.to/code2bits/pac-man-patterns--ghost-movement-strategy-pattern-1k1a?_sp=ee6d56cc-48d7-4d2e-9df8-786ed73897a8)
+* **BFS Pathfinding & Distance Maps:** [Breadth-First Search Distance Maps on Grids (Red Blob Games)](https://www.redblobgames.com/pathfinding/distance-to-any/)
+* **MLX-Style Pixel Rendering (`set_at` & `blit`):** [pygame.Surface Reference Guide (Pygame Docs)](https://www.pygame.org/docs/ref/surface.html)
 
 ### AI Usage Disclosure
 Throughout the development of this project, the AI was used exclusively as a supporting tool to better understand the general project requirements and architecture, as well as to generate custom test cases for verifying and testing the codebase's functionality.
