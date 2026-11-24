@@ -141,6 +141,7 @@ class Gameplay:
         self.player.handle_key(event.key)
         if self.cheat.handle_key(event.key):
             self.advance_level()
+        self.player.speed = self.speed * self.cheat.speed_mult
 
     def check_collisions(self) -> None:
         """Handle overlaps between player and ghosts."""
