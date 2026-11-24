@@ -25,7 +25,7 @@ class Bfs:
         target_x: int,
         target_y: int,
     ) -> Dict[Tuple[int, int], int]:
-        """Compute shortest corridor step distance from all cells to target."""
+        """Compute shortest corridor distance from all cells to target."""
         tx, ty = board.find_nearest_open(target_x, target_y)
         queue: Deque[Tuple[int, int]] = deque([(tx, ty)])
         dist: Dict[Tuple[int, int], int] = {(tx, ty): 0}

@@ -4,7 +4,7 @@ import pygame
 
 
 class CheatController:
-    """Manages cheat mode activation, god mode, and level skipping."""
+    """Manages cheat mode activation, invincibility mode, and level skipping."""
 
     def __init__(self) -> None:
         """Initialize cheat flags to disabled state."""

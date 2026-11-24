@@ -114,7 +114,7 @@ class Gameplay:
             ghost.reset_to_spawn()
 
     def lose_life(self) -> bool:
-        """Decrement lives unless in god mode; return True on game loss."""
+        """Decrement lives unless invincible; return True on game loss."""
         if self.cheat.invinc_mode:
             return False
         self.game_state.lives -= 1
@@ -196,8 +196,11 @@ class Gameplay:
             occupied: Set[Tuple[int, int]] = {
                 (g.position.x, g.position.y)
                 for g in self.ghosts
-                if g is not ghost
+                if g is not ghost and not g.is_eaten
             }
+            occupied.discard(
+                (self.player.position.x, self.player.position.y)
+            )
             ghost.update(
                 self.board,
                 self.player.position.x,

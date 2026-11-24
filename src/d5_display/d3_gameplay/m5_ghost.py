@@ -57,6 +57,7 @@ class GhostController(MovementController):
         self.normal_speed: int = normal_speed
         self.frightened_speed: int = max(1, normal_speed // 2)
         self.is_eaten: bool = False
+        self.is_fleeing: bool = False
         self.frightened_timer: int = 0
         self.respawn_timer: int = 0
         self.last_heading: str = self.current_direction
@@ -72,6 +73,7 @@ class GhostController(MovementController):
     def make_eaten(self) -> None:
         """Mark ghost as eaten so eyes return to spawn point."""
         self.is_eaten = True
+        self.is_fleeing = False
         self.data.is_edible = False
         self.frightened_timer = 0
         self.respawn_timer = 0
@@ -84,6 +86,7 @@ class GhostController(MovementController):
         self.next_direction = Direction.UP
         self.last_heading = Direction.UP
         self.is_eaten = False
+        self.is_fleeing = False
         self.data.is_edible = False
         self.frightened_timer = 0
         self.respawn_timer = 0
@@ -100,7 +103,10 @@ class GhostController(MovementController):
         if self.is_eaten:
             return self.spawn_x, self.spawn_y
 
-        dx, dy = Direction.VECTORS[player_dir]
+        p_dir: str = (
+            player_dir if player_dir != Direction.NONE else Direction.RIGHT
+        )
+        dx, dy = Direction.VECTORS[p_dir]
         if self.data.ghost_type == "pinky":
             return player_x + 4 * dx, player_y + 4 * dy
         if self.data.ghost_type == "inky":
@@ -116,50 +122,68 @@ class GhostController(MovementController):
         gy: int,
         player_x: int,
         player_y: int,
-        player_dir: str,
         target: Tuple[int, int],
         occupied: Set[Tuple[int, int]],
     ) -> None:
         """Select optimal valid corridor direction without reversing."""
+        p_map: Dict[Tuple[int, int], int] = {}
+        clyde_flee: bool = False
+        if not self.is_eaten and (
+            self.data.is_edible or self.data.ghost_type == "clyde"
+        ):
+            p_map = self.bfs.get_distance_map(board, player_x, player_y)
+            clyde_flee = (
+                self.data.ghost_type == "clyde"
+                and p_map.get((gx, gy), 999) <= 8
+            )
+
+        just_fled: bool = clyde_flee and not self.is_fleeing
+        self.is_fleeing = clyde_flee
+
         heading: str = (
             self.current_direction
             if self.current_direction != Direction.NONE
             else self.last_heading
         )
-        forbidden: str = Direction.OPPOSITES[heading]
+        forbidden: str = (
+            Direction.NONE if just_fled else Direction.OPPOSITES[heading]
+        )
         order: List[str] = self.PRIORITIES.get(
             self.data.ghost_type, self.PRIORITIES["blinky"]
         )
         valid: List[str] = [
             d for d in order if d != forbidden and board.can_move(gx, gy, d)
         ]
-        if not valid and board.can_move(gx, gy, forbidden):
+        if (
+            not valid
+            and forbidden != Direction.NONE
+            and board.can_move(gx, gy, forbidden)
+        ):
             valid = [forbidden]
         if not valid:
             return
 
-        fleeing: bool = self.data.is_edible and not self.is_eaten
-        tx, ty = (player_x, player_y) if fleeing else target
-        dist_map: Dict[Tuple[int, int], int] = self.bfs.get_distance_map(
-            board, tx, ty
+        fleeing: bool = not self.is_eaten and (
+            self.data.is_edible or clyde_flee
         )
-        opp_player: str = Direction.OPPOSITES[player_dir]
+        dist_map: Dict[Tuple[int, int], int] = (
+            p_map
+            if fleeing
+            else self.bfs.get_distance_map(board, target[0], target[1])
+        )
 
         best_dir: str = valid[0]
         best_cost: int = 999999
         for d in valid:
             dx, dy = Direction.VECTORS[d]
             npos: Tuple[int, int] = (gx + dx, gy + dy)
-            if fleeing:
-                cost: int = -dist_map.get(npos, 0) * 10
-                if d == opp_player:
-                    cost -= 5
-                if npos in occupied:
-                    cost += 40
-            else:
-                cost = dist_map.get(npos, 999999)
-                if not self.is_eaten and npos in occupied:
-                    cost += 4
+            cost: int = (
+                -dist_map.get(npos, 0)
+                if fleeing
+                else dist_map.get(npos, 999999)
+            )
+            if not self.is_eaten and npos in occupied:
+                cost += 3
             if cost < best_cost:
                 best_cost = cost
                 best_dir = d
@@ -199,14 +223,7 @@ class GhostController(MovementController):
                 player_x, player_y, player_dir, blinky_pos
             )
             self.choose_next_direction(
-                board,
-                gx,
-                gy,
-                player_x,
-                player_y,
-                player_dir,
-                target,
-                occupied,
+                board, gx, gy, player_x, player_y, target, occupied
             )
 
         if self.current_direction != Direction.NONE:

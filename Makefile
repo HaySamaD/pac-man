@@ -1,6 +1,13 @@
-install:
-	pip install -r dependensices/requirements.txt
-	pip install dependensices/mazegenerator-2.1.0-py3-none-any.whl
+VENV   = .myenv
+PYTHON = $(VENV)/bin/python
+
+$(VENV):
+	python3 -m venv $(VENV)
+
+install: $(VENV)
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -r dependensices/requirements.txt
+	$(PYTHON) -m pip install dependensices/mazegenerator-2.1.0-py3-none-any.whl
 
 run:
 	python3 pac-man.py config.json
