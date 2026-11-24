@@ -37,7 +37,7 @@ class Parser:
         self.config_txt: str = Helper().read_config_file(config_path)
         self.net_txt: str = self.skip_comments()
         self.conf_dic: Dict[str, Any] = self.str_to_dict()
-        self.conf_obj: Config = self.create_game_conf_obj()
+        self.conf_obj: Config = self.create_config_obj()
 
     # =========================================================================
     def skip_comments(self) -> str:
@@ -84,7 +84,7 @@ class Parser:
         return conf_dic
 
     # =========================================================================
-    def create_game_conf_obj(self) -> Config:
+    def create_config_obj(self) -> Config:
         """
             Validates configuration dictionary data and instantiates a Config
                                                             Pydantic object.

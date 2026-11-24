@@ -23,7 +23,7 @@ class HigherScore:
                                                                 player scores.
     """
 
-    def __init__(self, highscores_path: str):
+    def __init__(self, highscores_path: str) -> None:
         """
             Initializes highscore manager, reads storage file, parses scores,
                                                         and extracts top 10.

@@ -6,7 +6,7 @@
 
 from .m1_colors_RGB import Color
 
-from typing import List, Dict
+from typing import Any, List, Dict
 
 import json
 
@@ -39,7 +39,7 @@ class Helper:
             with open(file_path, 'r') as f:
                 content: str = f.read()
             return content
-        except OSError:
+        except (OSError, Exception):
             raise Exception(
                             f"{Color().RED}❌Error: '{file_path}' not exist or "
                             f"access denied{Color().WHITE}"
@@ -47,7 +47,7 @@ class Helper:
         # ---------------------------------------------------------------------
 
     # ==========================================================================
-    def read_highscore_file(self, file_path: str) -> List[Dict]:
+    def read_highscore_file(self, file_path: str) -> List[Any]:
         """
             Loads highscore JSON file and returns data as list of dictionaries.
 
@@ -69,8 +69,7 @@ class Helper:
             print(
                     f"\n{Color().YELLOW}❌Error: '{file_path}' not exist or "
                     "access denied\n"
-                    f"{Color().GREEN}add default value [] and switch to "
-                    f"'highscores.json'{Color().WHITE}"
+                    f"{Color().GREEN}add default value []{Color().WHITE}"
                  )
             return []
         except json.JSONDecodeError:

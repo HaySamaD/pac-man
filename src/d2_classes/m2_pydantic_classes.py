@@ -63,7 +63,11 @@ class Level(BaseModel):
             val_width = 46
         # the maze must be >= 14 (to display the 42 pattern)
         # and <= 46 (to display the full maze in screen)
-        elif not isinstance(val_width, int) or not (14 <= val_width <= 46):
+        elif (
+                isinstance(val_width, bool)
+                or not isinstance(val_width, int)
+                or not (14 <= val_width <= 46)
+             ):
             print(
                 f"\n{Color().YELLOW}'width' not a integer or out of [14, 46]."
                 f"\n{Color().GREEN}default value is added{Color().WHITE}"
@@ -81,7 +85,11 @@ class Level(BaseModel):
             val_height = 22
         # the maze must be >= 10 (to display the 42 pattern)
         # and <= 22 (to less space for HUD + display the full maze in screen)
-        elif not isinstance(val_height, int) or not (10 <= val_height <= 22):
+        elif (
+                isinstance(val_height, bool)
+                or not isinstance(val_height, int)
+                or not (10 <= val_height <= 22)
+             ):
             print(
                     f"\n{Color().YELLOW}'height' not a int or out of [10, 22]."
                     f"\n{Color().GREEN}default value is added{Color().WHITE}"
@@ -97,7 +105,11 @@ class Level(BaseModel):
                  )
             dic['pacgum'] = 42
             val_pacgum = 42
-        elif not isinstance(val_pacgum, int) or val_pacgum < 1:
+        elif (
+                isinstance(val_pacgum, bool)
+                or not isinstance(val_pacgum, int)
+                or val_pacgum < 1
+             ):
             print(
                     f"\n{Color().YELLOW}'pacgum' not a integer or < 1.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}"
@@ -194,7 +206,7 @@ class Config(BaseModel):
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
                  )
             dic['levels_data'] = [
-                                {"width": 42, "height": 42, "pacgum": 42}
+                                {"width": 42, "height": 22, "pacgum": 42}
                                 for _ in range(10)
                                  ]
             levels_data = dic['levels_data']
@@ -205,7 +217,7 @@ class Config(BaseModel):
                  )
             for _ in range(0, 10 - len(levels_data)):
                 dic['levels_data'].append(
-                                    {"width": 20, "height": 20, "pacgum": 42}
+                                    {"width": 42, "height": 22, "pacgum": 42}
                                          )
                 levels_data = dic['levels_data']
         # ---------------------- handel lives List[Dict] ----------------------
@@ -217,7 +229,11 @@ class Config(BaseModel):
                  )
             dic['lives'] = 3
             lives = 3
-        if not isinstance(lives, int) or lives < 1:
+        if (
+                isinstance(lives, bool)
+                or not isinstance(lives, int)
+                or lives < 1
+           ):
             print(
                     f"\n{Color().YELLOW}'lives' not a number or less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}\n"
@@ -234,7 +250,11 @@ class Config(BaseModel):
                  )
             dic['points_per_pacgum'] = 10
             points_per_pacgum = 10
-        if not isinstance(points_per_pacgum, int) or points_per_pacgum < 1:
+        if (
+                isinstance(points_per_pacgum, bool)
+                or not isinstance(points_per_pacgum, int)
+                or points_per_pacgum < 1
+           ):
             print(
                     f"\n{Color().YELLOW}'points_per_pacgum' not a number or"
                     " less than 1.\n"
@@ -253,7 +273,8 @@ class Config(BaseModel):
             dic['points_per_super_pacgum'] = 20
             points_per_super_pacgum = 20
         if (
-                not isinstance(points_per_super_pacgum, int)
+                isinstance(points_per_super_pacgum, bool)
+                or not isinstance(points_per_super_pacgum, int)
                 or points_per_super_pacgum < 1
            ):
             print(
@@ -273,7 +294,10 @@ class Config(BaseModel):
                  )
             dic['points_per_ghost'] = 40
             points_per_ghost = 40
-        elif not isinstance(points_per_ghost, int) or points_per_ghost < 1:
+        elif (
+                isinstance(points_per_ghost, bool)
+                or not isinstance(points_per_ghost, int)
+                or points_per_ghost < 1):
             print(
                     f"\n{Color().YELLOW}'points_per_ghost' not a number or"
                     " less than 1.\n"
@@ -291,7 +315,7 @@ class Config(BaseModel):
                  )
             dic['seed'] = 42
             seed = 42
-        elif not isinstance(seed, int) or seed < 1:
+        elif (isinstance(seed, bool) or not isinstance(seed, int) or seed < 1):
             print(
                     f"\n{Color().YELLOW}'seed' not a number or "
                     "less than 1.\n"
@@ -309,7 +333,11 @@ class Config(BaseModel):
                  )
             dic['level_max_time'] = 90
             level_max_time = 90
-        if not isinstance(level_max_time, int) or level_max_time < 1:
+        if (
+                isinstance(level_max_time, bool)
+                or not isinstance(level_max_time, int)
+                or level_max_time < 1
+           ):
             print(
                     f"\n{Color().YELLOW}'level_max_time' not a number or"
                     "less than 1.\n"
@@ -375,7 +403,7 @@ class NameScore(BaseModel):
                  )
             dic['name'] = 'Player'
             name = 'Player'
-        elif not all(c.isalnum() or c.isspace() for c in name):
+        elif not all([c.isalnum() or c.isspace() for c in name]):
             print(
                     f"\n{Color().YELLOW}One of chars of '{name}' not a alnum"
                     f" or space\n"
@@ -385,7 +413,11 @@ class NameScore(BaseModel):
             dic['name'] = 'Player'
             name = 'Player'
         # --------------------- verefy score is a integer -------------------
-        if not isinstance(score, int) or score < 0:
+        if (
+                isinstance(score, bool)
+                or not isinstance(score, int)
+                or score < 0
+           ):
             print(
                     f"\n{Color().YELLOW}'{score}' is not a integer or negative"
                     f"\n{Color().GREEN}default value is added{Color().WHITE}"
