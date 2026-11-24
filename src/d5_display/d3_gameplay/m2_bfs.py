@@ -4,20 +4,11 @@ from collections import deque
 from typing import Deque, Dict, Tuple
 
 from ...d2_classes import Direction
-from .m1_maze_board import MazeBoard
+from .m1_maze_board import CARDINAL, MazeBoard
 
 
 class Bfs:
     """Provides shortest-path distance maps across maze corridors."""
-
-    def __init__(self) -> None:
-        """Initialize BFS helper with cardinal search order."""
-        self.dirs: Tuple[str, str, str, str] = (
-            Direction.UP,
-            Direction.LEFT,
-            Direction.DOWN,
-            Direction.RIGHT,
-        )
 
     def get_distance_map(
         self,
@@ -33,7 +24,7 @@ class Bfs:
         while queue:
             cx, cy = queue.popleft()
             next_dist = dist[(cx, cy)] + 1
-            for d in self.dirs:
+            for d in CARDINAL:
                 dx, dy = Direction.VECTORS[d]
                 nx, ny = cx + dx, cy + dy
                 if (

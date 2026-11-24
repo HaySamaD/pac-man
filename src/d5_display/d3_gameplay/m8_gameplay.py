@@ -36,10 +36,12 @@ class Gameplay:
         self.screen: pygame.Surface = screen
         self.config: Config = config
         self.game_state: GameState = game_state
+        self.game_state.lives = config.lives
+        self.game_state.time_left = config.level_max_time
         self.tile_size: int = 40
         self.speed: int = 2
         self.frame_counter: int = 0
-        self.session_active: bool = False
+        self.session_active: bool = True
 
         self.bfs: Bfs = Bfs()
         self.cheat: CheatController = CheatController()
@@ -54,18 +56,13 @@ class Gameplay:
             True,
         )
         self.player: PlayerController = PlayerController(
-            p_data,
-            self.tile_size,
-            self.speed,
-            self.config.points_per_pacgum,
-            self.config.points_per_super_pacgum,
+            p_data, self.config, self.tile_size, self.speed
         )
         self.ghosts: List[GhostController] = self.create_ghosts()
 
     def make_board(self, level_num: int) -> MazeBoard:
         """Build a MazeBoard for the given 1-based level number."""
-        max_idx: int = len(self.config.levels_data) - 1
-        lvl = self.config.levels_data[max(0, min(max_idx, level_num - 1))]
+        lvl = self.config.levels_data[level_num - 1]
         seed: int = (
             self.config.seed
             if level_num == 1
@@ -92,7 +89,6 @@ class Gameplay:
         self.game_state.score = 0
         self.game_state.lives = self.config.lives
         self.game_state.level = 1
-        self.game_state.time_left = self.config.level_max_time
         self.player.data.is_alive = True
         self.session_active = True
         self.load_level(1)
@@ -149,21 +145,17 @@ class Gameplay:
         for ghost in self.ghosts:
             if ghost.is_eaten:
                 continue
-            dist_sq: float = self.player.distance_sq(
-                self.player.pixel_x,
-                self.player.pixel_y,
-                ghost.pixel_x,
-                ghost.pixel_y,
-            )
+            dx: float = self.player.pixel_x - ghost.pixel_x
+            dy: float = self.player.pixel_y - ghost.pixel_y
             same_tile: bool = (
                 ghost.position.x == px and ghost.position.y == py
             )
-            if dist_sq <= thresh_sq or same_tile:
+            if dx * dx + dy * dy <= thresh_sq or same_tile:
                 if ghost.data.is_edible:
                     ghost.make_eaten()
                     self.game_state.score += self.config.points_per_ghost
-                else:
-                    if not self.cheat.invinc_mode and not self.lose_life():
+                elif not self.cheat.invinc_mode:
+                    if not self.lose_life():
                         self.reset_positions()
                     break
 
@@ -188,6 +180,10 @@ class Gameplay:
             for ghost in self.ghosts:
                 ghost.set_frightened(420)
 
+        p_pos: Tuple[int, int] = (
+            self.player.position.x,
+            self.player.position.y,
+        )
         blinky_pos: Tuple[int, int] = (
             self.ghosts[0].position.x,
             self.ghosts[0].position.y,
@@ -198,16 +194,14 @@ class Gameplay:
                 for g in self.ghosts
                 if g is not ghost and not g.is_eaten
             }
-            occupied.discard(
-                (self.player.position.x, self.player.position.y)
-            )
+            occupied.discard(p_pos)
             ghost.update(
                 self.board,
-                self.player.position.x,
-                self.player.position.y,
+                p_pos[0],
+                p_pos[1],
                 self.player.current_direction,
                 blinky_pos,
-                occupied
+                occupied,
             )
 
         self.check_collisions()

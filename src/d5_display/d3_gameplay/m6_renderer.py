@@ -5,8 +5,9 @@ from typing import Dict, List, Optional, Tuple
 
 import pygame
 
-from ...d2_classes import TileType
-from .m1_maze_board import MazeBoard
+from ...d1_helpers import Rgb
+from ...d2_classes import Direction, TileType
+from .m1_maze_board import CARDINAL, MazeBoard
 from .m4_player import PlayerController
 from .m5_ghost import GhostController
 
@@ -30,10 +31,6 @@ class Renderer:
         self.offset_x: int = 0
         self.offset_y: int = 0
 
-        self.color_bg: Tuple[int, int, int] = (12, 12, 16)
-        self.color_wall: Tuple[int, int, int] = (40, 65, 135)
-        self.color_block: Tuple[int, int, int] = (30, 48, 102)
-
         self.tile_imgs: Dict[int, pygame.Surface] = {
             TileType.PACGUM: self.load_img("assets/pacgum's", "pacgum.png"),
             TileType.SUPER_PACGUM: self.load_img(
@@ -56,10 +53,7 @@ class Renderer:
 
     def load_img(self, *parts: str) -> pygame.Surface:
         """Load an image file with alpha transparency."""
-        img: pygame.Surface = pygame.image.load(
-            os.path.join(*parts)
-        ).convert_alpha()
-        return img
+        return pygame.image.load(os.path.join(*parts)).convert_alpha()
 
     def set_board(self, board: MazeBoard) -> None:
         """Update active maze board and bake its static walls."""
@@ -92,7 +86,7 @@ class Renderer:
 
     def bake_walls(self) -> None:
         """Pre-render maze background and walls once per level."""
-        self.fill_rect(0, 0, self.screen_w, self.screen_h, self.color_bg)
+        self.fill_rect(0, 0, self.screen_w, self.screen_h, Rgb.BLACK)
         ts: int = self.tile_size
         th: int = 2
         for y in range(self.board.height):
@@ -103,33 +97,33 @@ class Renderer:
                 px: int = self.offset_x + x * ts
                 py: int = self.offset_y + y * ts
                 if val == 15:
-                    self.fill_rect(px, py, ts, ts, self.color_block)
+                    self.fill_rect(px, py, ts, ts, Rgb.BLOCK_BLUE)
                 if val & 1:
-                    self.fill_rect(px, py, ts, th, self.color_wall)
+                    self.fill_rect(px, py, ts, th, Rgb.WALL_BLUE)
                 if val & 2:
                     self.fill_rect(
-                        px + ts - th, py, th, ts, self.color_wall
+                        px + ts - th, py, th, ts, Rgb.WALL_BLUE
                     )
                 if val & 4:
                     self.fill_rect(
-                        px, py + ts - th, ts, th, self.color_wall
+                        px, py + ts - th, ts, th, Rgb.WALL_BLUE
                     )
                 if val & 8:
-                    self.fill_rect(px, py, th, ts, self.color_wall)
+                    self.fill_rect(px, py, th, ts, Rgb.WALL_BLUE)
 
     def load_player_sprites(
         self, folder: str
     ) -> Dict[str, List[pygame.Surface]]:
         """Load Pac-Man animation frames for each movement direction."""
         sprites: Dict[str, List[pygame.Surface]] = {}
-        for d in ("RIGHT", "LEFT", "UP", "DOWN"):
+        for d in CARDINAL:
             low: str = d.lower()
             frames: List[pygame.Surface] = [
                 self.load_img(folder, f"pacman_{low}_{state}.png")
                 for state in ("closed", "half", "open")
             ]
             sprites[d] = [frames[0], frames[1], frames[2], frames[1]]
-        sprites["NONE"] = sprites["RIGHT"]
+        sprites[Direction.NONE] = sprites[Direction.RIGHT]
         return sprites
 
     def load_ghost_sprites(
@@ -168,11 +162,12 @@ class Renderer:
             )
             col: str = "white" if flash else "blue"
             return self.ghost_sprites["frightened"][col][f_idx]
-        g_name: str = ghost.data.ghost_type.lower()
-        g_dir: str = ghost.current_direction.lower()
-        if g_dir not in ("right", "left", "up", "down"):
-            g_dir = "up"
-        return self.ghost_sprites[g_name][g_dir][f_idx]
+        g_dir: str = (
+            "up"
+            if ghost.current_direction == Direction.NONE
+            else ghost.current_direction.lower()
+        )
+        return self.ghost_sprites[ghost.data.ghost_type][g_dir][f_idx]
 
     def render_all(
         self,
@@ -193,11 +188,11 @@ class Renderer:
                         (self.offset_x + x * ts, self.offset_y + y * ts),
                     )
 
-        p_dir: str = player.data.direction
-        if p_dir == "NONE" or p_dir not in self.player_sprites:
-            p_dir = player.next_direction
-        if p_dir == "NONE" or p_dir not in self.player_sprites:
-            p_dir = "RIGHT"
+        p_dir: str = (
+            player.next_direction
+            if player.data.direction == Direction.NONE
+            else player.data.direction
+        )
         p_sprite: pygame.Surface = self.player_sprites[p_dir][
             player.anim_frame % 4
         ]

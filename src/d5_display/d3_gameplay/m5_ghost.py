@@ -3,7 +3,7 @@
 from typing import Dict, List, Set, Tuple
 
 from ...d2_classes import Direction, Ghost
-from .m1_maze_board import MazeBoard
+from .m1_maze_board import CARDINAL, MazeBoard
 from .m2_bfs import Bfs
 from .m3_movement import MovementController
 
@@ -11,31 +11,26 @@ from .m3_movement import MovementController
 class GhostController(MovementController):
     """Controls autonomous behavior for Blinky, Pinky, Inky, and Clyde."""
 
-    PRIORITIES: Dict[str, List[str]] = {
-        "blinky": [
-            Direction.UP,
-            Direction.LEFT,
-            Direction.DOWN,
-            Direction.RIGHT,
-        ],
-        "pinky": [
+    PRIORITIES: Dict[str, Tuple[str, str, str, str]] = {
+        "blinky": CARDINAL,
+        "pinky": (
             Direction.LEFT,
             Direction.UP,
             Direction.RIGHT,
             Direction.DOWN,
-        ],
-        "inky": [
+        ),
+        "inky": (
             Direction.DOWN,
             Direction.RIGHT,
             Direction.UP,
             Direction.LEFT,
-        ],
-        "clyde": [
+        ),
+        "clyde": (
             Direction.RIGHT,
             Direction.DOWN,
             Direction.LEFT,
             Direction.UP,
-        ],
+        ),
     }
 
     def __init__(
@@ -51,8 +46,7 @@ class GhostController(MovementController):
             ghost_data.position, ghost_data.direction, tile_size, normal_speed
         )
         self.data: Ghost = ghost_data
-        self.spawn_x: int = spawn_corner[0]
-        self.spawn_y: int = spawn_corner[1]
+        self.spawn_x, self.spawn_y = spawn_corner
         self.bfs: Bfs = bfs
         self.normal_speed: int = normal_speed
         self.frightened_speed: int = max(1, normal_speed // 2)
@@ -60,7 +54,6 @@ class GhostController(MovementController):
         self.is_fleeing: bool = False
         self.frightened_timer: int = 0
         self.respawn_timer: int = 0
-        self.last_heading: str = self.current_direction
 
     def set_frightened(self, duration_frames: int = 420) -> None:
         """Activate frightened state and reverse current heading."""
@@ -76,7 +69,6 @@ class GhostController(MovementController):
         self.is_fleeing = False
         self.data.is_edible = False
         self.frightened_timer = 0
-        self.respawn_timer = 0
         self.speed = self.normal_speed
 
     def reset_to_spawn(self) -> None:
@@ -84,7 +76,6 @@ class GhostController(MovementController):
         self.set_grid_pos(self.spawn_x, self.spawn_y)
         self.current_direction = Direction.UP
         self.next_direction = Direction.UP
-        self.last_heading = Direction.UP
         self.is_eaten = False
         self.is_fleeing = False
         self.data.is_edible = False
@@ -126,31 +117,28 @@ class GhostController(MovementController):
         occupied: Set[Tuple[int, int]],
     ) -> None:
         """Select optimal valid corridor direction without reversing."""
-        p_map: Dict[Tuple[int, int], int] = {}
-        clyde_flee: bool = False
+        fleeing: bool = False
+        dist_map: Dict[Tuple[int, int], int] = {}
         if not self.is_eaten and (
             self.data.is_edible or self.data.ghost_type == "clyde"
         ):
-            p_map = self.bfs.get_distance_map(board, player_x, player_y)
-            clyde_flee = (
+            dist_map = self.bfs.get_distance_map(board, player_x, player_y)
+            fleeing = self.data.is_edible or (
                 self.data.ghost_type == "clyde"
-                and p_map.get((gx, gy), 999) <= 8
+                and dist_map.get((gx, gy), 999) <= 8
             )
 
-        just_fled: bool = clyde_flee and not self.is_fleeing
-        self.is_fleeing = clyde_flee
-
-        heading: str = (
-            self.current_direction
-            if self.current_direction != Direction.NONE
-            else self.last_heading
-        )
+        just_fled: bool = fleeing and not self.is_fleeing
+        self.is_fleeing = fleeing
         forbidden: str = (
-            Direction.NONE if just_fled else Direction.OPPOSITES[heading]
+            Direction.NONE
+            if just_fled
+            else Direction.OPPOSITES[self.current_direction]
         )
-        order: List[str] = self.PRIORITIES.get(
-            self.data.ghost_type, self.PRIORITIES["blinky"]
-        )
+
+        order: Tuple[str, str, str, str] = self.PRIORITIES[
+            self.data.ghost_type
+        ]
         valid: List[str] = [
             d for d in order if d != forbidden and board.can_move(gx, gy, d)
         ]
@@ -163,25 +151,16 @@ class GhostController(MovementController):
         if not valid:
             return
 
-        fleeing: bool = not self.is_eaten and (
-            self.data.is_edible or clyde_flee
-        )
-        dist_map: Dict[Tuple[int, int], int] = (
-            p_map
-            if fleeing
-            else self.bfs.get_distance_map(board, target[0], target[1])
-        )
+        if not dist_map:
+            dist_map = self.bfs.get_distance_map(board, target[0], target[1])
 
         best_dir: str = valid[0]
         best_cost: int = 999999
         for d in valid:
             dx, dy = Direction.VECTORS[d]
             npos: Tuple[int, int] = (gx + dx, gy + dy)
-            cost: int = (
-                -dist_map.get(npos, 0)
-                if fleeing
-                else dist_map.get(npos, 999999)
-            )
+            dist: int = dist_map.get(npos, 999999)
+            cost: int = -dist if fleeing else dist
             if not self.is_eaten and npos in occupied:
                 cost += 3
             if cost < best_cost:
@@ -226,7 +205,5 @@ class GhostController(MovementController):
                 board, gx, gy, player_x, player_y, target, occupied
             )
 
-        if self.current_direction != Direction.NONE:
-            self.last_heading = self.current_direction
         self.advance_position(board)
         self.data.direction = self.current_direction

@@ -49,10 +49,6 @@ class MovementController:
             and abs(self.pixel_y - gy * self.tile_size) <= self.speed
         )
 
-    def distance_sq(self, x1: float, y1: float, x2: float, y2: float) -> float:
-        """Compute squared Euclidean distance between two points."""
-        return (x1 - x2) ** 2 + (y1 - y2) ** 2
-
     def advance_position(self, board: MazeBoard) -> None:
         """Move entity along corridors and align on intersections."""
         gx, gy = self.get_grid_coords()

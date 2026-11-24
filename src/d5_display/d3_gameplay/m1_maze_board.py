@@ -8,6 +8,13 @@ from mazegenerator import MazeGenerator
 
 from ...d2_classes import Direction, TileType
 
+CARDINAL: Tuple[str, str, str, str] = (
+    Direction.UP,
+    Direction.LEFT,
+    Direction.DOWN,
+    Direction.RIGHT,
+)
+
 
 class MazeBoard:
     """Stores maze grid, wall bitmasks, and collectible items."""
@@ -122,7 +129,8 @@ class MazeBoard:
             cx, cy = queue.popleft()
             if not self.is_wall(cx, cy):
                 return cx, cy
-            for dx, dy in ((0, -1), (-1, 0), (0, 1), (1, 0)):
+            for d in CARDINAL:
+                dx, dy = Direction.VECTORS[d]
                 nx, ny = cx + dx, cy + dy
                 if self.is_in_bounds(nx, ny) and (nx, ny) not in visited:
                     visited.add((nx, ny))
@@ -143,5 +151,4 @@ class MazeBoard:
             (0, self.height - 1),
             (self.width - 1, self.height - 1),
         )
-        cx, cy = corners[corner_index % 4]
-        return self.find_nearest_open(cx, cy)
+        return self.find_nearest_open(*corners[corner_index])
