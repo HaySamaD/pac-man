@@ -14,6 +14,7 @@ This project is a Python recreation of the classic arcade game **Pac-Man** using
 * Pygame library
 * Pydantic library
 * Pyinstaller library
+* pillow library
 
 ### Installation & Execution
 
@@ -61,8 +62,8 @@ The game reads a custom JSON configuration file passed as a command-line argumen
 2. `levels_data` (List of Levels):
    * **Description:** Defines the settings for each game level (at least 10 levels required).
    * **Object Keys:**
-     * `width` (Integer): Width of the maze. Must be between `14` and `48`. (Default: `42`)
-     * `height` (Integer): Height of the maze. Must be between `10` and `24`. (Default: `42`)
+     * `width` (Integer): Width of the maze. Must be between `14` and `46`. (Default: `46`)
+     * `height` (Integer): Height of the maze. Must be between `10` and `22`. (Default: `42`)
      * `pacgum` (Integer): Number of small dots. Must be between `1` and the maximum map capacity. (Default: `42`)
 
 3. `lives` (Integer):
@@ -70,20 +71,20 @@ The game reads a custom JSON configuration file passed as a command-line argumen
    * **Accepted Values:** Integer $\ge 1$.
    * **Default:** `3`
 
-4. `pacgum_points` (Integer):
+4. `points_per_pacgum` (Integer):
    * **Description:** Points earned when eating a normal pacgum.
    * **Accepted Values:** Integer $\ge 1$.
    * **Default:** `10`
 
-5. `super_pacgum_points` (Integer):
+5. `points_per_super_pacgum` (Integer):
    * **Description:** Points earned when eating a super-pacgum (power pellet).
    * **Accepted Values:** Integer $\ge 1$.
-   * **Default:** `50`
+   * **Default:** `20`
 
-6. `ghost_points` (Integer):
+6. `points_per_ghost` (Integer):
    * **Description:** Points earned when eating an edible ghost.
    * **Accepted Values:** Integer $\ge 1$.
-   * **Default:** `200`
+   * **Default:** `40`
 
 7. `seed` (Integer):
    * **Description:** Random seed used for maze generation on the first level.
@@ -98,7 +99,7 @@ The game reads a custom JSON configuration file passed as a command-line argumen
 ### Example of Custom `config.json`:
 ```json
 {
-  "highscore_file": "highscores.json",
+  "highscore_filename": "highscores.json",
   "levels_data": [
                     {"width": 20, "height": 20, "pacgum": 42},
                     {"width": 20, "height": 20, "pacgum": 42},
@@ -112,9 +113,9 @@ The game reads a custom JSON configuration file passed as a command-line argumen
                     {"width": 20, "height": 20, "pacgum": 42}
                  ],
   "lives": 3,
-  "pacgum_points": 10,
-  "super_pacgum_points": 50,
-  "ghost_points": 200,
+  "points_per_pacgum": 10,
+  "points_per_super_pacgum": 50,
+  "points_per_ghost": 200,
   "seed": 42,
   "level_max_time": 90
 }
@@ -170,7 +171,7 @@ The code is organized into clear packages:
 
 ## Gameplay & Rendering Engine (`aryahi` Implementation)
 
-Located inside `src/d5_display/d3_gameplay/`, the gameplay engine is built using clean Object-Oriented Programming and inheritance:
+Located inside `src/d5_display/d3_gameplay/`, the gameplay engine is built using clean OOP:
 
 - `m1_maze_board.py` (`MazeBoard`): Integrates the external `mazegenerator` (`A-Maze-ing`) package, manages the 2D grid, handles 4-bit wall bitmasks (`1`, `2`, `4`, `8`, and `15` for the central `"42"` block), and places pacgums and corner super-pacgums.
 - `m2_bfs.py` (`Bfs`): Implements Breadth-First Search (`get_distance_map`) to compute shortest corridor distances across the maze.
@@ -196,7 +197,7 @@ Located inside `src/d5_display/d3_gameplay/`, the gameplay engine is built using
 All four ghosts navigate using **BFS shortest-path distance maps** without reversing direction at intersections, while slightly penalizing tiles occupied by other active ghosts to prevent stacking:
 - **Blinky (Red):** Targets Pac-Man's exact current tile directly.
 - **Pinky (Pink):** Targets 4 tiles ahead of Pac-Man's movement direction to block corridors.
-- **Inky (Cyan):** Calculates a flanking target opposite to Blinky relative to 2 tiles ahead of Pac-Man.
+- **Inky (Cyan):** Calculates a flanking target opposite to Blinky relative to 2 tiles ahead of Pac-Man (target of Inky = pos_player * 2 - red_pos).
 - **Clyde (Orange):** Chases Pac-Man directly, but switches to fleeing when within 8 corridor cells (`BFS distance <= 8`).
 - **Frightened & Eaten States:** Eating a super-pacgum turns ghosts edible (blue, flashing white before expiring) for 7 seconds (`420` frames at 60 FPS). When eaten, ghost eyes return to their home corner and freeze for 6 seconds (`360` frames) before respawning.
 

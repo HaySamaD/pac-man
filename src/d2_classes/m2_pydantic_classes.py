@@ -305,19 +305,19 @@ class Config(BaseModel):
             print(
                     f"\n{Color().YELLOW}'level_max_time' not exist.\n"
                     f"{Color().GREEN}default value is added{Color().WHITE}"
-                    " level_max_time -> 300\n"
+                    " level_max_time -> 90\n"
                  )
-            dic['level_max_time'] = 300
-            level_max_time = 300
+            dic['level_max_time'] = 90
+            level_max_time = 90
         if not isinstance(level_max_time, int) or level_max_time < 1:
             print(
                     f"\n{Color().YELLOW}'level_max_time' not a number or"
                     "less than 1.\n"
                     f"{Color().GREEN}add a default level data{Color().WHITE}"
-                    " level_max_time -> 300\n"
+                    " level_max_time -> 90\n"
                  )
-            dic['level_max_time'] = 300
-            level_max_time = 300
+            dic['level_max_time'] = 90
+            level_max_time = 90
         # ---------------------------------------------------------------------
         return dic
 

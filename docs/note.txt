@@ -3,3 +3,10 @@
 3 - Remove Fullscreen and update the HUD and max maze size default value. (Fixed)
 4 - Ghost algo update: Remove first 5s no target, Remove return to spawn point always target player. (Fixed)
 5 - Ghosts should not be aligned with one another, and orange ghost must flee if it comes within a distance of 8 cells from the player. (Fixed)
+
+clean:
+    1 - makefile
+    2 - remove docs
+
+add:
+    in redeme, adding the ressources of aryahi
