@@ -205,7 +205,7 @@ class Config(BaseModel):
                  )
             for _ in range(0, 10 - len(levels_data)):
                 dic['levels_data'].append(
-                                    {"width": 42, "height": 42, "pacgum": 42}
+                                    {"width": 20, "height": 20, "pacgum": 42}
                                          )
                 levels_data = dic['levels_data']
         # ---------------------- handel lives List[Dict] ----------------------
