@@ -6,6 +6,8 @@
 # vscode cache
 .vscode
 
+# folders
+docs
 
 # mypy cache
 src/__pycache__
