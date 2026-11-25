@@ -54,7 +54,7 @@ The game reads a custom JSON configuration file passed as a command-line argumen
 
 ### Accepted Configuration Keys and Values:
 
-1. `highscore_file` (String):
+1. `highscore_filename` (String):
    * **Description:** The name of the JSON file where highscores are saved.
    * **Accepted Values:** Any valid filename ending with `.json` (e.g., `"highscores.json"`).
    * **Default:** `"highscores.json"`
@@ -155,7 +155,7 @@ The file stores a list of player objects. Each object contains:
 
 ---
 
-## Software Architecture (ybajdou Implementation)
+## General Software Architecture
 
 The code is organized into clear packages:
 
@@ -169,7 +169,7 @@ The code is organized into clear packages:
 
 ---
 
-## Gameplay & Rendering Engine (`aryahi` Implementation)
+### Gameplay & Rendering Engine
 
 Located inside `src/d5_display/d3_gameplay/`, the gameplay engine is built using clean OOP:
 
