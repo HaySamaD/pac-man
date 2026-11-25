@@ -53,7 +53,8 @@ def main() -> None:
                             config,
                             highscores_obj,
                             game_state_obj,
-                            nbr_levels
+                            nbr_levels,
+                            (1920, 1080)
                           )
     g.game_loop()
     # -------------------------------------------------------------------------
@@ -62,7 +63,7 @@ def main() -> None:
 
 # =============================================================================
 if __name__ == "__main__":
-    try:
-        main()
-    except (Exception, KeyboardInterrupt, ImportError) as e:
-        print(e)
+    # try:
+    main()
+    # except (Exception, KeyboardInterrupt, ImportError) as e:
+    #     print(e)

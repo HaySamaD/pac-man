@@ -3,6 +3,8 @@
                                                             and event routing.
 """
 
+from typing import Tuple
+
 from .m1_menu_events import MenuEvent
 from .m2_highscores_events import HighScoresEvent
 from .m3_instructions_events import InstructionsEvents
@@ -10,7 +12,7 @@ from .m4_play_events import PlayEvent
 from .m5_pause_events import PauseEvent
 from .m6_win_loss_events import WinLossEvent
 
-from ..d1_helpers import Rgb, Resizer
+from ..d1_helpers import Rgb
 from ..d2_classes import Config, GameState
 from ..d4_parsing_highscores import HigherScore
 from ..d5_display import (
@@ -40,6 +42,7 @@ class GameLoop:
                     highscores_obj: HigherScore,
                     game_state: GameState,
                     nbr_levels: int,
+                    resolution: Tuple[int, int]
                 ) -> None:
         """
             Initializes game loop controller with configuration and state
@@ -57,22 +60,18 @@ class GameLoop:
         self.highscores_obj: HigherScore = highscores_obj
         self.game_state: GameState = game_state
         self.nbr_levels = nbr_levels
+        self.width, self.height = resolution
         # ------------------------ init pygame -------------------------
         pygame.init()
-        # ------------- get the resolution of the monitor --------------
-        infos = pygame.display.Info()
-        self.width, self.height = infos.current_w, infos.current_h
-        # ---------------------- init the screen -----------------------
         self.screen = pygame.display.set_mode((self.width, self.height))
+        self.clock = pygame.time.Clock()
         # ------------------------- init font --------------------------
         self.title_font = pygame.font.Font(None, 135)
         self.content_font = pygame.font.Font(None, 35)
-        # ----------- resize and load the instruction image ------------
-        Resizer((self.width, self.height))
+        # ----------- load the instructions image ------------
         self.image = pygame.image.load(
-                                "assets/instructions/instructions_resized.jpeg"
+                                "assets/instructions/instructions.jpeg"
                                       )
-        self.clock = pygame.time.Clock()
         # --------------------- the printer object ---------------------
         self.p: Printer = Printer(
                                     self.screen,

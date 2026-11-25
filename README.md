@@ -224,7 +224,6 @@ You can view the project timeline, task breakdown, and others in the [Project Ma
 * [FPS Tutorial](https://gamedevacademy.org/pygame-fps-tutorial/)
 * [Get the size of any screen](https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size)
 * [Load a image in pygame](https://gamedevacademy.org/pygame-image-load-tutorial-complete-guide/)
-* [Resizing a image using pillow (PIL)](https://dev.to/mary_kariuki_944435052aa9/how-to-resize-an-image-in-python-using-pil-pillow-5hmj)
 
 #### Gameplay, AI & Rendering (`aryahi`)
 * **Pac-Man Ghost AI Personality & Targeting:** [The Pac-Man Dossier by Jamey Pittman](https://cs.au.dk/~ocaprani/GameAI/PacMan/The%20Pac-Man%20Dossier.pdf) & [Pac-Man Patterns — Ghost Movement](https://dev.to/code2bits/pac-man-patterns--ghost-movement-strategy-pattern-1k1a?_sp=ee6d56cc-48d7-4d2e-9df8-786ed73897a8)
