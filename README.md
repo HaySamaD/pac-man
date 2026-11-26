@@ -218,14 +218,14 @@ You can view the project timeline, task breakdown, and others in the [Project Ma
 
 ### References & Links
 
-#### Core System & UI (`ybajdou`)
+#### Core System & UI
 * [Game Loop](https://www.pygame.fr/en/bb-01-game-loop/)
 * [Display Text](https://gamedevacademy.org/display-text-pygame-tutorial-complete-guide/)
 * [FPS Tutorial](https://gamedevacademy.org/pygame-fps-tutorial/)
 * [Get the size of any screen](https://bugnet.io/blog/fix-pygame-fullscreen-resolution-wrong-size)
 * [Load a image in pygame](https://gamedevacademy.org/pygame-image-load-tutorial-complete-guide/)
 
-#### Gameplay, AI & Rendering (`aryahi`)
+#### Gameplay, AI & Rendering
 * **Pac-Man Ghost AI Personality & Targeting:** [The Pac-Man Dossier by Jamey Pittman](https://cs.au.dk/~ocaprani/GameAI/PacMan/The%20Pac-Man%20Dossier.pdf) & [Pac-Man Patterns — Ghost Movement](https://dev.to/code2bits/pac-man-patterns--ghost-movement-strategy-pattern-1k1a?_sp=ee6d56cc-48d7-4d2e-9df8-786ed73897a8)
 * **BFS Pathfinding & Distance Maps:** [Breadth-First Search Distance Maps on Grids (Red Blob Games)](https://www.redblobgames.com/pathfinding/distance-to-any/)
 * **MLX-Style Pixel Rendering (`set_at` & `blit`):** [pygame.Surface Reference Guide (Pygame Docs)](https://www.pygame.org/docs/ref/surface.html)
