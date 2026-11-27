@@ -1,6 +1,6 @@
 *This project has been created as part of the 42 curriculum by [ybajdou, aryahi].*
 
-# Pac-Man (Python Pygame Implementation)
+# Pac-Man
 
 ## Description
 
@@ -155,6 +155,30 @@ The file stores a list of player objects. Each object contains:
 
 ---
 
+## Maze Generation
+
+We use the external mazegenerator package without changing its code.
+
+### How It Works:
+- `MazeBoard `creates the maze with `perfect=False` so paths have loops.
+- Level 1 uses the seed from c`onfig.json`; other levels use random seeds.
+- Wall codes (`1`: up, `2`: right, `4`: down, `8`: left) build the grid, and `15` is a solid wall block ("`42`" center).
+- `can_move` method stops entities (pacman or ghost) from walking through walls.
+- Pac-Man starts near the center, super-pacgums are in the 4 corners, and pacgums are in open paths.
+
+---
+
+## Implementation
+
+This project is built in Python with Pygame using a modular structure and Pydantic validation.
+
+### Technical Summary
+- **Config & Highscores:** `Parser` reads the config file, skips `#` comment lines, and uses `Config` (Pydantic) with safe default values on errors. `HigherScore` loads, sorts, and saves the Top 10 scores in JSON.
+- **Game Loop & UI:** `GameLoop` runs at 60 FPS, handles keyboard events, switches game states (`MENU`, `PLAY`, `PAUSE`, `HIGHSCORES`, `WIN`, `LOSS`), and renders screens and the `HUD` with `Printer`.
+- **Movement & Collisions:** `MovementController` moves entities (pacmun or ghosts) smoothly on the grid and checks walls. `PlayerController` reads `Arrow` / `WASD` keys, eats pacgums and super-pacgums, and updates the score.
+- **Ghost AI & BFS:** `Bfs` finds short corridor paths. `GhostController` moves `blinky`, `pinky`, `inky`, and `clyde` with different targets, frightened mode (420 frames), and eaten respawn (360 frames).
+- **Rendering & Cheat Mode:** `Renderer` draws walls once with `set_at()` and draws items and sprites with `blit()`. `CheatController` supports `C`, `I`, and `N` keys for testing.
+
 ## General Software Architecture
 
 The code is organized into clear packages:
@@ -166,21 +190,6 @@ The code is organized into clear packages:
 
 * `d5_display`: UI rendering engine (`Printer`) for Main Menu, Highscores page, Instructions page, HUD, Pause, Win, Loss, and the gameplay screens.
 * `d6_game_loop`: Handles keyboard events and game state transitions.
-
----
-
-### Gameplay & Rendering Engine
-
-Located inside `src/d5_display/d3_gameplay/`, the gameplay engine is built using clean OOP:
-
-- `m1_maze_board.py` (`MazeBoard`): Integrates the external `mazegenerator` (`A-Maze-ing`) package, manages the 2D grid, handles 4-bit wall bitmasks (`1`, `2`, `4`, `8`, and `15` for the central `"42"` block), and places pacgums and corner super-pacgums.
-- `m2_bfs.py` (`Bfs`): Implements Breadth-First Search (`get_distance_map`) to compute shortest corridor distances across the maze.
-- `m3_movement.py` (`MovementController`): Base class handling smooth pixel-to-grid movement, intersection alignment, direction reversal, and wall collision checks.
-- `m4_player.py` (`PlayerController`): Inherits from `MovementController` to handle keyboard input (`Arrow keys` / `WASD`), item consumption, and score updates.
-- `m5_ghost.py` (`GhostController`): Inherits from `MovementController` to control autonomous ghost targeting, frightened fleeing, and respawn timers.
-- `m6_renderer.py` (`Renderer`): Pre-bakes maze walls pixel-by-pixel onto a surface and renders collectibles, animated Pac-Man, and ghosts each frame.
-- `m7_cheat_mode.py` (`CheatController`): Provides keyboard shortcuts to test invincibility and level progression during evaluation.
-- `m8_gameplay.py` (`Gameplay`): Unified facade class connecting all gameplay modules with the main game loop, timers, lives, and collision detection.
 
 ---
 

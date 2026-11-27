@@ -42,27 +42,11 @@ class MazeBoard:
         self, width: int, height: int, seed: int
     ) -> List[List[int]]:
         """Invoke external MazeGenerator safely with fallback grid."""
-        try:
-            try:
-                gen = MazeGenerator(
-                    size=(width, height), seed=seed, perfect=False
-                )
-            except TypeError:
-                gen = MazeGenerator(size=(width, height), seed=seed)
-            raw: List[List[int]] = gen.maze
-            if raw and len(raw) == height and len(raw[0]) == width:
-                return raw
-        except Exception:
-            pass
-
-        fallback = [[0] * width for _ in range(height)]
-        for x in range(width):
-            fallback[0][x] |= 1
-            fallback[height - 1][x] |= 4
-        for y in range(height):
-            fallback[y][0] |= 8
-            fallback[y][width - 1] |= 2
-        return fallback
+        gen = MazeGenerator(
+            size=(width, height), seed=seed, perfect=False
+        )
+        raw: List[List[int]] = gen.maze
+        return raw
 
     def populate_collectibles(self, max_pacgums: int) -> None:
         """Place pacgums in corridors and super-pacgums in the 4 corners."""
