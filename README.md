@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by [ybajdou, aryahi].*
+*This project has been created as part of the 42 curriculum by ybajdou, aryahi.*
 
 # Pac-Man
 
@@ -42,6 +42,10 @@ You can use the `Makefile` to manage the project easily:
   make clean
   ```
 
+* **Debug the code:**
+  ```bash
+  make debug
+  ```
 ---
 
 ## Configuration File Structure
@@ -63,7 +67,7 @@ The game reads a custom JSON configuration file passed as a command-line argumen
    * **Description:** Defines the settings for each game level (at least 10 levels required).
    * **Object Keys:**
      * `width` (Integer): Width of the maze. Must be between `14` and `46`. (Default: `46`)
-     * `height` (Integer): Height of the maze. Must be between `10` and `22`. (Default: `42`)
+     * `height` (Integer): Height of the maze. Must be between `10` and `22`. (Default: `22`)
      * `pacgum` (Integer): Number of small dots. Must be between `1` and the maximum map capacity. (Default: `42`)
 
 3. `lives` (Integer):
@@ -134,6 +138,9 @@ The file stores a list of player objects. Each object contains:
 * `score` (Integer): The final score achieved.
   * **Rules:** Must be a non-negative integer ($\ge 0$).
 
+### Why JSON?
+We use a JSON file because it is simple, easy to read, built into Python (`json`), and saves scores permanently.
+
 ### How It Works:
 1. **Loading:** Highscores are loaded automatically when the game starts.
 2. **Ranking:** The system automatically sorts all scores from highest to lowest and keeps only the **Top 10** scores.
@@ -160,9 +167,9 @@ The file stores a list of player objects. Each object contains:
 We use the external mazegenerator package without changing its code.
 
 ### How It Works:
-- `MazeBoard `creates the maze with `perfect=False` so paths have loops.
-- Level 1 uses the seed from c`onfig.json`; other levels use random seeds.
-- Wall codes (`1`: up, `2`: right, `4`: down, `8`: left) build the grid, and `15` is a solid wall block ("`42`" center).
+- `MazeBoard` creates the maze with `perfect=False` so paths have loops.
+- Level 1 uses the seed from `config.json`; other levels use random seeds.
+- Wall codes (`1`: up, `2`: right, `4`: down, `8`: left) build the grid, and `15` is a solid wall block ("42" center).
 - `can_move` method stops entities (pacman or ghost) from walking through walls.
 - Pac-Man starts near the center, super-pacgums are in the 4 corners, and pacgums are in open paths.
 
@@ -175,7 +182,7 @@ This project is built in Python with Pygame using a modular structure and Pydant
 ### Technical Summary
 - **Config & Highscores:** `Parser` reads the config file, skips `#` comment lines, and uses `Config` (Pydantic) with safe default values on errors. `HigherScore` loads, sorts, and saves the Top 10 scores in JSON.
 - **Game Loop & UI:** `GameLoop` runs at 60 FPS, handles keyboard events, switches game states (`MENU`, `PLAY`, `PAUSE`, `HIGHSCORES`, `WIN`, `LOSS`), and renders screens and the `HUD` with `Printer`.
-- **Movement & Collisions:** `MovementController` moves entities (pacmun or ghosts) smoothly on the grid and checks walls. `PlayerController` reads `Arrow` / `WASD` keys, eats pacgums and super-pacgums, and updates the score.
+- **Movement & Collisions:** `MovementController` moves entities (pacman or ghosts) smoothly on the grid and checks walls. `PlayerController` reads `Arrow` / `WASD` keys, eats pacgums and super-pacgums, and updates the score.
 - **Ghost AI & BFS:** `Bfs` finds short corridor paths. `GhostController` moves `blinky`, `pinky`, `inky`, and `clyde` with different targets, frightened mode (420 frames), and eaten respawn (360 frames).
 - **Rendering & Cheat Mode:** `Renderer` draws walls once with `set_at()` and draws items and sprites with `blit()`. `CheatController` supports `C`, `I`, and `N` keys for testing.
 
@@ -219,7 +226,13 @@ To respect the project's graphical constraints, `Renderer` uses only Pygame oper
 
 ## Project Management
 
-You can view the project timeline, task breakdown, and others in the [Project Management Document](./project_management).
+We organized our project work into clear steps:
+- **Team Organization:** Split tasks between `ybajdou` (config, highscores, menus, HUD, main loop) and `aryahi` (maze generation, player/ghost AI, gameplay rendering).
+- **Technical & Risk Analysis:** Chose OOP, wrapped `mazegenerator` (`perfect=False`), handled bad config files with safe defaults, and pre-rendered assets for fast performance.
+- **Testing:** Tested error handling, cheat mode, and refactored the game loop into clean modules.
+- **Timeline:** A Gantt chart that shows every task done by the team and the time duration for each task.
+
+See the full details in [Project Management](./project_management).
 
 ---
 
